@@ -184,39 +184,39 @@ document.addEventListener('DOMContentLoaded', function() {
             type: 'two-cars',
             steps: [
                 {
-                    title: "Identify Given Information",
-                    body: "We start by extracting all the known values from the problem statement.",
+                    title: "What do we know?",
+                    body: "Okay, so picture this: two cars leave from the same spot at an intersection. One goes south at 60 m/hr (pretty fast!), and the other heads west at 25 m/hr (more of a Sunday driver). We want to know how fast the distance between them is growing after 2 hours.",
                     equation: "$$\\frac{dx}{dt} = 25 \\text{ m/hr (west)}, \\quad \\frac{dy}{dt} = 60 \\text{ m/hr (south)}, \\quad t = 2 \\text{ hours}$$",
-                    concept: "In related rates problems, always identify what rates you know and what rate you're looking for.",
-                    mistake: "Don't confuse velocity with position. $\\frac{dx}{dt}$ is a rate (velocity), while $x$ is position."
+                    concept: "The key insight: those speeds (60 and 25) are rates of change. They tell us how position changes over time. We're hunting for another rate - how the gap between them changes.",
+                    mistake: "Don't mix up the speed (like 60 m/hr) with how far they've gone! Speed is the rate, distance is what changes because of that rate."
                 },
                 {
-                    title: "Set Up the Geometric Relationship",
-                    body: "The two cars traveling perpendicular to each other form a right triangle, where $x$ is the westward distance, $y$ is the southward distance, and $z$ is the distance between them.",
+                    title: "Visualize the triangle",
+                    body: "Here's the cool part - imagine looking down from above. One car goes south, one goes west, so they're making a right angle! The distance between them is the diagonal of that right triangle. Remember good old Pythagoras from geometry?",
                     equation: "$$z^2 = x^2 + y^2$$",
-                    concept: "This is the Pythagorean theorem — it relates our three variables at any point in time.",
-                    mistake: "Don't forget that this relationship holds for all values of time, not just at $t = 2$."
+                    concept: "This equation is always true for these three distances - not just at 2 hours, but at any moment in time. That's what makes it so powerful for this problem.",
+                    mistake: "People sometimes think this only works at one specific time, but nope! This triangle relationship holds throughout their entire journey."
                 },
                 {
-                    title: "Differentiate Both Sides with Respect to Time",
-                    body: "Since all three variables ($x$, $y$, $z$) change with time, we use implicit differentiation to relate their rates of change.",
+                    title: "Take the derivative (the magic step!)",
+                    body: "Since everything's changing with time, we differentiate both sides. Think of it like this: if the sides of the triangle are growing, the diagonal must be growing too, right? The derivative tells us exactly how those rates relate.",
                     equation: "$$\\frac{d}{dt}(z^2) = \\frac{d}{dt}(x^2 + y^2)$$$$2z\\frac{dz}{dt} = 2x\\frac{dx}{dt} + 2y\\frac{dy}{dt}$$",
-                    concept: "Implicit differentiation lets us relate rates when variables are connected by an equation.",
-                    mistake: "Don't forget the chain rule! When differentiating $z^2$, you get $2z \\cdot \\frac{dz}{dt}$, not just $2z$."
+                    concept: "This is called implicit differentiation - we're finding how rates connect when variables are linked by an equation. It's like seeing how pulling one string affects the whole web.",
+                    mistake: "The chain rule trips people up here! When you differentiate $z^2$, you get $2z$ times $\\frac{dz}{dt}$, not just $2z$. That extra $\\frac{dz}{dt}$ is crucial!"
                 },
                 {
-                    title: "Find Positions at $t = 2$ Hours",
-                    body: "Before we can solve for $\\frac{dz}{dt}$, we need to know the actual positions at the specific time we're interested in.",
+                    title: "Calculate where they are",
+                    body: "Let's figure out where each car ended up after cruising for 2 hours. Distance = speed × time, so it's straightforward multiplication. Then we use Pythagoras again to find how far apart they are.",
                     equation: "$$x = (25)(2) = 50 \\text{ m}$$$$y = (60)(2) = 120 \\text{ m}$$$$z = \\sqrt{50^2 + 120^2} = \\sqrt{2500 + 14400} = \\sqrt{16900} = 130 \\text{ m}$$",
-                    concept: "Position = rate × time when velocity is constant.",
-                    mistake: "Make sure to use consistent units throughout!"
+                    concept: "We need these actual distances to plug into our rate equation. Think of it like: 'Where are they now? And given where they are now, how fast is the gap growing?'",
+                    mistake: "Watch your units! Everything needs to be in the same units - if you mix up meters and kilometers, you'll get nonsense."
                 },
                 {
-                    title: "Solve for $\\frac{dz}{dt}$",
-                    body: "Now we substitute all known values into our differentiated equation and solve for the unknown rate.",
+                    title: "Solve for the answer",
+                    body: "Now we've got all the pieces! Plug everything into that differentiated equation and solve for $\\frac{dz}{dt}$ - that's what we've been after this whole time. The algebra is pretty straightforward from here.",
                     equation: "$$2(130)\\frac{dz}{dt} = 2(50)(25) + 2(120)(60)$$$$260\\frac{dz}{dt} = 2500 + 14400$$$$260\\frac{dz}{dt} = 16900$$$$\\frac{dz}{dt} = \\frac{16900}{260} = 65 \\text{ m/hr}$$",
-                    concept: "We can cancel the 2's from both sides to simplify, but either approach works.",
-                    mistake: "Don't forget units! The answer should be in m/hr since we're finding a rate."
+                    concept: "What this means: even though one car is going 60 and the other 25, the distance between them grows at 65 m/hr. Not 85 (the sum), but 65! That's because they're moving at right angles, not directly away from each other.",
+                    mistake: "Don't forget to include units in your final answer! It's m/hr because we're finding a rate (how fast the distance changes)."
                 }
             ],
             answer: "$\\frac{dz}{dt} = 65 \\text{ m/hr}$",

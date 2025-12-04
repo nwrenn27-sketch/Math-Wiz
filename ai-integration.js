@@ -45,27 +45,27 @@ class MathWizAI {
     }
 
     buildSolutionPrompt(problemText, problemType) {
-        return `You are an expert math tutor helping a student with ${problemType}.
+        return `You're a friendly tutor explaining ${problemType} to a student who wants to actually understand, not just get the answer.
 
 Problem: ${problemText}
 
-Provide a detailed solution with:
-1. Clear identification of given information
-2. The formula or relationship to use (in LaTeX)
-3. Step-by-step algebraic work
-4. The concept/reasoning behind each step
-5. Common mistakes students make
-6. The final answer
+Explain this like you're helping a friend study. Be conversational and intuitive:
+- Talk naturally, not like a textbook
+- Use real-world analogies and examples
+- Explain WHY things work, not just HOW
+- Point out the "aha moments" and intuition
+- Share tricks you'd tell a friend
+- Warn about mistakes you've seen people make
 
-Format your response as JSON with this structure:
+Format your response as JSON:
 {
     "steps": [
         {
-            "title": "Step title",
-            "body": "Explanation",
+            "title": "Friendly step title",
+            "body": "Conversational explanation with real-world context",
             "equation": "LaTeX equation in $$ $$",
-            "concept": "Why we do this",
-            "mistake": "Common mistake to avoid"
+            "concept": "The intuitive 'why' behind this - what's really happening here",
+            "mistake": "Real talk about what trips people up"
         }
     ],
     "answer": "Final answer with LaTeX"
@@ -150,22 +150,29 @@ Format your response as JSON with this structure:
                         },
                         {
                             type: 'text',
-                            text: `Analyze this image of a calculus problem and provide a detailed solution.
+                            text: `Look at this math problem and help me understand it like you're a friend explaining it over coffee.
 
-Return your response as JSON with this exact structure:
+Be conversational and intuitive:
+- Explain like you're teaching a friend, not reading a textbook
+- Use real-world examples and analogies
+- Focus on WHY things work, not just the mechanics
+- Share the "aha moments" and intuition
+- Point out what trips people up
+
+Return as JSON:
 {
-    "extractedText": "The problem statement extracted from the image",
+    "extractedText": "The problem from the image",
     "steps": [
         {
-            "title": "Step title",
-            "body": "Explanation",
-            "equation": "LaTeX equation in $$ $$",
-            "concept": "Why we do this",
-            "mistake": "Common mistake to avoid"
+            "title": "Friendly step title",
+            "body": "Conversational explanation with real context",
+            "equation": "LaTeX in $$ $$",
+            "concept": "The intuitive 'why' - what's really happening",
+            "mistake": "What trips people up here"
         }
     ],
     "answer": "Final answer with LaTeX",
-    "type": "problem-type (e.g., related-rates, optimization, derivatives)",
+    "type": "problem-type",
     "colors": {}
 }`
                         }
@@ -269,22 +276,29 @@ Return your response as JSON with this exact structure:
                         },
                         {
                             type: 'text',
-                            text: `Analyze this image of a calculus problem and provide a detailed solution.
+                            text: `Look at this math problem and help me understand it like you're a friend explaining it over coffee.
 
-Return your response as JSON with this exact structure:
+Be conversational and intuitive:
+- Explain like you're teaching a friend, not reading a textbook
+- Use real-world examples and analogies
+- Focus on WHY things work, not just the mechanics
+- Share the "aha moments" and intuition
+- Point out what trips people up
+
+Return as JSON:
 {
-    "extractedText": "The problem statement extracted from the image",
+    "extractedText": "The problem from the image",
     "steps": [
         {
-            "title": "Step title",
-            "body": "Explanation",
-            "equation": "LaTeX equation in $$ $$",
-            "concept": "Why we do this",
-            "mistake": "Common mistake to avoid"
+            "title": "Friendly step title",
+            "body": "Conversational explanation with real context",
+            "equation": "LaTeX in $$ $$",
+            "concept": "The intuitive 'why' - what's really happening",
+            "mistake": "What trips people up here"
         }
     ],
     "answer": "Final answer with LaTeX",
-    "type": "problem-type (e.g., related-rates, optimization, derivatives)",
+    "type": "problem-type",
     "colors": {}
 }`
                         }
