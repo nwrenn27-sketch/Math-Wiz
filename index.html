@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Wiz - Calculus Problem Solver</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">Math Wiz</h1>
+                <p class="tagline">Advanced calculus problem solver with step-by-step solutions</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Input Section -->
+            <section class="input-section" id="input-section">
+                <div class="input-container">
+                    <div class="input-tabs">
+                        <button class="input-tab active" data-mode="text">Type Problem</button>
+                        <button class="input-tab" data-mode="image">Upload Image</button>
+                    </div>
+
+                    <div class="input-mode" id="text-mode">
+                        <label for="problem-input" class="input-label">Enter your problem</label>
+                        <textarea
+                            id="problem-input"
+                            class="problem-textarea"
+                            placeholder="Paste any calculus problem here - related rates, optimization, derivatives, integrals, limits, etc."
+                            rows="6"
+                        ></textarea>
+                    </div>
+
+                    <div class="input-mode" id="image-mode" style="display: none;">
+                        <label class="input-label">Upload a photo or screenshot</label>
+                        <div class="upload-zone" id="upload-zone">
+                            <input type="file" id="image-input" accept="image/*" hidden>
+                            <div class="upload-prompt">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                                </svg>
+                                <p>Click to upload or drag and drop</p>
+                                <span>PNG, JPG, PDF up to 10MB</span>
+                            </div>
+                            <div id="image-preview" class="image-preview" style="display: none;">
+                                <img id="preview-img" src="" alt="Preview">
+                                <button class="btn-remove" id="remove-image">×</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" id="solve-btn">Solve Problem</button>
+                </div>
+            </section>
+
+            <section class="loading-section" id="loading-section" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>Analyzing problem...</p>
+            </section>
+
+            <section class="solution-section" id="solution-section" style="display: none;">
+                <div class="solution-header">
+                    <h2>Solution</h2>
+                    <button class="btn btn-secondary" id="new-problem-btn">New Problem</button>
+                </div>
+
+                <div class="problem-statement">
+                    <h3>Problem</h3>
+                    <p id="problem-display"></p>
+                </div>
+
+                <div class="solution-grid">
+                    <div class="visualization-panel">
+                        <h3>Visualization</h3>
+                        <canvas id="diagram-canvas"></canvas>
+                        <div id="diagram-legend"></div>
+                    </div>
+
+                    <div class="steps-panel">
+                        <h3>Step-by-Step Solution</h3>
+                        <div id="steps-content"></div>
+                        <div class="final-answer">
+                            <div class="answer-label">Final Answer</div>
+                            <div id="answer-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+    </div>
+
+    <script src="config.js"></script>
+    <script src="ai-integration.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
