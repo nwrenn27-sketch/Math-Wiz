@@ -1,44 +1,68 @@
-document.addEventListener('DOMContentLoaded', function() {
-    let currentMode = 'text';
-    let uploadedImageData = null;
-    let ai = null;
+// ========================================================
+// MATH WIZ - MAIN APPLICATION SCRIPT
+// ========================================================
+// This file handles:
+// - UI interactions (tabs, image upload, buttons)
+// - Problem solving (AI or built-in solutions)
+// - Solution rendering (steps, diagrams, LaTeX)
+// ========================================================
 
-    // Initialize AI if configured
+// Wait for DOM to fully load before running code
+document.addEventListener('DOMContentLoaded', function() {
+    // ========================================================
+    // STATE VARIABLES
+    // ========================================================
+    let currentMode = 'text';          // Current input mode: 'text' or 'image'
+    let uploadedImageData = null;      // Base64 data of uploaded image
+    let ai = null;                     // AI integration instance (if configured)
+
+    // Initialize AI if API key is configured
     if (typeof CONFIG !== 'undefined') {
         ai = new MathWizAI(CONFIG);
     }
 
-    // Tab switching
+    // ========================================================
+    // TAB SWITCHING (Text Input vs Image Upload)
+    // ========================================================
     document.querySelectorAll('.input-tab').forEach(tab => {
         tab.addEventListener('click', () => {
+            // Update current mode based on clicked tab
             currentMode = tab.dataset.mode;
 
+            // Update active tab styling
             document.querySelectorAll('.input-tab').forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
 
+            // Show/hide corresponding input mode
             document.getElementById('text-mode').style.display = currentMode === 'text' ? 'block' : 'none';
             document.getElementById('image-mode').style.display = currentMode === 'image' ? 'block' : 'none';
         });
     });
 
-    // Image upload
+    // ========================================================
+    // IMAGE UPLOAD FUNCTIONALITY
+    // ========================================================
     const uploadZone = document.getElementById('upload-zone');
     const imageInput = document.getElementById('image-input');
     const imagePreview = document.getElementById('image-preview');
     const previewImg = document.getElementById('preview-img');
     const removeImageBtn = document.getElementById('remove-image');
 
+    // Click upload zone to trigger file picker
     uploadZone.addEventListener('click', () => imageInput.click());
 
+    // Drag-and-drop: Show blue border when dragging over
     uploadZone.addEventListener('dragover', (e) => {
         e.preventDefault();
         uploadZone.style.borderColor = 'var(--color-primary)';
     });
 
+    // Drag-and-drop: Reset border when leaving
     uploadZone.addEventListener('dragleave', () => {
         uploadZone.style.borderColor = '';
     });
 
+    // Drag-and-drop: Handle file drop
     uploadZone.addEventListener('drop', (e) => {
         e.preventDefault();
         uploadZone.style.borderColor = '';
@@ -46,44 +70,56 @@ document.addEventListener('DOMContentLoaded', function() {
         handleImageUpload(file);
     });
 
+    // Handle file selection via file picker
     imageInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         handleImageUpload(file);
     });
 
+    // Remove uploaded image (X button)
     removeImageBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
+        e.stopPropagation();  // Don't trigger upload zone click
         imageInput.value = '';
         uploadedImageData = null;
         imagePreview.style.display = 'none';
         document.querySelector('.upload-prompt').style.display = 'flex';
     });
 
+    /**
+     * Process uploaded image file
+     * Validates file type and size, converts to base64
+     */
     function handleImageUpload(file) {
+        // Validate file type
         if (!file || !file.type.startsWith('image/')) {
             alert('Please upload an image file (PNG, JPG)');
             return;
         }
 
+        // Validate file size (10MB max)
         if (file.size > 10 * 1024 * 1024) {
             alert('Image must be less than 10MB');
             return;
         }
 
+        // Read file and convert to base64
         const reader = new FileReader();
         reader.onload = (e) => {
-            uploadedImageData = e.target.result;
-            previewImg.src = e.target.result;
+            uploadedImageData = e.target.result;  // Store base64 data
+            previewImg.src = e.target.result;      // Show preview
             document.querySelector('.upload-prompt').style.display = 'none';
             imagePreview.style.display = 'block';
         };
         reader.readAsDataURL(file);
     }
 
-    // Solve button
+    // ========================================================
+    // SOLVE BUTTON HANDLER
+    // ========================================================
     document.getElementById('solve-btn').addEventListener('click', async () => {
         let problemText = '';
 
+        // Validate input based on current mode
         if (currentMode === 'text') {
             problemText = document.getElementById('problem-input').value.trim();
             if (!problemText) {
@@ -97,12 +133,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        // Solve the problem (with AI or built-in solutions)
         await solveProblem(problemText, uploadedImageData);
     });
 
+    // ========================================================
+    // NEW PROBLEM BUTTON - Reset UI
+    // ========================================================
     document.getElementById('new-problem-btn').addEventListener('click', () => {
+        // Hide solution, show input
         document.getElementById('solution-section').style.display = 'none';
         document.getElementById('input-section').style.display = 'block';
+
+        // Clear all inputs
         document.getElementById('problem-input').value = '';
         uploadedImageData = null;
         imageInput.value = '';
@@ -110,7 +153,18 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('.upload-prompt').style.display = 'flex';
     });
 
+    // ========================================================
+    // PROBLEM SOLVING LOGIC
+    // ========================================================
+
+    /**
+     * Main function to solve a math problem
+     * Uses AI if configured, otherwise falls back to built-in solutions
+     * @param {string} problemText - Text description of problem
+     * @param {string} imageData - Base64 image data (optional)
+     */
     async function solveProblem(problemText, imageData) {
+        // Show loading spinner, hide other sections
         document.getElementById('input-section').style.display = 'none';
         document.getElementById('loading-section').style.display = 'block';
         document.getElementById('solution-section').style.display = 'none';
@@ -118,17 +172,21 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             let solution;
 
+            // Choose AI or built-in solution
             if (ai && ai.provider) {
-                // Use AI to solve
+                // AI is configured - use it to solve
                 if (imageData) {
+                    // Image upload: extract problem from image, then solve
                     solution = await ai.solveFromImage(imageData);
                     problemText = solution.extractedText || 'Problem from uploaded image';
                 } else {
+                    // Text input: solve directly
                     solution = await ai.solveProblemWithAI(problemText);
                 }
             } else {
-                // Fallback to built-in solutions
+                // No AI configured - use built-in solutions
                 if (imageData) {
+                    // Image analysis requires AI
                     alert('AI is required for image analysis. Please add your API key to config.js');
                     document.getElementById('loading-section').style.display = 'none';
                     document.getElementById('input-section').style.display = 'block';
@@ -137,10 +195,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 solution = getSolution(problemText);
             }
 
+            // Display the solution
             displaySolution(problemText, solution);
             document.getElementById('loading-section').style.display = 'none';
             document.getElementById('solution-section').style.display = 'block';
         } catch (error) {
+            // Handle errors (usually API key issues)
             console.error('Error solving problem:', error);
             alert('Error: ' + error.message + '\n\nPlease check your API key in config.js');
             document.getElementById('loading-section').style.display = 'none';
@@ -148,7 +208,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Built-in solutions for the 4 original problems (fallback)
+    // ========================================================
+    // BUILT-IN SOLUTIONS (Fallback when AI not configured)
+    // ========================================================
+
+    /**
+     * Match problem text to one of 4 built-in solutions
+     * Returns error message if problem not recognized
+     */
     function getSolution(text) {
         const lower = text.toLowerCase();
 
@@ -345,16 +412,30 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
+    // ========================================================
+    // SOLUTION DISPLAY (Render steps, equations, diagram)
+    // ========================================================
+
+    /**
+     * Display solution in the UI
+     * Renders steps, equations (with MathJax), and diagram
+     * @param {string} problemText - Original problem statement
+     * @param {object} solution - Solution object with steps, answer, colors
+     */
     function displaySolution(problemText, solution) {
+        // Display the problem statement
         document.getElementById('problem-display').textContent = problemText;
 
+        // Clear previous solution steps
         const stepsContent = document.getElementById('steps-content');
         stepsContent.innerHTML = '';
 
+        // Render each solution step
         solution.steps.forEach((step, i) => {
             const stepDiv = document.createElement('div');
             stepDiv.className = 'step';
 
+            // Build step HTML with number, title, and body
             let stepHTML = `
                 <div class="step-header">
                     <span class="step-number">${i + 1}</span>
@@ -363,14 +444,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="step-body">${step.body}</div>
             `;
 
+            // Add equation if present (LaTeX will be rendered by MathJax)
             if (step.equation) {
                 stepHTML += `<div class="step-equation">${step.equation}</div>`;
             }
 
+            // Add concept callout if present
             if (step.concept) {
                 stepHTML += `<div class="step-concept"><strong>Concept:</strong> ${step.concept}</div>`;
             }
 
+            // Add mistake warning if present
             if (step.mistake) {
                 stepHTML += `<div class="step-mistake"><strong>Common Mistake:</strong> ${step.mistake}</div>`;
             }
@@ -379,14 +463,18 @@ document.addEventListener('DOMContentLoaded', function() {
             stepsContent.appendChild(stepDiv);
         });
 
+        // Display final answer
         document.getElementById('answer-content').innerHTML = solution.answer;
 
+        // Render LaTeX equations with MathJax
         if (window.MathJax) {
             MathJax.typesetPromise([stepsContent, document.getElementById('answer-content')]).catch((err) => console.log(err));
         }
 
+        // Draw diagram on canvas
         drawVisualization(solution.type, solution.colors || {});
 
+        // Create color-coded legend
         if (solution.colors && Object.keys(solution.colors).length > 0) {
             const legendHTML = Object.entries(solution.colors).map(([variable, color]) => `
                 <div class="legend-item">
@@ -396,12 +484,23 @@ document.addEventListener('DOMContentLoaded', function() {
             `).join('');
             document.getElementById('diagram-legend').innerHTML = legendHTML;
 
+            // Render LaTeX in legend
             if (window.MathJax) {
                 MathJax.typesetPromise([document.getElementById('diagram-legend')]).catch((err) => console.log(err));
             }
         }
     }
 
+    // ========================================================
+    // DIAGRAM DRAWING (Canvas visualizations)
+    // ========================================================
+
+    /**
+     * Draw visual diagram based on problem type
+     * Uses HTML5 Canvas API to draw color-coded diagrams
+     * @param {string} type - Problem type (two-cars, plane, balloon, cube)
+     * @param {object} colors - Color mapping for variables
+     */
     function drawVisualization(type, colors) {
         const canvas = document.getElementById('diagram-canvas');
         const ctx = canvas.getContext('2d');

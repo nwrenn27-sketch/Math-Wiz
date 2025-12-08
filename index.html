@@ -1,28 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Character encoding and viewport settings for responsive design -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math Wiz - Calculus Problem Solver</title>
+
+    <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
+
+    <!-- ES6 polyfill for older browsers -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+    <!-- MathJax configuration for LaTeX math rendering -->
     <script>
         window.MathJax = {
             tex: {
+                // Define inline math delimiters: $...$ or \(...\)
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
+                // Define display math delimiters: $$...$$ or \[...\]
                 displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                // Allow escaping special characters
                 processEscapes: true
             },
             svg: {
+                // Use global font cache for better performance
                 fontCache: 'global'
             }
         };
     </script>
+    <!-- Load MathJax library for rendering mathematical equations -->
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
 <body>
+    <!-- Main application wrapper -->
     <div class="app">
-        <!-- Header -->
+        <!-- Header Section -->
         <header class="header">
             <div class="header-content">
                 <h1 class="logo">Math Wiz</h1>
@@ -30,16 +43,18 @@
             </div>
         </header>
 
-        <!-- Main Content -->
+        <!-- Main Content Area -->
         <main class="main">
-            <!-- Input Section -->
+            <!-- Input Section: Where users enter problems via text or image -->
             <section class="input-section" id="input-section">
                 <div class="input-container">
+                    <!-- Tab buttons to switch between text input and image upload -->
                     <div class="input-tabs">
                         <button class="input-tab active" data-mode="text">Type Problem</button>
                         <button class="input-tab" data-mode="image">Upload Image</button>
                     </div>
 
+                    <!-- Text Input Mode: Type or paste problem text -->
                     <div class="input-mode" id="text-mode">
                         <label for="problem-input" class="input-label">Enter your problem</label>
                         <textarea
@@ -50,10 +65,14 @@
                         ></textarea>
                     </div>
 
+                    <!-- Image Upload Mode: Upload a photo of the problem -->
                     <div class="input-mode" id="image-mode" style="display: none;">
                         <label class="input-label">Upload a photo or screenshot</label>
                         <div class="upload-zone" id="upload-zone">
+                            <!-- Hidden file input (triggered by clicking upload zone) -->
                             <input type="file" id="image-input" accept="image/*" hidden>
+
+                            <!-- Upload prompt shown when no image is selected -->
                             <div class="upload-prompt">
                                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
@@ -61,6 +80,8 @@
                                 <p>Click to upload or drag and drop</p>
                                 <span>PNG, JPG, PDF up to 10MB</span>
                             </div>
+
+                            <!-- Image preview shown after file is selected -->
                             <div id="image-preview" class="image-preview" style="display: none;">
                                 <img id="preview-img" src="" alt="Preview">
                                 <button class="btn-remove" id="remove-image">×</button>
@@ -68,33 +89,41 @@
                         </div>
                     </div>
 
+                    <!-- Solve button to submit the problem -->
                     <button class="btn btn-primary" id="solve-btn">Solve Problem</button>
                 </div>
             </section>
 
+            <!-- Loading Section: Shown while AI is processing the problem -->
             <section class="loading-section" id="loading-section" style="display: none;">
                 <div class="loading-spinner"></div>
                 <p>Analyzing problem...</p>
             </section>
 
+            <!-- Solution Section: Displays the step-by-step solution -->
             <section class="solution-section" id="solution-section" style="display: none;">
+                <!-- Solution header with "New Problem" button -->
                 <div class="solution-header">
                     <h2>Solution</h2>
                     <button class="btn btn-secondary" id="new-problem-btn">New Problem</button>
                 </div>
 
+                <!-- Display the original problem statement -->
                 <div class="problem-statement">
                     <h3>Problem</h3>
                     <p id="problem-display"></p>
                 </div>
 
+                <!-- Grid layout: Visualization on left, steps on right -->
                 <div class="solution-grid">
+                    <!-- Left panel: Canvas diagram with color-coded legend -->
                     <div class="visualization-panel">
                         <h3>Visualization</h3>
                         <canvas id="diagram-canvas"></canvas>
                         <div id="diagram-legend"></div>
                     </div>
 
+                    <!-- Right panel: Step-by-step solution and final answer -->
                     <div class="steps-panel">
                         <h3>Step-by-Step Solution</h3>
                         <div id="steps-content"></div>
@@ -109,6 +138,7 @@
 
     </div>
 
+    <!-- Load JavaScript files in order: config -> AI integration -> main script -->
     <script src="config.js"></script>
     <script src="ai-integration.js"></script>
     <script src="script.js"></script>

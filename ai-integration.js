@@ -1,12 +1,30 @@
-// AI Integration Module
+// ========================================================
+// AI INTEGRATION MODULE
+// ========================================================
 // This file handles all AI API calls for enhanced problem solving
+// Supports both Anthropic Claude and OpenAI GPT-4
+// Includes vision AI for analyzing uploaded images
+// ========================================================
 
+/**
+ * Math Wiz AI Integration
+ * Handles API calls to Claude or OpenAI for solving math problems
+ */
 class MathWizAI {
+    /**
+     * Initialize AI with configuration
+     * @param {object} config - Configuration object from config.js
+     */
     constructor(config) {
         this.config = config;
         this.provider = this.selectProvider();
     }
 
+    /**
+     * Select AI provider based on which API key is enabled
+     * Prefers Anthropic Claude if both are configured
+     * @returns {string|null} - 'anthropic', 'openai', or null
+     */
     selectProvider() {
         if (this.config.api.anthropic.enabled) {
             return 'anthropic';
@@ -16,7 +34,16 @@ class MathWizAI {
         return null;
     }
 
-    // Solve any math problem using AI
+    // ========================================================
+    // PUBLIC METHODS
+    // ========================================================
+
+    /**
+     * Solve any math problem using AI (text input)
+     * @param {string} problemText - The math problem to solve
+     * @param {string} problemType - Type of problem (default: 'calculus')
+     * @returns {object} - Solution object with steps, answer, colors
+     */
     async solveProblemWithAI(problemText, problemType = 'calculus') {
         if (!this.provider) {
             throw new Error('No AI provider configured. Add an API key in config.js');
@@ -31,7 +58,12 @@ class MathWizAI {
         }
     }
 
-    // Solve from uploaded image
+    /**
+     * Solve math problem from uploaded image
+     * Uses vision AI to extract problem text and solve
+     * @param {string} base64Image - Base64 encoded image data
+     * @returns {object} - Solution object with extractedText, steps, answer
+     */
     async solveFromImage(base64Image) {
         if (!this.provider) {
             throw new Error('No AI provider configured. Add an API key in config.js');
@@ -44,6 +76,17 @@ class MathWizAI {
         }
     }
 
+    // ========================================================
+    // PROMPT BUILDING
+    // ========================================================
+
+    /**
+     * Build conversational prompt for solving a text-based problem
+     * Emphasizes intuitive explanations over robotic textbook style
+     * @param {string} problemText - The problem to solve
+     * @param {string} problemType - Type of problem (e.g., 'calculus')
+     * @returns {string} - Formatted prompt for AI
+     */
     buildSolutionPrompt(problemText, problemType) {
         return `You're a friendly tutor explaining ${problemType} to a student who wants to actually understand, not just get the answer.
 
@@ -72,11 +115,20 @@ Format your response as JSON:
 }`;
     }
 
-    // Call Anthropic Claude API
+    // ========================================================
+    // ANTHROPIC CLAUDE API CALLS
+    // ========================================================
+
+    /**
+     * Call Anthropic Claude API with a text prompt
+     * @param {string} prompt - The prompt to send
+     * @returns {object} - Parsed JSON response with solution
+     */
     async callClaude(prompt) {
         const apiKey = this.config.api.anthropic.apiKey;
         const model = this.config.api.anthropic.model;
 
+        // Call Claude Messages API
         const response = await fetch('https://api.anthropic.com/v1/messages', {
             method: 'POST',
             headers: {
@@ -101,11 +153,11 @@ Format your response as JSON:
         const data = await response.json();
         const content = data.content[0].text;
 
-        // Parse JSON response
+        // Parse JSON response from AI
         try {
             return JSON.parse(content);
         } catch (e) {
-            // If not JSON, wrap in generic format
+            // If AI didn't return JSON, wrap response in generic format
             return {
                 steps: [{
                     title: "Solution",
@@ -119,14 +171,20 @@ Format your response as JSON:
         }
     }
 
-    // Call Claude with image
+    /**
+     * Call Claude with vision AI to analyze uploaded image
+     * @param {string} base64Image - Base64 encoded image
+     * @returns {object} - Solution with extractedText, steps, answer
+     */
     async callClaudeWithImage(base64Image) {
         const apiKey = this.config.api.anthropic.apiKey;
         const model = this.config.api.anthropic.model;
 
+        // Extract base64 data and MIME type from data URL
         const imageData = base64Image.split(',')[1];
         const mimeType = base64Image.match(/data:(.*);base64/)[1];
 
+        // Call Claude with image content block
         const response = await fetch('https://api.anthropic.com/v1/messages', {
             method: 'POST',
             headers: {
@@ -207,7 +265,15 @@ Return as JSON:
         }
     }
 
-    // Call OpenAI GPT API
+    // ========================================================
+    // OPENAI GPT-4 API CALLS
+    // ========================================================
+
+    /**
+     * Call OpenAI GPT-4 API with a text prompt
+     * @param {string} prompt - The prompt to send
+     * @returns {object} - Parsed JSON response with solution
+     */
     async callOpenAI(prompt) {
         const apiKey = this.config.api.openai.apiKey;
         const model = this.config.api.openai.model;
@@ -252,7 +318,11 @@ Return as JSON:
         }
     }
 
-    // Call OpenAI with image
+    /**
+     * Call OpenAI GPT-4 Vision with uploaded image
+     * @param {string} base64Image - Base64 encoded image
+     * @returns {object} - Solution with extractedText, steps, answer
+     */
     async callOpenAIWithImage(base64Image) {
         const apiKey = this.config.api.openai.apiKey;
         const model = 'gpt-4-vision-preview';
@@ -334,7 +404,15 @@ Return as JSON:
         }
     }
 
-    // Ask clarifying questions about an unclear problem
+    // ========================================================
+    // ADDITIONAL AI FEATURES (Future expansion)
+    // ========================================================
+
+    /**
+     * Ask AI to generate clarifying questions for unclear problems
+     * @param {string} problemText - The unclear problem
+     * @returns {Array<string>} - List of clarifying questions
+     */
     async askClarifyingQuestions(problemText) {
         if (!this.provider) return [];
 
@@ -356,7 +434,12 @@ Return as JSON array: ["Question 1?", "Question 2?"]`;
         }
     }
 
-    // Generate similar practice problems
+    /**
+     * Generate similar practice problems based on original
+     * @param {string} originalProblem - The original problem
+     * @param {number} count - Number of similar problems to generate
+     * @returns {Array<object>} - Array of {problem, hint, answer}
+     */
     async generateSimilarProblems(originalProblem, count = 3) {
         if (!this.provider) return [];
 
@@ -385,7 +468,11 @@ Return as JSON array of objects:
         }
     }
 
-    // Explain a specific concept
+    /**
+     * Get AI explanation of a specific calculus concept
+     * @param {string} concept - The concept to explain
+     * @returns {string} - Plain text explanation with examples
+     */
     async explainConcept(concept) {
         if (!this.provider) return null;
 
@@ -407,7 +494,11 @@ Format as plain text, use LaTeX for math in $$ $$.`;
     }
 }
 
-// Export
+// ========================================================
+// EXPORT
+// ========================================================
+
+// Export for use in other modules (Node.js compatibility)
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = MathWizAI;
 }
