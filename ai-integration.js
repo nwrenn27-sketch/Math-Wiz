@@ -81,6 +81,57 @@ class MathWizAI {
     // ========================================================
 
     /**
+     * Build image analysis prompt (shared between Claude and OpenAI)
+     * @returns {string} - Formatted prompt for vision AI
+     */
+    buildImagePrompt() {
+        return `Look at this math problem and help me understand it like you're a friend explaining it over coffee.
+
+Be conversational and intuitive:
+- Explain like you're teaching a friend, not reading a textbook
+- Use real-world examples and analogies
+- Focus on WHY things work, not just the mechanics
+- Share the "aha moments" and intuition
+- Point out what trips people up
+
+IMPORTANT: Provide a diagram description so we can visualize the problem.
+
+Return as JSON:
+{
+    "extractedText": "The problem from the image",
+    "steps": [
+        {
+            "title": "Friendly step title",
+            "body": "Conversational explanation with real context",
+            "equation": "LaTeX in $$ $$",
+            "concept": "The intuitive 'why' - what's really happening",
+            "mistake": "What trips people up here"
+        }
+    ],
+    "answer": "Final answer with LaTeX",
+    "diagram": {
+        "type": "geometry|graph|3d|none",
+        "description": "What to draw",
+        "elements": [
+            {
+                "shape": "line|circle|rectangle|curve|point|arrow|text",
+                "label": "variable or label",
+                "color": "primary|secondary|accent",
+                "position": "position description"
+            }
+        ],
+        "labels": {
+            "variable1": "description"
+        }
+    },
+    "colors": {
+        "x": "#3b82f6",
+        "y": "#ef4444"
+    }
+}`;
+    }
+
+    /**
      * Build conversational prompt for solving a text-based problem
      * Emphasizes intuitive explanations over robotic textbook style
      * @param {string} problemText - The problem to solve
@@ -230,50 +281,7 @@ Format your response as JSON:
                         },
                         {
                             type: 'text',
-                            text: `Look at this math problem and help me understand it like you're a friend explaining it over coffee.
-
-Be conversational and intuitive:
-- Explain like you're teaching a friend, not reading a textbook
-- Use real-world examples and analogies
-- Focus on WHY things work, not just the mechanics
-- Share the "aha moments" and intuition
-- Point out what trips people up
-
-IMPORTANT: Provide a diagram description so we can visualize the problem.
-
-Return as JSON:
-{
-    "extractedText": "The problem from the image",
-    "steps": [
-        {
-            "title": "Friendly step title",
-            "body": "Conversational explanation with real context",
-            "equation": "LaTeX in $$ $$",
-            "concept": "The intuitive 'why' - what's really happening",
-            "mistake": "What trips people up here"
-        }
-    ],
-    "answer": "Final answer with LaTeX",
-    "diagram": {
-        "type": "geometry|graph|3d|none",
-        "description": "What to draw",
-        "elements": [
-            {
-                "shape": "line|circle|rectangle|curve|point|arrow|text",
-                "label": "variable or label",
-                "color": "primary|secondary|accent",
-                "position": "position description"
-            }
-        ],
-        "labels": {
-            "variable1": "description"
-        }
-    },
-    "colors": {
-        "x": "#3b82f6",
-        "y": "#ef4444"
-    }
-}`
+                            text: this.buildImagePrompt()
                         }
                     ]
                 }]
@@ -387,50 +395,7 @@ Return as JSON:
                         },
                         {
                             type: 'text',
-                            text: `Look at this math problem and help me understand it like you're a friend explaining it over coffee.
-
-Be conversational and intuitive:
-- Explain like you're teaching a friend, not reading a textbook
-- Use real-world examples and analogies
-- Focus on WHY things work, not just the mechanics
-- Share the "aha moments" and intuition
-- Point out what trips people up
-
-IMPORTANT: Provide a diagram description so we can visualize the problem.
-
-Return as JSON:
-{
-    "extractedText": "The problem from the image",
-    "steps": [
-        {
-            "title": "Friendly step title",
-            "body": "Conversational explanation with real context",
-            "equation": "LaTeX in $$ $$",
-            "concept": "The intuitive 'why' - what's really happening",
-            "mistake": "What trips people up here"
-        }
-    ],
-    "answer": "Final answer with LaTeX",
-    "diagram": {
-        "type": "geometry|graph|3d|none",
-        "description": "What to draw",
-        "elements": [
-            {
-                "shape": "line|circle|rectangle|curve|point|arrow|text",
-                "label": "variable or label",
-                "color": "primary|secondary|accent",
-                "position": "position description"
-            }
-        ],
-        "labels": {
-            "variable1": "description"
-        }
-    },
-    "colors": {
-        "x": "#3b82f6",
-        "y": "#ef4444"
-    }
-}`
+                            text: this.buildImagePrompt()
                         }
                     ]
                 }],
@@ -464,94 +429,6 @@ Return as JSON:
         }
     }
 
-    // ========================================================
-    // ADDITIONAL AI FEATURES (Future expansion)
-    // ========================================================
-
-    /**
-     * Ask AI to generate clarifying questions for unclear problems
-     * @param {string} problemText - The unclear problem
-     * @returns {Array<string>} - List of clarifying questions
-     */
-    async askClarifyingQuestions(problemText) {
-        if (!this.provider) return [];
-
-        const prompt = `A student submitted this math problem: "${problemText}"
-
-If this problem is unclear or missing information, generate 2-3 clarifying questions to ask the student.
-If the problem is clear, return an empty array.
-
-Return as JSON array: ["Question 1?", "Question 2?"]`;
-
-        const response = this.provider === 'anthropic'
-            ? await this.callClaude(prompt)
-            : await this.callOpenAI(prompt);
-
-        try {
-            return JSON.parse(response);
-        } catch {
-            return [];
-        }
-    }
-
-    /**
-     * Generate similar practice problems based on original
-     * @param {string} originalProblem - The original problem
-     * @param {number} count - Number of similar problems to generate
-     * @returns {Array<object>} - Array of {problem, hint, answer}
-     */
-    async generateSimilarProblems(originalProblem, count = 3) {
-        if (!this.provider) return [];
-
-        const prompt = `Given this calculus problem:
-"${originalProblem}"
-
-Generate ${count} similar practice problems with different numbers/scenarios but the same concept.
-
-Return as JSON array of objects:
-[
-    {
-        "problem": "Problem text",
-        "hint": "One sentence hint",
-        "answer": "Final answer"
-    }
-]`;
-
-        const response = this.provider === 'anthropic'
-            ? await this.callClaude(prompt)
-            : await this.callOpenAI(prompt);
-
-        try {
-            return JSON.parse(response);
-        } catch {
-            return [];
-        }
-    }
-
-    /**
-     * Get AI explanation of a specific calculus concept
-     * @param {string} concept - The concept to explain
-     * @returns {string} - Plain text explanation with examples
-     */
-    async explainConcept(concept) {
-        if (!this.provider) return null;
-
-        const prompt = `Explain this calculus concept to a student: "${concept}"
-
-Provide:
-1. A clear, simple explanation
-2. An example
-3. When to use it
-4. Common misconceptions
-
-Format as plain text, use LaTeX for math in $$ $$.`;
-
-        const response = this.provider === 'anthropic'
-            ? await this.callClaude(prompt)
-            : await this.callOpenAI(prompt);
-
-        return response;
-    }
 }
 
 // ========================================================

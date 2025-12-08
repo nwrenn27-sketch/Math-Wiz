@@ -29,32 +29,6 @@ const CONFIG = {
             model: 'gpt-4',                         // GPT-4 for best results (gpt-3.5-turbo is cheaper but less accurate)
             enabled: false                          // Set to true after adding your API key
         }
-    },
-
-    // ========================================================
-    // FEATURE FLAGS (Future expansion)
-    // ========================================================
-    // These features are not yet implemented but planned for future versions
-    features: {
-        aiClarifyingQuestions: false,   // AI asks clarifying questions for unclear problems
-        aiSimilarProblems: false,       // AI generates similar practice problems
-        aiConceptExplanations: false,   // AI explains concepts on demand
-        imageOCR: false,                // OCR for uploaded images (currently uses vision AI)
-        latexInput: false               // LaTeX input support (currently supports LaTeX in output only)
-    },
-
-    // ========================================================
-    // PROBLEM TYPES SUPPORTED
-    // ========================================================
-    // Currently only related rates has built-in solutions
-    // With AI enabled, all problem types are supported
-    problemTypes: {
-        relatedRates: true,    // Fully supported with 4 built-in examples
-        optimization: false,   // Coming soon (works with AI now)
-        integration: false,    // Coming soon (works with AI now)
-        derivatives: false,    // Coming soon (works with AI now)
-        limits: false,         // Coming soon (works with AI now)
-        series: false          // Coming soon (works with AI now)
     }
 };
 
