@@ -100,6 +100,8 @@ Explain this like you're helping a friend study. Be conversational and intuitive
 - Share tricks you'd tell a friend
 - Warn about mistakes you've seen people make
 
+IMPORTANT: Also provide a simple diagram description so we can visualize the problem.
+
 Format your response as JSON:
 {
     "steps": [
@@ -111,7 +113,27 @@ Format your response as JSON:
             "mistake": "Real talk about what trips people up"
         }
     ],
-    "answer": "Final answer with LaTeX"
+    "answer": "Final answer with LaTeX",
+    "diagram": {
+        "type": "geometry|graph|3d|none",
+        "description": "Brief description of what to draw (e.g., 'right triangle with sides x, y, hypotenuse z')",
+        "elements": [
+            {
+                "shape": "line|circle|rectangle|curve|point|arrow|text",
+                "label": "variable name or description",
+                "color": "primary|secondary|accent",
+                "position": "relative position description"
+            }
+        ],
+        "labels": {
+            "variable1": "what it represents",
+            "variable2": "what it represents"
+        }
+    },
+    "colors": {
+        "x": "#3b82f6",
+        "y": "#ef4444"
+    }
 }`;
     }
 
@@ -217,6 +239,8 @@ Be conversational and intuitive:
 - Share the "aha moments" and intuition
 - Point out what trips people up
 
+IMPORTANT: Provide a diagram description so we can visualize the problem.
+
 Return as JSON:
 {
     "extractedText": "The problem from the image",
@@ -230,8 +254,25 @@ Return as JSON:
         }
     ],
     "answer": "Final answer with LaTeX",
-    "type": "problem-type",
-    "colors": {}
+    "diagram": {
+        "type": "geometry|graph|3d|none",
+        "description": "What to draw",
+        "elements": [
+            {
+                "shape": "line|circle|rectangle|curve|point|arrow|text",
+                "label": "variable or label",
+                "color": "primary|secondary|accent",
+                "position": "position description"
+            }
+        ],
+        "labels": {
+            "variable1": "description"
+        }
+    },
+    "colors": {
+        "x": "#3b82f6",
+        "y": "#ef4444"
+    }
 }`
                         }
                     ]
@@ -355,6 +396,8 @@ Be conversational and intuitive:
 - Share the "aha moments" and intuition
 - Point out what trips people up
 
+IMPORTANT: Provide a diagram description so we can visualize the problem.
+
 Return as JSON:
 {
     "extractedText": "The problem from the image",
@@ -368,8 +411,25 @@ Return as JSON:
         }
     ],
     "answer": "Final answer with LaTeX",
-    "type": "problem-type",
-    "colors": {}
+    "diagram": {
+        "type": "geometry|graph|3d|none",
+        "description": "What to draw",
+        "elements": [
+            {
+                "shape": "line|circle|rectangle|curve|point|arrow|text",
+                "label": "variable or label",
+                "color": "primary|secondary|accent",
+                "position": "position description"
+            }
+        ],
+        "labels": {
+            "variable1": "description"
+        }
+    },
+    "colors": {
+        "x": "#3b82f6",
+        "y": "#ef4444"
+    }
 }`
                         }
                     ]

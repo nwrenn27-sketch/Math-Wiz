@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Draw diagram on canvas
-        drawVisualization(solution.type, solution.colors || {});
+        drawVisualization(solution.type, solution.colors || {}, solution.diagram || null);
 
         // Create color-coded legend
         if (solution.colors && Object.keys(solution.colors).length > 0) {
@@ -496,12 +496,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // ========================================================
 
     /**
-     * Draw visual diagram based on problem type
+     * Draw visual diagram based on problem type or AI-generated description
      * Uses HTML5 Canvas API to draw color-coded diagrams
-     * @param {string} type - Problem type (two-cars, plane, balloon, cube)
+     * @param {string} type - Problem type (two-cars, plane, balloon, cube, or generic)
      * @param {object} colors - Color mapping for variables
+     * @param {object} diagram - AI-generated diagram description (optional)
      */
-    function drawVisualization(type, colors) {
+    function drawVisualization(type, colors, diagram) {
         const canvas = document.getElementById('diagram-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = 500;
@@ -511,6 +512,13 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.font = '13px -apple-system, BlinkMacSystemFont, sans-serif';
         ctx.lineWidth = 2;
 
+        // If AI provided a diagram description, use it
+        if (diagram && diagram.type && diagram.type !== 'none') {
+            drawDynamicDiagram(ctx, diagram, colors);
+            return;
+        }
+
+        // Otherwise use built-in diagrams
         if (type === 'two-cars') {
             const cx = 120, cy = 80;
             ctx.strokeStyle = '#d4d4d4';
@@ -715,5 +723,288 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.textAlign = 'center';
             ctx.fillText('Diagram generated based on problem type', canvas.width / 2, canvas.height / 2);
         }
+    }
+
+    // ========================================================
+    // DYNAMIC DIAGRAM RENDERER (AI-generated diagrams)
+    // ========================================================
+
+    /**
+     * Draw diagram from AI-generated description
+     * Interprets diagram JSON and renders shapes dynamically
+     * @param {CanvasRenderingContext2D} ctx - Canvas context
+     * @param {object} diagram - AI diagram description
+     * @param {object} colors - Color mapping
+     */
+    function drawDynamicDiagram(ctx, diagram, colors) {
+        const canvas = ctx.canvas;
+        const width = canvas.width;
+        const height = canvas.height;
+        const centerX = width / 2;
+        const centerY = height / 2;
+
+        // Color palette
+        const colorMap = {
+            'primary': '#3b82f6',
+            'secondary': '#ef4444',
+            'accent': '#10b981',
+            'neutral': '#64748b'
+        };
+
+        // If no elements, show description text
+        if (!diagram.elements || diagram.elements.length === 0) {
+            ctx.fillStyle = '#64748b';
+            ctx.textAlign = 'center';
+            ctx.font = '14px -apple-system, BlinkMacSystemFont, sans-serif';
+            ctx.fillText(diagram.description || 'Diagram visualization', centerX, centerY - 10);
+            ctx.font = '12px -apple-system, BlinkMacSystemFont, sans-serif';
+            ctx.fillStyle = '#a3a3a3';
+            ctx.fillText('(AI-generated diagram)', centerX, centerY + 10);
+            return;
+        }
+
+        // Draw based on diagram type
+        if (diagram.type === 'geometry') {
+            drawGeometricDiagram(ctx, diagram, colors, colorMap);
+        } else if (diagram.type === 'graph') {
+            drawGraphDiagram(ctx, diagram, colors, colorMap);
+        } else if (diagram.type === '3d') {
+            draw3DDiagram(ctx, diagram, colors, colorMap);
+        } else {
+            // Generic rendering
+            drawGenericDiagram(ctx, diagram, colors, colorMap);
+        }
+
+        // Add description text at bottom
+        if (diagram.description) {
+            ctx.fillStyle = '#737373';
+            ctx.textAlign = 'center';
+            ctx.font = '11px -apple-system, BlinkMacSystemFont, sans-serif';
+            ctx.fillText(diagram.description, centerX, height - 15);
+        }
+    }
+
+    /**
+     * Draw geometric diagram (triangles, circles, rectangles)
+     */
+    function drawGeometricDiagram(ctx, diagram, colors, colorMap) {
+        const canvas = ctx.canvas;
+        const width = canvas.width;
+        const height = canvas.height;
+        const centerX = width / 2;
+        const centerY = height / 2;
+
+        // Simple geometric layout
+        diagram.elements.forEach((element, index) => {
+            const colorKey = element.color || 'primary';
+            const color = colors[element.label] || colorMap[colorKey] || colorMap.primary;
+
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 2.5;
+
+            switch (element.shape) {
+                case 'line':
+                    // Draw line from center outward
+                    const angle = (index / diagram.elements.length) * Math.PI * 2;
+                    const length = 100;
+                    const startX = centerX;
+                    const startY = centerY;
+                    const endX = centerX + Math.cos(angle) * length;
+                    const endY = centerY + Math.sin(angle) * length;
+
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    ctx.lineTo(endX, endY);
+                    ctx.stroke();
+
+                    // Label
+                    if (element.label) {
+                        ctx.fillStyle = '#171717';
+                        ctx.font = '13px -apple-system, BlinkMacSystemFont, sans-serif';
+                        ctx.fillText(element.label, (startX + endX) / 2, (startY + endY) / 2 - 10);
+                    }
+                    break;
+
+                case 'circle':
+                    const radius = 50;
+                    const offsetX = (index - diagram.elements.length / 2) * 80;
+
+                    ctx.beginPath();
+                    ctx.arc(centerX + offsetX, centerY, radius, 0, Math.PI * 2);
+                    ctx.stroke();
+
+                    if (element.label) {
+                        ctx.fillStyle = '#171717';
+                        ctx.font = '13px -apple-system, BlinkMacSystemFont, sans-serif';
+                        ctx.fillText(element.label, centerX + offsetX, centerY + radius + 20);
+                    }
+                    break;
+
+                case 'rectangle':
+                    const rectWidth = 80;
+                    const rectHeight = 60;
+                    const rectX = centerX - rectWidth / 2;
+                    const rectY = centerY - rectHeight / 2 + index * 30;
+
+                    ctx.strokeRect(rectX, rectY, rectWidth, rectHeight);
+
+                    if (element.label) {
+                        ctx.fillStyle = '#171717';
+                        ctx.font = '13px -apple-system, BlinkMacSystemFont, sans-serif';
+                        ctx.fillText(element.label, centerX, centerY + index * 30);
+                    }
+                    break;
+
+                case 'arrow':
+                    // Draw arrow pointing right
+                    const arrowStartX = centerX - 60;
+                    const arrowEndX = centerX + 60;
+                    const arrowY = centerY + index * 40 - 40;
+
+                    ctx.beginPath();
+                    ctx.moveTo(arrowStartX, arrowY);
+                    ctx.lineTo(arrowEndX, arrowY);
+                    ctx.stroke();
+
+                    // Arrow head
+                    ctx.beginPath();
+                    ctx.moveTo(arrowEndX, arrowY);
+                    ctx.lineTo(arrowEndX - 10, arrowY - 5);
+                    ctx.lineTo(arrowEndX - 10, arrowY + 5);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    if (element.label) {
+                        ctx.fillStyle = '#171717';
+                        ctx.font = '13px -apple-system, BlinkMacSystemFont, sans-serif';
+                        ctx.fillText(element.label, centerX, arrowY - 10);
+                    }
+                    break;
+
+                case 'point':
+                    const pointX = centerX + (index - diagram.elements.length / 2) * 80;
+                    const pointY = centerY;
+
+                    ctx.beginPath();
+                    ctx.arc(pointX, pointY, 5, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    if (element.label) {
+                        ctx.fillStyle = '#171717';
+                        ctx.font = '13px -apple-system, BlinkMacSystemFont, sans-serif';
+                        ctx.fillText(element.label, pointX, pointY - 15);
+                    }
+                    break;
+
+                case 'text':
+                    ctx.fillStyle = color;
+                    ctx.font = '14px -apple-system, BlinkMacSystemFont, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(element.label || '', centerX, centerY + index * 25 - 30);
+                    break;
+            }
+        });
+    }
+
+    /**
+     * Draw graph diagram (coordinate system with curves)
+     */
+    function drawGraphDiagram(ctx, diagram, colors, colorMap) {
+        const canvas = ctx.canvas;
+        const width = canvas.width;
+        const height = canvas.height;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const axisLength = 150;
+
+        // Draw axes
+        ctx.strokeStyle = '#d4d4d4';
+        ctx.lineWidth = 1.5;
+
+        // X-axis
+        ctx.beginPath();
+        ctx.moveTo(centerX - axisLength, centerY);
+        ctx.lineTo(centerX + axisLength, centerY);
+        ctx.stroke();
+
+        // Y-axis
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY - axisLength);
+        ctx.lineTo(centerX, centerY + axisLength);
+        ctx.stroke();
+
+        // Axis labels
+        ctx.fillStyle = '#737373';
+        ctx.font = '12px -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.fillText('x', centerX + axisLength + 10, centerY + 5);
+        ctx.fillText('y', centerX - 5, centerY - axisLength - 10);
+
+        // Draw elements
+        diagram.elements.forEach((element) => {
+            const colorKey = element.color || 'primary';
+            const color = colors[element.label] || colorMap[colorKey] || colorMap.primary;
+
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 2.5;
+
+            if (element.shape === 'curve') {
+                // Draw a simple curve
+                ctx.beginPath();
+                ctx.moveTo(centerX - 100, centerY);
+                ctx.quadraticCurveTo(centerX, centerY - 80, centerX + 100, centerY);
+                ctx.stroke();
+            }
+        });
+    }
+
+    /**
+     * Draw 3D diagram (isometric view)
+     */
+    function draw3DDiagram(ctx) {
+        // Simple isometric box
+        const centerX = ctx.canvas.width / 2;
+        const centerY = ctx.canvas.height / 2;
+        const size = 80;
+        const depth = 40;
+
+        ctx.strokeStyle = '#171717';
+        ctx.lineWidth = 2;
+
+        // Front face
+        ctx.fillStyle = '#fafafa';
+        ctx.fillRect(centerX - size/2, centerY - size/2, size, size);
+        ctx.strokeRect(centerX - size/2, centerY - size/2, size, size);
+
+        // Top face
+        ctx.fillStyle = '#e5e5e5';
+        ctx.beginPath();
+        ctx.moveTo(centerX - size/2, centerY - size/2);
+        ctx.lineTo(centerX - size/2 + depth, centerY - size/2 - depth);
+        ctx.lineTo(centerX + size/2 + depth, centerY - size/2 - depth);
+        ctx.lineTo(centerX + size/2, centerY - size/2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Right face
+        ctx.fillStyle = '#d4d4d4';
+        ctx.beginPath();
+        ctx.moveTo(centerX + size/2, centerY - size/2);
+        ctx.lineTo(centerX + size/2 + depth, centerY - size/2 - depth);
+        ctx.lineTo(centerX + size/2 + depth, centerY + size/2 - depth);
+        ctx.lineTo(centerX + size/2, centerY + size/2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+    }
+
+    /**
+     * Draw generic diagram (fallback)
+     */
+    function drawGenericDiagram(ctx, diagram, colors, colorMap) {
+        // Use geometric rendering as fallback
+        drawGeometricDiagram(ctx, diagram, colors, colorMap);
     }
 });
