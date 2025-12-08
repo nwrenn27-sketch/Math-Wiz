@@ -40,13 +40,21 @@
             <div class="header-content">
                 <h1 class="logo">Math Wiz</h1>
                 <p class="tagline">Advanced calculus problem solver with step-by-step solutions</p>
+
+                <!-- Main navigation tabs -->
+                <nav class="main-nav">
+                    <button class="nav-tab active" data-tab="solve">Solve Problem</button>
+                    <button class="nav-tab" data-tab="practice">Practice Problems</button>
+                </nav>
             </div>
         </header>
 
         <!-- Main Content Area -->
         <main class="main">
-            <!-- Input Section: Where users enter problems via text or image -->
-            <section class="input-section" id="input-section">
+            <!-- ===== SOLVE TAB ===== -->
+            <div class="tab-content active" id="solve-tab">
+                <!-- Input Section: Where users enter problems via text or image -->
+                <section class="input-section" id="input-section">
                 <div class="input-container">
                     <!-- Tab buttons to switch between text input and image upload -->
                     <div class="input-tabs">
@@ -134,6 +142,120 @@
                     </div>
                 </div>
             </section>
+            </div>
+            <!-- End Solve Tab -->
+
+            <!-- ===== PRACTICE TAB ===== -->
+            <div class="tab-content" id="practice-tab" style="display: none;">
+                <section class="practice-section">
+                    <div class="practice-header">
+                        <h2>Practice Problem Generator</h2>
+                        <p>Generate unlimited practice problems to master calculus concepts</p>
+                    </div>
+
+                    <!-- Topic Selection -->
+                    <div class="practice-selector">
+                        <label class="input-label">Choose a topic to practice:</label>
+                        <div class="topic-grid">
+                            <button class="topic-card" data-topic="related-rates">
+                                <div class="topic-icon">📐</div>
+                                <div class="topic-title">Related Rates</div>
+                                <div class="topic-desc">Moving objects, changing quantities</div>
+                            </button>
+                            <button class="topic-card" data-topic="optimization">
+                                <div class="topic-icon">📈</div>
+                                <div class="topic-title">Optimization</div>
+                                <div class="topic-desc">Max/min problems, constraints</div>
+                            </button>
+                            <button class="topic-card" data-topic="integration">
+                                <div class="topic-icon">∫</div>
+                                <div class="topic-title">Integration</div>
+                                <div class="topic-desc">Area, volume, antiderivatives</div>
+                            </button>
+                            <button class="topic-card" data-topic="derivatives">
+                                <div class="topic-icon">d/dx</div>
+                                <div class="topic-title">Derivatives</div>
+                                <div class="topic-desc">Chain rule, product rule, quotients</div>
+                            </button>
+                            <button class="topic-card" data-topic="limits">
+                                <div class="topic-icon">lim</div>
+                                <div class="topic-title">Limits</div>
+                                <div class="topic-desc">Continuity, L'Hôpital's rule</div>
+                            </button>
+                            <button class="topic-card" data-topic="series">
+                                <div class="topic-icon">∑</div>
+                                <div class="topic-title">Series</div>
+                                <div class="topic-desc">Convergence, Taylor series</div>
+                            </button>
+                        </div>
+
+                        <!-- Difficulty Selector -->
+                        <div class="difficulty-selector">
+                            <label class="input-label">Difficulty Level:</label>
+                            <div class="difficulty-buttons">
+                                <button class="difficulty-btn active" data-difficulty="easy">
+                                    <span class="difficulty-label">Easy</span>
+                                    <span class="difficulty-desc">Basic concepts</span>
+                                </button>
+                                <button class="difficulty-btn" data-difficulty="medium">
+                                    <span class="difficulty-label">Medium</span>
+                                    <span class="difficulty-desc">Multi-step</span>
+                                </button>
+                                <button class="difficulty-btn" data-difficulty="hard">
+                                    <span class="difficulty-label">Hard</span>
+                                    <span class="difficulty-desc">Complex scenarios</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" id="generate-problem-btn">Generate Practice Problem</button>
+                    </div>
+
+                    <!-- Generated Problem Display -->
+                    <div class="practice-problem-display" id="practice-problem-display" style="display: none;">
+                        <div class="practice-card">
+                            <div class="practice-card-header">
+                                <h3>Practice Problem</h3>
+                                <div class="practice-actions">
+                                    <button class="btn-icon" id="show-hint-btn" title="Show Hint">💡 Hint</button>
+                                    <button class="btn-icon" id="reveal-solution-btn" title="Show Solution">👁️ Solution</button>
+                                    <button class="btn-icon" id="next-problem-btn" title="Next Problem">➡️ Next</button>
+                                </div>
+                            </div>
+
+                            <div class="practice-problem-text" id="practice-problem-text"></div>
+
+                            <!-- Hint (hidden by default) -->
+                            <div class="practice-hint" id="practice-hint" style="display: none;">
+                                <strong>💡 Hint:</strong>
+                                <p id="practice-hint-text"></p>
+                            </div>
+
+                            <!-- Solution (hidden by default) -->
+                            <div class="practice-solution" id="practice-solution" style="display: none;">
+                                <h4>Solution</h4>
+                                <div id="practice-solution-steps"></div>
+                                <div class="practice-answer">
+                                    <strong>Answer:</strong>
+                                    <div id="practice-answer-text"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Tracker -->
+                        <div class="practice-progress">
+                            <div class="progress-header">
+                                <span>Session Progress</span>
+                                <span id="progress-count">0 problems solved</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!-- End Practice Tab -->
         </main>
 
     </div>

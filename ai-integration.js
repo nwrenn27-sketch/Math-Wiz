@@ -76,9 +76,75 @@ class MathWizAI {
         }
     }
 
+    /**
+     * Generate a practice problem for a given topic and difficulty
+     * @param {string} topic - Topic name (related-rates, optimization, etc.)
+     * @param {string} difficulty - Difficulty level (easy, medium, hard)
+     * @returns {object} - Practice problem with hint, solution, answer
+     */
+    async generatePracticeProblem(topic, difficulty = 'medium') {
+        if (!this.provider) {
+            throw new Error('No AI provider configured. Add an API key in config.js');
+        }
+
+        const prompt = this.buildPracticePrompt(topic, difficulty);
+
+        if (this.provider === 'anthropic') {
+            return await this.callClaude(prompt);
+        } else if (this.provider === 'openai') {
+            return await this.callOpenAI(prompt);
+        }
+    }
+
     // ========================================================
     // PROMPT BUILDING
     // ========================================================
+
+    /**
+     * Build practice problem generation prompt
+     * @param {string} topic - Topic name
+     * @param {string} difficulty - Difficulty level
+     * @returns {string} - Formatted prompt for AI
+     */
+    buildPracticePrompt(topic, difficulty) {
+        const topicDescriptions = {
+            'related-rates': 'related rates (rates of change in connected variables)',
+            'optimization': 'optimization (finding maximum or minimum values)',
+            'integration': 'integration (finding antiderivatives, area, volume)',
+            'derivatives': 'derivatives (rates of change, slopes, tangent lines)',
+            'limits': 'limits (behavior as x approaches a value)',
+            'series': 'series (infinite sums, convergence tests)'
+        };
+
+        const difficultyGuidance = {
+            'easy': 'simple, straightforward problem with basic calculations',
+            'medium': 'moderate complexity, requires multiple steps',
+            'hard': 'challenging problem with complex scenarios or multiple concepts'
+        };
+
+        return `Generate a ${difficulty} practice problem about ${topicDescriptions[topic] || topic}.
+
+The problem should be:
+- ${difficultyGuidance[difficulty]}
+- Clear and well-defined with all necessary information
+- Realistic and relatable (real-world context when possible)
+- Appropriate for calculus students
+
+Return as JSON:
+{
+    "problem": "The complete problem statement",
+    "hint": "A helpful hint without giving away the answer",
+    "steps": [
+        {
+            "title": "Step title",
+            "body": "Brief explanation",
+            "equation": "LaTeX equation in $$ $$"
+        }
+    ],
+    "answer": "Final answer with LaTeX",
+    "explanation": "Brief explanation of the key concept"
+}`;
+    }
 
     /**
      * Build image analysis prompt (shared between Claude and OpenAI)

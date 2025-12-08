@@ -1007,4 +1007,207 @@ document.addEventListener('DOMContentLoaded', function() {
         // Use geometric rendering as fallback
         drawGeometricDiagram(ctx, diagram, colors, colorMap);
     }
+
+    // ========================================================
+    // MAIN NAVIGATION TAB SWITCHING
+    // ========================================================
+
+    /**
+     * Handle main navigation tab switching (Solve vs Practice)
+     */
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetTab = tab.dataset.tab;
+
+            // Update active tab button
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // Show/hide tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+                content.style.display = 'none';
+            });
+
+            const targetContent = document.getElementById(`${targetTab}-tab`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+                targetContent.style.display = 'block';
+            }
+        });
+    });
+
+    // ========================================================
+    // PRACTICE TAB FUNCTIONALITY
+    // ========================================================
+
+    let selectedTopic = null;
+    let selectedDifficulty = 'easy';
+    let practiceCount = 0;
+    let currentPracticeProblem = null;
+
+    /**
+     * Handle topic card selection
+     */
+    document.querySelectorAll('.topic-card').forEach(card => {
+        card.addEventListener('click', () => {
+            // Remove previous selection
+            document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('selected'));
+
+            // Select this topic
+            card.classList.add('selected');
+            selectedTopic = card.dataset.topic;
+        });
+    });
+
+    /**
+     * Handle difficulty button selection
+     */
+    document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove previous selection
+            document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+
+            // Select this difficulty
+            btn.classList.add('active');
+            selectedDifficulty = btn.dataset.difficulty;
+        });
+    });
+
+    /**
+     * Generate practice problem button
+     */
+    document.getElementById('generate-problem-btn').addEventListener('click', async () => {
+        if (!selectedTopic) {
+            alert('Please select a topic first!');
+            return;
+        }
+
+        if (!ai || !ai.provider) {
+            alert('AI is required for practice problems. Please add your API key to config.js');
+            return;
+        }
+
+        // Show loading state
+        const btn = document.getElementById('generate-problem-btn');
+        const originalText = btn.textContent;
+        btn.textContent = 'Generating...';
+        btn.disabled = true;
+
+        try {
+            // Generate problem using AI
+            currentPracticeProblem = await ai.generatePracticeProblem(selectedTopic, selectedDifficulty);
+
+            // Display the problem
+            displayPracticeProblem(currentPracticeProblem);
+
+            // Show the problem display area
+            document.getElementById('practice-problem-display').style.display = 'block';
+
+            // Reset hint and solution visibility
+            document.getElementById('practice-hint').style.display = 'none';
+            document.getElementById('practice-solution').style.display = 'none';
+
+        } catch (error) {
+            console.error('Error generating practice problem:', error);
+            alert('Error generating problem: ' + error.message);
+        } finally {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    });
+
+    /**
+     * Display practice problem in the UI
+     */
+    function displayPracticeProblem(problem) {
+        // Display problem text
+        document.getElementById('practice-problem-text').textContent = problem.problem;
+
+        // Set hint text
+        if (problem.hint) {
+            document.getElementById('practice-hint-text').textContent = problem.hint;
+        }
+
+        // Build solution steps HTML
+        let stepsHTML = '';
+        if (problem.steps) {
+            problem.steps.forEach((step, i) => {
+                stepsHTML += `
+                    <div class="step">
+                        <div class="step-header">
+                            <span class="step-number">${i + 1}</span>
+                            <span class="step-title">${step.title}</span>
+                        </div>
+                        <div class="step-body">${step.body}</div>
+                        ${step.equation ? `<div class="step-equation">${step.equation}</div>` : ''}
+                    </div>
+                `;
+            });
+        }
+
+        if (problem.explanation) {
+            stepsHTML += `<p style="margin-top: var(--spacing-md); color: var(--color-text-secondary);">${problem.explanation}</p>`;
+        }
+
+        document.getElementById('practice-solution-steps').innerHTML = stepsHTML;
+        document.getElementById('practice-answer-text').innerHTML = problem.answer;
+
+        // Render LaTeX
+        if (window.MathJax) {
+            MathJax.typesetPromise([
+                document.getElementById('practice-problem-text'),
+                document.getElementById('practice-solution-steps'),
+                document.getElementById('practice-answer-text')
+            ]).catch((err) => console.log(err));
+        }
+    }
+
+    /**
+     * Show hint button
+     */
+    document.getElementById('show-hint-btn').addEventListener('click', () => {
+        const hintEl = document.getElementById('practice-hint');
+        if (hintEl.style.display === 'none') {
+            hintEl.style.display = 'block';
+        } else {
+            hintEl.style.display = 'none';
+        }
+    });
+
+    /**
+     * Reveal solution button
+     */
+    document.getElementById('reveal-solution-btn').addEventListener('click', () => {
+        const solutionEl = document.getElementById('practice-solution');
+        if (solutionEl.style.display === 'none') {
+            solutionEl.style.display = 'block';
+
+            // Increment progress
+            practiceCount++;
+            updateProgress();
+        } else {
+            solutionEl.style.display = 'none';
+        }
+    });
+
+    /**
+     * Next problem button
+     */
+    document.getElementById('next-problem-btn').addEventListener('click', () => {
+        // Trigger generate button click
+        document.getElementById('generate-problem-btn').click();
+    });
+
+    /**
+     * Update progress tracker
+     */
+    function updateProgress() {
+        document.getElementById('progress-count').textContent =
+            `${practiceCount} problem${practiceCount !== 1 ? 's' : ''} solved`;
+
+        // Update progress bar (max out at 10 problems)
+        const percentage = Math.min((practiceCount / 10) * 100, 100);
+        document.getElementById('progress-fill').style.width = `${percentage}%`;
+    }
 });
