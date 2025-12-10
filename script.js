@@ -34,8 +34,11 @@ document.addEventListener('DOMContentLoaded', function() {
             tab.classList.add('active');
 
             // Show/hide corresponding input mode
-            document.getElementById('text-mode').style.display = currentMode === 'text' ? 'block' : 'none';
-            document.getElementById('image-mode').style.display = currentMode === 'image' ? 'block' : 'none';
+            const textMode = document.getElementById('text-mode');
+            const imageMode = document.getElementById('image-mode');
+
+            if (textMode) textMode.style.display = currentMode === 'text' ? 'block' : 'none';
+            if (imageMode) imageMode.style.display = currentMode === 'image' ? 'block' : 'none';
         });
     });
 
@@ -49,41 +52,48 @@ document.addEventListener('DOMContentLoaded', function() {
     const removeImageBtn = document.getElementById('remove-image');
 
     // Click upload zone to trigger file picker
-    uploadZone.addEventListener('click', () => imageInput.click());
+    if (uploadZone && imageInput) {
+        uploadZone.addEventListener('click', () => imageInput.click());
 
-    // Drag-and-drop: Show blue border when dragging over
-    uploadZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadZone.style.borderColor = 'var(--color-primary)';
-    });
+        // Drag-and-drop: Show blue border when dragging over
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.style.borderColor = 'var(--color-primary)';
+        });
 
-    // Drag-and-drop: Reset border when leaving
-    uploadZone.addEventListener('dragleave', () => {
-        uploadZone.style.borderColor = '';
-    });
+        // Drag-and-drop: Reset border when leaving
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.style.borderColor = '';
+        });
 
-    // Drag-and-drop: Handle file drop
-    uploadZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadZone.style.borderColor = '';
-        const file = e.dataTransfer.files[0];
-        handleImageUpload(file);
-    });
+        // Drag-and-drop: Handle file drop
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.style.borderColor = '';
+            const file = e.dataTransfer.files[0];
+            if (file) handleImageUpload(file);
+        });
+    }
 
     // Handle file selection via file picker
-    imageInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        handleImageUpload(file);
-    });
+    if (imageInput) {
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) handleImageUpload(file);
+        });
+    }
 
     // Remove uploaded image (X button)
-    removeImageBtn.addEventListener('click', (e) => {
-        e.stopPropagation();  // Don't trigger upload zone click
-        imageInput.value = '';
-        uploadedImageData = null;
-        imagePreview.style.display = 'none';
-        document.querySelector('.upload-prompt').style.display = 'flex';
-    });
+    if (removeImageBtn) {
+        removeImageBtn.addEventListener('click', (e) => {
+            e.stopPropagation();  // Don't trigger upload zone click
+            if (imageInput) imageInput.value = '';
+            uploadedImageData = null;
+            if (imagePreview) imagePreview.style.display = 'none';
+            const uploadPrompt = document.querySelector('.upload-prompt');
+            if (uploadPrompt) uploadPrompt.style.display = 'flex';
+        });
+    }
 
     /**
      * Process uploaded image file
@@ -106,9 +116,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const reader = new FileReader();
         reader.onload = (e) => {
             uploadedImageData = e.target.result;  // Store base64 data
-            previewImg.src = e.target.result;      // Show preview
-            document.querySelector('.upload-prompt').style.display = 'none';
-            imagePreview.style.display = 'block';
+
+            if (previewImg) {
+                previewImg.src = e.target.result;  // Show preview
+            }
+
+            const uploadPrompt = document.querySelector('.upload-prompt');
+            if (uploadPrompt) uploadPrompt.style.display = 'none';
+            if (imagePreview) imagePreview.style.display = 'block';
         };
         reader.readAsDataURL(file);
     }
@@ -116,42 +131,58 @@ document.addEventListener('DOMContentLoaded', function() {
     // ========================================================
     // SOLVE BUTTON HANDLER
     // ========================================================
-    document.getElementById('solve-btn').addEventListener('click', async () => {
-        let problemText = '';
+    const solveBtn = document.getElementById('solve-btn');
+    if (solveBtn) {
+        solveBtn.addEventListener('click', async () => {
+            let problemText = '';
 
-        // Validate input based on current mode
-        if (currentMode === 'text') {
-            problemText = document.getElementById('problem-input').value.trim();
-            if (!problemText) {
-                alert('Please enter a problem!');
-                return;
-            }
-        } else if (currentMode === 'image') {
-            if (!uploadedImageData) {
-                alert('Please upload an image!');
-                return;
-            }
-        }
+            // Validate input based on current mode
+            if (currentMode === 'text') {
+                const problemInput = document.getElementById('problem-input');
+                if (!problemInput) return;
 
-        // Solve the problem (with AI or built-in solutions)
-        await solveProblem(problemText, uploadedImageData);
-    });
+                problemText = problemInput.value.trim();
+                if (!problemText) {
+                    alert('Please enter a problem!');
+                    return;
+                }
+            } else if (currentMode === 'image') {
+                if (!uploadedImageData) {
+                    alert('Please upload an image!');
+                    return;
+                }
+            }
+
+            // Solve the problem (with AI or built-in solutions)
+            await solveProblem(problemText, uploadedImageData);
+        });
+    }
 
     // ========================================================
     // NEW PROBLEM BUTTON - Reset UI
     // ========================================================
-    document.getElementById('new-problem-btn').addEventListener('click', () => {
-        // Hide solution, show input
-        document.getElementById('solution-section').style.display = 'none';
-        document.getElementById('input-section').style.display = 'block';
+    const newProblemBtn = document.getElementById('new-problem-btn');
+    if (newProblemBtn) {
+        newProblemBtn.addEventListener('click', () => {
+            // Hide solution, show input
+            const solutionSection = document.getElementById('solution-section');
+            const inputSection = document.getElementById('input-section');
 
-        // Clear all inputs
-        document.getElementById('problem-input').value = '';
-        uploadedImageData = null;
-        imageInput.value = '';
-        imagePreview.style.display = 'none';
-        document.querySelector('.upload-prompt').style.display = 'flex';
-    });
+            if (solutionSection) solutionSection.style.display = 'none';
+            if (inputSection) inputSection.style.display = 'block';
+
+            // Clear all inputs
+            const problemInput = document.getElementById('problem-input');
+            if (problemInput) problemInput.value = '';
+
+            uploadedImageData = null;
+            if (imageInput) imageInput.value = '';
+            if (imagePreview) imagePreview.style.display = 'none';
+
+            const uploadPrompt = document.querySelector('.upload-prompt');
+            if (uploadPrompt) uploadPrompt.style.display = 'flex';
+        });
+    }
 
     // ========================================================
     // PROBLEM SOLVING LOGIC
@@ -164,10 +195,15 @@ document.addEventListener('DOMContentLoaded', function() {
      * @param {string} imageData - Base64 image data (optional)
      */
     async function solveProblem(problemText, imageData) {
+        // Get section elements
+        const inputSection = document.getElementById('input-section');
+        const loadingSection = document.getElementById('loading-section');
+        const solutionSection = document.getElementById('solution-section');
+
         // Show loading spinner, hide other sections
-        document.getElementById('input-section').style.display = 'none';
-        document.getElementById('loading-section').style.display = 'block';
-        document.getElementById('solution-section').style.display = 'none';
+        if (inputSection) inputSection.style.display = 'none';
+        if (loadingSection) loadingSection.style.display = 'block';
+        if (solutionSection) solutionSection.style.display = 'none';
 
         try {
             let solution;
@@ -188,8 +224,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (imageData) {
                     // Image analysis requires AI
                     alert('AI is required for image analysis. Please add your API key to config.js');
-                    document.getElementById('loading-section').style.display = 'none';
-                    document.getElementById('input-section').style.display = 'block';
+                    if (loadingSection) loadingSection.style.display = 'none';
+                    if (inputSection) inputSection.style.display = 'block';
                     return;
                 }
                 solution = getSolution(problemText);
@@ -197,14 +233,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Display the solution
             displaySolution(problemText, solution);
-            document.getElementById('loading-section').style.display = 'none';
-            document.getElementById('solution-section').style.display = 'block';
+            if (loadingSection) loadingSection.style.display = 'none';
+            if (solutionSection) solutionSection.style.display = 'block';
         } catch (error) {
             // Handle errors (usually API key issues)
             console.error('Error solving problem:', error);
             alert('Error: ' + error.message + '\n\nPlease check your API key in config.js');
-            document.getElementById('loading-section').style.display = 'none';
-            document.getElementById('input-section').style.display = 'block';
+            if (loadingSection) loadingSection.style.display = 'none';
+            if (inputSection) inputSection.style.display = 'block';
         }
     }
 
@@ -424,14 +460,28 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     function displaySolution(problemText, solution) {
         // Display the problem statement
-        document.getElementById('problem-display').textContent = problemText;
+        const problemDisplay = document.getElementById('problem-display');
+        if (problemDisplay) {
+            problemDisplay.textContent = problemText;
+        }
 
         // Clear previous solution steps
         const stepsContent = document.getElementById('steps-content');
+        if (!stepsContent) return;
+
         stepsContent.innerHTML = '';
+
+        // Ensure solution has required properties
+        if (!solution || !solution.steps) {
+            console.error('Invalid solution object:', solution);
+            return;
+        }
 
         // Render each solution step
         solution.steps.forEach((step, i) => {
+            // Skip invalid steps
+            if (!step || typeof step !== 'object') return;
+
             const stepDiv = document.createElement('div');
             stepDiv.className = 'step';
 
@@ -439,9 +489,9 @@ document.addEventListener('DOMContentLoaded', function() {
             let stepHTML = `
                 <div class="step-header">
                     <span class="step-number">${i + 1}</span>
-                    <span class="step-title">${step.title}</span>
+                    <span class="step-title">${step.title || 'Step ' + (i + 1)}</span>
                 </div>
-                <div class="step-body">${step.body}</div>
+                <div class="step-body">${step.body || ''}</div>
             `;
 
             // Add equation if present (LaTeX will be rendered by MathJax)
@@ -464,29 +514,40 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Display final answer
-        document.getElementById('answer-content').innerHTML = solution.answer;
+        const answerContent = document.getElementById('answer-content');
+        if (answerContent && solution.answer) {
+            answerContent.innerHTML = solution.answer;
+        }
 
         // Render LaTeX equations with MathJax
         if (window.MathJax) {
-            MathJax.typesetPromise([stepsContent, document.getElementById('answer-content')]).catch((err) => console.log(err));
+            const elements = [stepsContent, document.getElementById('answer-content')].filter(el => el !== null);
+            if (elements.length > 0) {
+                MathJax.typesetPromise(elements).catch((err) => console.log('MathJax error:', err));
+            }
         }
 
         // Draw diagram on canvas
         drawVisualization(solution.type, solution.colors || {}, solution.diagram || null);
 
         // Create color-coded legend
-        if (solution.colors && Object.keys(solution.colors).length > 0) {
-            const legendHTML = Object.entries(solution.colors).map(([variable, color]) => `
-                <div class="legend-item">
-                    <div class="legend-color" style="background: ${color}"></div>
-                    <span>$${variable}$ variable</span>
-                </div>
-            `).join('');
-            document.getElementById('diagram-legend').innerHTML = legendHTML;
+        const legendEl = document.getElementById('diagram-legend');
+        if (legendEl) {
+            if (solution.colors && Object.keys(solution.colors).length > 0) {
+                const legendHTML = Object.entries(solution.colors).map(([variable, color]) => `
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: ${color}"></div>
+                        <span>$${variable}$ variable</span>
+                    </div>
+                `).join('');
+                legendEl.innerHTML = legendHTML;
 
-            // Render LaTeX in legend
-            if (window.MathJax) {
-                MathJax.typesetPromise([document.getElementById('diagram-legend')]).catch((err) => console.log(err));
+                // Render LaTeX in legend
+                if (window.MathJax) {
+                    MathJax.typesetPromise([legendEl]).catch((err) => console.log('MathJax error:', err));
+                }
+            } else {
+                legendEl.innerHTML = '';
             }
         }
     }
@@ -504,6 +565,8 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     function drawVisualization(type, colors, diagram) {
         const canvas = document.getElementById('diagram-canvas');
+        if (!canvas) return;
+
         const ctx = canvas.getContext('2d');
         canvas.width = 500;
         canvas.height = 400;
@@ -511,6 +574,9 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font = '13px -apple-system, BlinkMacSystemFont, sans-serif';
         ctx.lineWidth = 2;
+
+        // Ensure colors object exists
+        colors = colors || {};
 
         // If AI provided a diagram description, use it
         if (diagram && diagram.type && diagram.type !== 'none') {
@@ -794,6 +860,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const centerX = width / 2;
         const centerY = height / 2;
 
+        // Validate diagram has elements
+        if (!diagram.elements || !Array.isArray(diagram.elements)) {
+            ctx.fillStyle = '#64748b';
+            ctx.textAlign = 'center';
+            ctx.font = '14px -apple-system, BlinkMacSystemFont, sans-serif';
+            ctx.fillText('Diagram not available', centerX, centerY);
+            return;
+        }
+
         // Simple geometric layout
         diagram.elements.forEach((element, index) => {
             const colorKey = element.color || 'primary';
@@ -940,7 +1015,11 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.fillText('x', centerX + axisLength + 10, centerY + 5);
         ctx.fillText('y', centerX - 5, centerY - axisLength - 10);
 
-        // Draw elements
+        // Draw elements if available
+        if (!diagram.elements || !Array.isArray(diagram.elements)) {
+            return;
+        }
+
         diagram.elements.forEach((element) => {
             const colorKey = element.color || 'primary';
             const color = colors[element.label] || colorMap[colorKey] || colorMap.primary;
@@ -1077,69 +1156,87 @@ document.addEventListener('DOMContentLoaded', function() {
     /**
      * Generate practice problem button
      */
-    document.getElementById('generate-problem-btn').addEventListener('click', async () => {
-        if (!selectedTopic) {
-            alert('Please select a topic first!');
-            return;
-        }
+    const generateProblemBtn = document.getElementById('generate-problem-btn');
+    if (generateProblemBtn) {
+        generateProblemBtn.addEventListener('click', async () => {
+            if (!selectedTopic) {
+                alert('Please select a topic first!');
+                return;
+            }
 
-        if (!ai || !ai.provider) {
-            alert('AI is required for practice problems. Please add your API key to config.js');
-            return;
-        }
+            if (!ai || !ai.provider) {
+                alert('AI is required for practice problems. Please add your API key to config.js');
+                return;
+            }
 
-        // Show loading state
-        const btn = document.getElementById('generate-problem-btn');
-        const originalText = btn.textContent;
-        btn.textContent = 'Generating...';
-        btn.disabled = true;
+            // Show loading state
+            const originalText = generateProblemBtn.textContent;
+            generateProblemBtn.textContent = 'Generating...';
+            generateProblemBtn.disabled = true;
 
-        try {
-            // Generate problem using AI
-            currentPracticeProblem = await ai.generatePracticeProblem(selectedTopic, selectedDifficulty);
+            try {
+                // Generate problem using AI
+                currentPracticeProblem = await ai.generatePracticeProblem(selectedTopic, selectedDifficulty);
 
-            // Display the problem
-            displayPracticeProblem(currentPracticeProblem);
+                // Display the problem
+                displayPracticeProblem(currentPracticeProblem);
 
-            // Show the problem display area
-            document.getElementById('practice-problem-display').style.display = 'block';
+                // Show the problem display area
+                const problemDisplay = document.getElementById('practice-problem-display');
+                if (problemDisplay) problemDisplay.style.display = 'block';
 
-            // Reset hint and solution visibility
-            document.getElementById('practice-hint').style.display = 'none';
-            document.getElementById('practice-solution').style.display = 'none';
+                // Reset hint and solution visibility
+                const hintEl = document.getElementById('practice-hint');
+                const solutionEl = document.getElementById('practice-solution');
+                if (hintEl) hintEl.style.display = 'none';
+                if (solutionEl) solutionEl.style.display = 'none';
 
-        } catch (error) {
-            console.error('Error generating practice problem:', error);
-            alert('Error generating problem: ' + error.message);
-        } finally {
-            btn.textContent = originalText;
-            btn.disabled = false;
-        }
-    });
+            } catch (error) {
+                console.error('Error generating practice problem:', error);
+                alert('Error generating problem: ' + error.message);
+            } finally {
+                generateProblemBtn.textContent = originalText;
+                generateProblemBtn.disabled = false;
+            }
+        });
+    }
 
     /**
      * Display practice problem in the UI
      */
     function displayPracticeProblem(problem) {
+        // Validate problem object
+        if (!problem) {
+            console.error('Invalid practice problem:', problem);
+            return;
+        }
+
         // Display problem text
-        document.getElementById('practice-problem-text').textContent = problem.problem;
+        const problemTextEl = document.getElementById('practice-problem-text');
+        if (problemTextEl && problem.problem) {
+            problemTextEl.textContent = problem.problem;
+        }
 
         // Set hint text
-        if (problem.hint) {
-            document.getElementById('practice-hint-text').textContent = problem.hint;
+        const hintTextEl = document.getElementById('practice-hint-text');
+        if (hintTextEl && problem.hint) {
+            hintTextEl.textContent = problem.hint;
         }
 
         // Build solution steps HTML
         let stepsHTML = '';
-        if (problem.steps) {
+        if (problem.steps && Array.isArray(problem.steps)) {
             problem.steps.forEach((step, i) => {
+                // Skip invalid steps
+                if (!step || typeof step !== 'object') return;
+
                 stepsHTML += `
                     <div class="step">
                         <div class="step-header">
                             <span class="step-number">${i + 1}</span>
-                            <span class="step-title">${step.title}</span>
+                            <span class="step-title">${step.title || 'Step ' + (i + 1)}</span>
                         </div>
-                        <div class="step-body">${step.body}</div>
+                        <div class="step-body">${step.body || ''}</div>
                         ${step.equation ? `<div class="step-equation">${step.equation}</div>` : ''}
                     </div>
                 `;
@@ -1150,64 +1247,93 @@ document.addEventListener('DOMContentLoaded', function() {
             stepsHTML += `<p style="margin-top: var(--spacing-md); color: var(--color-text-secondary);">${problem.explanation}</p>`;
         }
 
-        document.getElementById('practice-solution-steps').innerHTML = stepsHTML;
-        document.getElementById('practice-answer-text').innerHTML = problem.answer;
+        const solutionStepsEl = document.getElementById('practice-solution-steps');
+        if (solutionStepsEl) {
+            solutionStepsEl.innerHTML = stepsHTML;
+        }
+
+        const answerTextEl = document.getElementById('practice-answer-text');
+        if (answerTextEl && problem.answer) {
+            answerTextEl.innerHTML = problem.answer;
+        }
 
         // Render LaTeX
         if (window.MathJax) {
-            MathJax.typesetPromise([
+            const elements = [
                 document.getElementById('practice-problem-text'),
                 document.getElementById('practice-solution-steps'),
                 document.getElementById('practice-answer-text')
-            ]).catch((err) => console.log(err));
+            ].filter(el => el !== null);
+
+            if (elements.length > 0) {
+                MathJax.typesetPromise(elements).catch((err) => console.log('MathJax error:', err));
+            }
         }
     }
 
     /**
      * Show hint button
      */
-    document.getElementById('show-hint-btn').addEventListener('click', () => {
-        const hintEl = document.getElementById('practice-hint');
-        if (hintEl.style.display === 'none') {
-            hintEl.style.display = 'block';
-        } else {
-            hintEl.style.display = 'none';
-        }
-    });
+    const showHintBtn = document.getElementById('show-hint-btn');
+    if (showHintBtn) {
+        showHintBtn.addEventListener('click', () => {
+            const hintEl = document.getElementById('practice-hint');
+            if (hintEl) {
+                if (hintEl.style.display === 'none') {
+                    hintEl.style.display = 'block';
+                } else {
+                    hintEl.style.display = 'none';
+                }
+            }
+        });
+    }
 
     /**
      * Reveal solution button
      */
-    document.getElementById('reveal-solution-btn').addEventListener('click', () => {
-        const solutionEl = document.getElementById('practice-solution');
-        if (solutionEl.style.display === 'none') {
-            solutionEl.style.display = 'block';
+    const revealSolutionBtn = document.getElementById('reveal-solution-btn');
+    if (revealSolutionBtn) {
+        revealSolutionBtn.addEventListener('click', () => {
+            const solutionEl = document.getElementById('practice-solution');
+            if (solutionEl) {
+                if (solutionEl.style.display === 'none') {
+                    solutionEl.style.display = 'block';
 
-            // Increment progress
-            practiceCount++;
-            updateProgress();
-        } else {
-            solutionEl.style.display = 'none';
-        }
-    });
+                    // Increment progress
+                    practiceCount++;
+                    updateProgress();
+                } else {
+                    solutionEl.style.display = 'none';
+                }
+            }
+        });
+    }
 
     /**
      * Next problem button
      */
-    document.getElementById('next-problem-btn').addEventListener('click', () => {
-        // Trigger generate button click
-        document.getElementById('generate-problem-btn').click();
-    });
+    const nextProblemBtn = document.getElementById('next-problem-btn');
+    if (nextProblemBtn) {
+        nextProblemBtn.addEventListener('click', () => {
+            // Trigger generate button click
+            if (generateProblemBtn) generateProblemBtn.click();
+        });
+    }
 
     /**
      * Update progress tracker
      */
     function updateProgress() {
-        document.getElementById('progress-count').textContent =
-            `${practiceCount} problem${practiceCount !== 1 ? 's' : ''} solved`;
+        const progressCount = document.getElementById('progress-count');
+        if (progressCount) {
+            progressCount.textContent = `${practiceCount} problem${practiceCount !== 1 ? 's' : ''} solved`;
+        }
 
         // Update progress bar (max out at 10 problems)
         const percentage = Math.min((practiceCount / 10) * 100, 100);
-        document.getElementById('progress-fill').style.width = `${percentage}%`;
+        const progressFill = document.getElementById('progress-fill');
+        if (progressFill) {
+            progressFill.style.width = `${percentage}%`;
+        }
     }
 });

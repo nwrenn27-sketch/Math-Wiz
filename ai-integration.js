@@ -298,6 +298,7 @@ Format your response as JSON:
         } catch (e) {
             // If AI didn't return JSON, wrap response in generic format
             return {
+                type: 'generic',
                 steps: [{
                     title: "Solution",
                     body: content,
@@ -305,7 +306,8 @@ Format your response as JSON:
                     concept: null,
                     mistake: null
                 }],
-                answer: "See solution above"
+                answer: "See solution above",
+                colors: {}
             };
         }
     }
@@ -421,6 +423,7 @@ Format your response as JSON:
             return JSON.parse(content);
         } catch (e) {
             return {
+                type: 'generic',
                 steps: [{
                     title: "Solution",
                     body: content,
@@ -428,7 +431,8 @@ Format your response as JSON:
                     concept: null,
                     mistake: null
                 }],
-                answer: "See solution above"
+                answer: "See solution above",
+                colors: {}
             };
         }
     }
@@ -495,13 +499,4 @@ Format your response as JSON:
         }
     }
 
-}
-
-// ========================================================
-// EXPORT
-// ========================================================
-
-// Export for use in other modules (Node.js compatibility)
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = MathWizAI;
 }
