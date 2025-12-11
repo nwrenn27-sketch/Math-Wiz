@@ -210,17 +210,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Choose AI or built-in solution
             if (ai && ai.provider) {
-                // AI is configured - use it to solve
+                // AI is configured - use it to solve ANY problem
                 if (imageData) {
                     // Image upload: extract problem from image, then solve
                     solution = await ai.solveFromImage(imageData);
                     problemText = solution.extractedText || 'Problem from uploaded image';
                 } else {
-                    // Text input: solve directly
+                    // Text input: solve directly with AI (no keyword restrictions)
                     solution = await ai.solveProblemWithAI(problemText);
                 }
             } else {
-                // No AI configured - use built-in solutions
+                // No AI configured - use built-in solutions only
                 if (imageData) {
                     // Image analysis requires AI
                     alert('AI is required for image analysis. Please add your API key to config.js');

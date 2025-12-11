@@ -28,6 +28,16 @@ const CONFIG = {
             apiKey: '',                             // Paste your OpenAI API key here (starts with sk-...)
             model: 'gpt-4',                         // GPT-4 for best results (gpt-3.5-turbo is cheaper but less accurate)
             enabled: false                          // Set to true after adding your API key
+        },
+
+        // Option 3: Google Gemini (FREE TIER AVAILABLE!)
+        // Gemini has a generous free tier: 15 RPM, 1500 requests/day
+        // Get your key at: https://aistudio.google.com/app/apikey
+        // Cost: FREE for most usage (then pay-as-you-go)
+        gemini: {
+            apiKey: '',                             // Paste your Gemini API key here
+            model: 'gemini-1.5-pro',               // gemini-1.5-pro for best math performance
+            enabled: false                          // Set to true after adding your API key
         }
     }
 };
