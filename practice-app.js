@@ -11,7 +11,10 @@ const appState = {
     selectedDifficulty: null,
     currentProblem: null,
     currentStepIndex: -1, // -1 = not started, 0 = first step, etc.
-    stepsRevealed: []
+    stepsRevealed: [],
+    studentAnswer: null,
+    answerIsCorrect: null,
+    answerSubmitted: false
 };
 
 // ========================================================
@@ -137,6 +140,9 @@ function loadProblem(problem) {
     appState.currentProblem = problem;
     appState.currentStepIndex = -1;
     appState.stepsRevealed = [];
+    appState.studentAnswer = null;
+    appState.answerIsCorrect = null;
+    appState.answerSubmitted = false;
 
     // Switch to solver screen
     showScreen('solver-screen');
@@ -145,6 +151,11 @@ function loadProblem(problem) {
     document.getElementById('problem-title').textContent = problem.title;
     document.getElementById('problem-statement').textContent = problem.problem;
     document.getElementById('visual-description').textContent = problem.visual.description;
+
+    // Reset answer input
+    document.getElementById('student-answer-input').value = '';
+    document.getElementById('answer-feedback').classList.add('hidden');
+    document.getElementById('answer-input-container').classList.remove('hidden');
 
     // Reset steps display
     const stepsDisplay = document.getElementById('steps-display');
@@ -165,6 +176,115 @@ function loadProblem(problem) {
 
     // Render math
     MathJax.typesetPromise();
+}
+
+// ========================================================
+// ANSWER SUBMISSION
+// ========================================================
+
+function submitAnswer() {
+    const problem = appState.currentProblem;
+    if (!problem) return;
+
+    const studentInput = document.getElementById('student-answer-input').value.trim();
+    if (!studentInput) {
+        alert('Please enter an answer first!');
+        return;
+    }
+
+    appState.studentAnswer = studentInput;
+    appState.answerSubmitted = true;
+
+    // Check if answer is correct
+    appState.answerIsCorrect = checkAnswer(studentInput, problem.answer);
+
+    // Show feedback
+    displayAnswerFeedback();
+
+    // Disable input after submission
+    document.getElementById('student-answer-input').disabled = true;
+    document.getElementById('submit-answer-btn').disabled = true;
+}
+
+function checkAnswer(studentAnswer, correctAnswer) {
+    // Normalize both answers for comparison
+    const normalize = (str) => {
+        return str
+            .toLowerCase()
+            .replace(/\s+/g, '') // Remove whitespace
+            .replace(/[\\${}]/g, '') // Remove LaTeX symbols
+            .replace(/\\text\{([^}]+)\}/g, '$1') // Extract text from \text{}
+            .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '($1/$2)') // Convert fractions
+            .replace(/\\sqrt\{([^}]+)\}/g, 'sqrt($1)') // Convert sqrt
+            .replace(/≈|~|approximately/g, '') // Remove approximation symbols
+            .replace(/[^\w\d.\/\-+*()]/g, ''); // Keep only alphanumeric, operators, decimals
+    };
+
+    const normalizedStudent = normalize(studentAnswer);
+    const normalizedCorrect = normalize(correctAnswer);
+
+    // Check exact match
+    if (normalizedStudent === normalizedCorrect) {
+        return true;
+    }
+
+    // Extract numeric values and compare
+    const extractNumber = (str) => {
+        const match = str.match(/[\d.]+/);
+        return match ? parseFloat(match[0]) : null;
+    };
+
+    const studentNum = extractNumber(normalizedStudent);
+    const correctNum = extractNumber(normalizedCorrect);
+
+    if (studentNum !== null && correctNum !== null) {
+        // Allow small floating point differences (within 0.01)
+        return Math.abs(studentNum - correctNum) < 0.01;
+    }
+
+    // Check if student answer is contained in correct answer or vice versa
+    if (normalizedStudent.includes(normalizedCorrect) || normalizedCorrect.includes(normalizedStudent)) {
+        return true;
+    }
+
+    return false;
+}
+
+function displayAnswerFeedback() {
+    const feedbackDiv = document.getElementById('answer-feedback');
+    const feedbackContent = document.getElementById('feedback-content');
+
+    if (appState.answerIsCorrect) {
+        feedbackContent.innerHTML = `
+            <div class="feedback-correct">
+                <span class="feedback-icon">✓</span>
+                <div class="feedback-text">
+                    <strong>Correct!</strong>
+                    <p>Great job! Your answer is correct. Feel free to view the solution steps to see the detailed work.</p>
+                </div>
+            </div>
+        `;
+        feedbackDiv.classList.remove('hidden');
+        feedbackDiv.classList.add('correct');
+        feedbackDiv.classList.remove('incorrect');
+    } else {
+        feedbackContent.innerHTML = `
+            <div class="feedback-incorrect">
+                <span class="feedback-icon">✗</span>
+                <div class="feedback-text">
+                    <strong>Not quite right</strong>
+                    <p>Your answer: <code>${appState.studentAnswer}</code></p>
+                    <p>That's not the answer we're looking for. Check out the solution steps to see where you might have made a mistake!</p>
+                </div>
+            </div>
+        `;
+        feedbackDiv.classList.remove('hidden');
+        feedbackDiv.classList.add('incorrect');
+        feedbackDiv.classList.remove('correct');
+    }
+
+    // Render any math in the feedback
+    MathJax.typesetPromise([feedbackContent]);
 }
 
 function showNextStep() {
@@ -653,6 +773,16 @@ function setupEventListeners() {
 
     // Back button
     document.getElementById('back-btn').addEventListener('click', goBackToProblems);
+
+    // Answer submission
+    document.getElementById('submit-answer-btn').addEventListener('click', submitAnswer);
+
+    // Allow Enter key to submit answer
+    document.getElementById('student-answer-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            submitAnswer();
+        }
+    });
 
     // Control buttons
     document.getElementById('next-step-btn').addEventListener('click', showNextStep);

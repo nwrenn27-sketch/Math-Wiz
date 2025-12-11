@@ -93,6 +93,34 @@
                     </div>
                 </div>
 
+                <!-- Answer Input Section -->
+                <div class="answer-input-container" id="answer-input-container">
+                    <div class="answer-prompt">
+                        <h3>Try it yourself first!</h3>
+                        <p>Enter your answer below, or skip ahead to view the solution.</p>
+                    </div>
+
+                    <div class="answer-input-group">
+                        <input
+                            type="text"
+                            id="student-answer-input"
+                            class="answer-input"
+                            placeholder="Type your answer (e.g., 65 m/hr)"
+                            aria-label="Your answer"
+                        />
+                        <button class="control-btn primary" id="submit-answer-btn" aria-label="Submit your answer">
+                            Check Answer
+                        </button>
+                    </div>
+
+                    <!-- Answer Feedback (hidden until answer submitted) -->
+                    <div class="answer-feedback hidden" id="answer-feedback" aria-live="polite">
+                        <div class="feedback-content" id="feedback-content">
+                            <!-- Feedback will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Solution Steps Container -->
                 <div class="solution-container">
                     <!-- Progress Indicator -->
