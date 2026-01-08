@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Wiz - Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px 50px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            color: #e74c3c;
+        }
+
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .file-structure {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+        }
+
+        .section-intro {
+            background-color: #ecf0f1;
+            padding: 15px 20px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .nav {
+            background-color: #2c3e50;
+            padding: 15px 20px;
+            margin: -40px -50px 30px -50px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .nav a {
+            color: white;
+            margin-right: 20px;
+            font-weight: 500;
+        }
+
+        .nav a:hover {
+            color: #3498db;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #ecf0f1;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 25px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .nav {
+                margin: -20px -25px 20px -25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="#overview">Overview</a>
+            <a href="#installation">Installation</a>
+            <a href="#usage">Usage</a>
+            <a href="#technical">Technical Details</a>
+            <a href="#contact">Contact</a>
+        </div>
+
+        <h1>Math Wiz</h1>
+        <p class="subtitle">A web-based calculus problem solver that provides step-by-step solutions with interactive visualizations. Built with vanilla JavaScript and integrated with AI language models for comprehensive problem-solving capabilities.</p>
+
+        <section id="overview">
+            <h2>Overview</h2>
+            <div class="section-intro">
+                <p>Math Wiz is an educational tool designed to solve calculus problems through text input or image upload. The application renders mathematical notation using LaTeX and generates visual diagrams to aid understanding. It demonstrates integration with large language model APIs and computer vision for mathematical problem analysis.</p>
+            </div>
+        </section>
+
+        <section id="technologies">
+            <h2>Technologies Used</h2>
+            <ul>
+                <li>HTML5, CSS3, JavaScript (ES6+)</li>
+                <li>MathJax 3.0 for mathematical typesetting</li>
+                <li>Canvas API for diagram rendering</li>
+                <li>Anthropic Claude API (primary)</li>
+                <li>OpenAI GPT-4 API (alternative)</li>
+                <li>Python SimpleHTTPServer for local development</li>
+            </ul>
+        </section>
+
+        <section id="features">
+            <h2>Features</h2>
+            <ul>
+                <li>Text-based calculus problem input and solution generation</li>
+                <li>Image upload with OCR and problem extraction</li>
+                <li>Step-by-step solution breakdowns with explanations</li>
+                <li>LaTeX rendering for mathematical expressions</li>
+                <li>Interactive canvas-based visualizations</li>
+                <li>Support for related rates, optimization, derivatives, integrals, limits, and series</li>
+            </ul>
+        </section>
+
+        <section id="installation">
+            <h2>Installation</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li>Python 3.x installed on your system</li>
+                <li>API key from Anthropic or OpenAI (required for AI-powered features)</li>
+            </ul>
+
+            <h3>Setup Instructions</h3>
+            <ol>
+                <li>
+                    Clone the repository:
+                    <pre><code>git clone https://github.com/nwrenn27-sketch/Math-Wiz.git
+cd Math-Wiz</code></pre>
+                </li>
+                <li>
+                    Configure API credentials:
+                    <p>Edit <code>config.js</code> and add your API key:</p>
+                    <pre><code>const CONFIG = {
+    api: {
+        anthropic: {
+            apiKey: 'your-api-key-here',
+            model: 'claude-3-5-sonnet-20241022',
+            enabled: true
+        }
+    }
+};</code></pre>
+                </li>
+                <li>
+                    Start the local server:
+                    <pre><code>python3 -m http.server 8000</code></pre>
+                </li>
+                <li>
+                    Navigate to <code>http://localhost:8000</code> in your browser.
+                </li>
+            </ol>
+        </section>
+
+        <section id="usage">
+            <h2>Usage</h2>
+
+            <h3>Solving Problems via Text Input</h3>
+            <ol>
+                <li>Enter a calculus problem in the text area</li>
+                <li>Click "Solve" to generate a step-by-step solution</li>
+                <li>Review the rendered solution with LaTeX formatting and diagrams</li>
+            </ol>
+
+            <h3>Solving Problems via Image Upload</h3>
+            <ol>
+                <li>Click the upload area or drag and drop an image file</li>
+                <li>Supported formats: PNG, JPG, PDF (maximum 10MB)</li>
+                <li>The application will extract the problem text and generate a solution</li>
+            </ol>
+
+            <h3>Built-in Examples</h3>
+            <p>The application includes four pre-configured related rates problems that work without AI integration:</p>
+            <ul>
+                <li>Two cars moving apart</li>
+                <li>Plane and radar station distance calculation</li>
+                <li>Balloon inflation rate</li>
+                <li>Cube volume expansion</li>
+            </ul>
+        </section>
+
+        <section id="structure">
+            <h2>Project Structure</h2>
+            <div class="file-structure">
+                <pre>Math Wiz/
+├── index.html              # Main application interface
+├── practice-app.js         # Student practice mode implementation
+├── practice-styles.css     # Practice mode styling
+├── script.js               # Core application logic
+├── styles.css              # Main application styles
+├── ai-integration.js       # AI API integration layer
+├── config.js               # API configuration file
+├── problems.js             # Problem database and definitions
+└── README.md               # Project documentation</pre>
+            </div>
+        </section>
+
+        <section id="technical">
+            <h2>Technical Details</h2>
+
+            <h3>Architecture</h3>
+            <p>The application follows a modular architecture with separation of concerns:</p>
+            <ul>
+                <li>UI rendering and event handling in <code>script.js</code></li>
+                <li>AI service abstraction in <code>ai-integration.js</code></li>
+                <li>Configuration management in <code>config.js</code></li>
+                <li>Mathematical problem definitions in <code>problems.js</code></li>
+            </ul>
+
+            <h3>API Integration</h3>
+            <p>The application supports multiple AI providers through a unified interface. API calls are made client-side, and no user data is stored on external servers beyond the API provider's processing.</p>
+        </section>
+
+        <section id="limitations">
+            <h2>Known Limitations</h2>
+            <ul>
+                <li>Requires a valid API key for solving arbitrary problems</li>
+                <li>Image analysis quality depends on image clarity and formatting</li>
+                <li>API usage incurs costs based on provider pricing models</li>
+                <li>Solutions are generated by AI and should be verified for accuracy</li>
+            </ul>
+        </section>
+
+        <section id="future">
+            <h2>Future Enhancements</h2>
+            <ul>
+                <li>Add support for additional mathematical domains beyond calculus</li>
+                <li>Implement solution history and bookmarking</li>
+                <li>Add user authentication for personalized problem sets</li>
+                <li>Develop offline mode with expanded built-in problem library</li>
+            </ul>
+        </section>
+
+        <section id="license">
+            <h2>License</h2>
+            <p>This project is available for educational and portfolio purposes.</p>
+        </section>
+
+        <section id="contact">
+            <h2>Contact</h2>
+            <p>Repository: <a href="https://github.com/nwrenn27-sketch/Math-Wiz" target="_blank">github.com/nwrenn27-sketch/Math-Wiz</a></p>
+        </section>
+
+        <footer>
+            <p>Math Wiz Documentation &copy; 2026 | Nolan Wrenn</p>
+        </footer>
+    </div>
+</body>
+</html>
