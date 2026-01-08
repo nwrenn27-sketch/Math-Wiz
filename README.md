@@ -1,139 +1,135 @@
 # Math Wiz
 
-Professional calculus problem solver with AI-powered solutions and image analysis.
+A web-based calculus problem solver that provides step-by-step solutions with interactive visualizations. Built with vanilla JavaScript and integrated with AI language models for comprehensive problem-solving capabilities.
 
-## Quick Start
+## Overview
 
+Math Wiz is an educational tool designed to solve calculus problems through text input or image upload. The application renders mathematical notation using LaTeX and generates visual diagrams to aid understanding. It demonstrates integration with large language model APIs and computer vision for mathematical problem analysis.
+
+## Technologies Used
+
+- HTML5, CSS3, JavaScript (ES6+)
+- MathJax 3.0 for mathematical typesetting
+- Canvas API for diagram rendering
+- Anthropic Claude API (primary)
+- OpenAI GPT-4 API (alternative)
+- Python SimpleHTTPServer for local development
+
+## Features
+
+- Text-based calculus problem input and solution generation
+- Image upload with OCR and problem extraction
+- Step-by-step solution breakdowns with explanations
+- LaTeX rendering for mathematical expressions
+- Interactive canvas-based visualizations
+- Support for related rates, optimization, derivatives, integrals, limits, and series
+
+## Installation
+
+### Prerequisites
+
+- Python 3.x installed on your system
+- API key from Anthropic or OpenAI (required for AI-powered features)
+
+### Setup Instructions
+
+1. Clone the repository:
+```bash
+git clone https://github.com/nwrenn27-sketch/Math-Wiz.git
+cd Math-Wiz
+```
+
+2. Configure API credentials:
+
+   Edit `config.js` and add your API key:
+   ```javascript
+   const CONFIG = {
+       api: {
+           anthropic: {
+               apiKey: 'your-api-key-here',
+               model: 'claude-3-5-sonnet-20241022',
+               enabled: true
+           }
+       }
+   };
+   ```
+
+3. Start the local server:
 ```bash
 python3 -m http.server 8000
 ```
 
-Visit http://localhost:8000
+4. Navigate to `http://localhost:8000` in your browser.
 
-## Setup (Required for AI Features)
+## Usage
 
-Math Wiz has 4 built-in problems but needs an API key to solve ANY problem.
+### Solving Problems via Text Input
 
-### Get an API Key
+1. Enter a calculus problem in the text area
+2. Click "Solve" to generate a step-by-step solution
+3. Review the rendered solution with LaTeX formatting and diagrams
 
-**Anthropic Claude** (Recommended - best for math):
-- Visit: https://console.anthropic.com/
-- Create account → Get API key
-- Free tier available
+### Solving Problems via Image Upload
 
-**OR OpenAI GPT-4**:
-- Visit: https://platform.openai.com/
-- Create account → Get API key
-- Requires payment method
+1. Click the upload area or drag and drop an image file
+2. Supported formats: PNG, JPG, PDF (maximum 10MB)
+3. The application will extract the problem text and generate a solution
 
-### Add Your API Key
+### Built-in Examples
 
-Edit `config.js`:
-
-```javascript
-const CONFIG = {
-    api: {
-        anthropic: {
-            apiKey: 'sk-ant-your-actual-key-here',  // Paste your key
-            model: 'claude-3-5-sonnet-20241022',
-            enabled: true  // Set to true
-        }
-    }
-};
-```
-
-Save the file and refresh your browser. That's it!
-
-## Features
-
-### Text Input
-- Type or paste ANY calculus problem
-- Related rates, optimization, derivatives, integrals, limits, series
-- Get step-by-step solutions with LaTeX math
-- Concepts explained + common mistakes highlighted
-
-### Image Upload
-- Drag & drop or click to upload
-- Upload photos of worksheets, textbooks, handwritten problems
-- AI extracts text and solves automatically
-- Supports PNG, JPG, PDF up to 10MB
-
-### Solutions Include
-- Beautiful LaTeX fraction rendering
-- Color-coded diagrams
-- Step-by-step explanations
-- Conceptual understanding
-- Common mistake warnings
-- Final answer highlighted
-
-## How It Works
-
-### Without AI (4 Built-In Problems Only)
+The application includes four pre-configured related rates problems that work without AI integration:
 - Two cars moving apart
-- Plane and radar station
-- Balloon inflation
+- Plane and radar station distance calculation
+- Balloon inflation rate
 - Cube volume expansion
 
-### With AI (Unlimited Problems)
-- Solves ANY calculus problem you throw at it
-- Analyzes images with vision AI
-- Generates detailed step-by-step solutions
-- Creates appropriate visualizations
-
-## File Structure
+## Project Structure
 
 ```
 Math Wiz/
-├── index.html          # UI
-├── styles.css          # Clean styling
-├── script.js           # Core logic + fallback solutions
-├── config.js           # ← ADD YOUR API KEY HERE
-├── ai-integration.js   # AI features
-└── README.md
+├── index.html              # Main application interface
+├── practice-app.js         # Student practice mode implementation
+├── practice-styles.css     # Practice mode styling
+├── script.js               # Core application logic
+├── styles.css              # Main application styles
+├── ai-integration.js       # AI API integration layer
+├── config.js               # API configuration file
+├── problems.js             # Problem database and definitions
+└── README.md               # Project documentation
 ```
 
-## Tech Stack
+## Technical Details
 
-- HTML5 + CSS3 (no frameworks)
-- Vanilla JavaScript
-- MathJax 3 for LaTeX
-- Canvas API for diagrams
-- Anthropic Claude or OpenAI GPT-4
+### Architecture
 
-## Costs
+The application follows a modular architecture with separation of concerns:
+- UI rendering and event handling in `script.js`
+- AI service abstraction in `ai-integration.js`
+- Configuration management in `config.js`
+- Mathematical problem definitions in `problems.js`
 
-- **Built-in problems**: Free
-- **AI (Claude)**: ~$0.01-0.05 per problem
-- **AI (OpenAI)**: ~$0.05-0.15 per problem
+### API Integration
 
-Most students spend < $5/month.
+The application supports multiple AI providers through a unified interface. API calls are made client-side, and no user data is stored on external servers beyond the API provider's processing.
 
-## Troubleshooting
+## Known Limitations
 
-**"AI Required" message?**
-- Add your API key to `config.js`
-- Set `enabled: true`
-- Refresh browser (hard refresh: Cmd+Shift+R)
+- Requires a valid API key for solving arbitrary problems
+- Image analysis quality depends on image clarity and formatting
+- API usage incurs costs based on provider pricing models
+- Solutions are generated by AI and should be verified for accuracy
 
-**Image upload not working?**
-- AI is required for image analysis
-- Check API key is configured
-- Image must be < 10MB
+## Future Enhancements
 
-**Math not rendering?**
-- Check browser console for errors
-- Ensure MathJax loaded (check network tab)
-- Try hard refresh
+- Add support for additional mathematical domains beyond calculus
+- Implement solution history and bookmarking
+- Add user authentication for personalized problem sets
+- Develop offline mode with expanded built-in problem library
 
-## Privacy
+## License
 
-- All processing happens via your API key
-- No data stored on our servers
-- Images sent directly to AI provider (Anthropic/OpenAI)
+This project is available for educational and portfolio purposes.
 
-## Browser Support
+## Contact
 
-- Chrome/Edge ✅
-- Firefox ✅
-- Safari ✅
-- Mobile responsive ✅
+Repository: [github.com/nwrenn27-sketch/Math-Wiz](https://github.com/nwrenn27-sketch/Math-Wiz)
