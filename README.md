@@ -24,6 +24,20 @@ Math Wiz is an educational tool designed to solve calculus problems through text
 - Interactive canvas-based visualizations
 - Support for related rates, optimization, derivatives, integrals, limits, and series
 
+## Screenshots
+
+### Topic Selection Interface
+![Topic Selection](images/topic-selection.png)
+*Select from six calculus topics with varying difficulty levels*
+
+### Problem Display with Interactive Diagram
+![Problem Diagram](images/problem-diagram.png)
+*Visual representation of calculus problems using Canvas API*
+
+### Step-by-Step Solution with LaTeX
+![Solution Steps](images/solution-steps.png)
+*Detailed solutions with mathematical notation, key concepts, and common mistake warnings*
+
 ## Installation
 
 ### Prerequisites
