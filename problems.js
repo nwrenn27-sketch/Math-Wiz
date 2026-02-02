@@ -13,13 +13,13 @@
 const TOPIC_INFO = {
     'related-rates': {
         name: 'Related Rates',
-        icon: '📐',
+        icon: 'dy/dt',
         description: 'Moving objects, changing quantities',
         color: '#3b82f6'
     },
     'optimization': {
         name: 'Optimization',
-        icon: '📈',
+        icon: 'max',
         description: 'Max/min problems, constraints',
         color: '#ef4444'
     },
