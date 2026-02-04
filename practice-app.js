@@ -486,6 +486,9 @@ function drawDiagram(problem) {
         case 'cube':
             drawCube(ctx, problem.colors);
             break;
+        case 'function-graph':
+            drawFunctionGraph(ctx, problem.visual, problem.colors);
+            break;
         default:
             drawGenericDiagram(ctx);
     }
@@ -735,6 +738,240 @@ function drawGenericDiagram(ctx) {
     ctx.fillStyle = '#e5e7eb';
     ctx.font = '16px sans-serif';
     ctx.fillText('Diagram will appear here', 220, 200);
+}
+
+function drawFunctionGraph(ctx, visual, colors) {
+    const canvas = ctx.canvas;
+    const width = canvas.width;
+    const height = canvas.height;
+    const padding = 50;
+
+    const xRange = visual.xRange || [-5, 5];
+    const yRange = visual.yRange || [-5, 5];
+    const xMin = xRange[0], xMax = xRange[1];
+    const yMin = yRange[0], yMax = yRange[1];
+
+    // Helper function to convert mathematical coordinates to canvas coordinates
+    const toCanvasX = (x) => padding + ((x - xMin) / (xMax - xMin)) * (width - 2 * padding);
+    const toCanvasY = (y) => height - padding - ((y - yMin) / (yMax - yMin)) * (height - 2 * padding);
+
+    // Helper function to safely evaluate mathematical expressions
+    const evaluateFunction = (expr, x) => {
+        try {
+            // Replace common math notation with JavaScript
+            const jsExpr = expr
+                .replace(/\^/g, '**')
+                .replace(/(\d)x/g, '$1*x')
+                .replace(/x/g, `(${x})`);
+            return eval(jsExpr);
+        } catch (e) {
+            return NaN;
+        }
+    };
+
+    // Draw axes
+    ctx.strokeStyle = '#d1d5db';
+    ctx.lineWidth = 2;
+
+    // X-axis
+    if (yMin <= 0 && yMax >= 0) {
+        const y0 = toCanvasY(0);
+        ctx.beginPath();
+        ctx.moveTo(padding, y0);
+        ctx.lineTo(width - padding, y0);
+        ctx.stroke();
+
+        // X-axis arrow
+        ctx.fillStyle = '#d1d5db';
+        ctx.beginPath();
+        ctx.moveTo(width - padding, y0);
+        ctx.lineTo(width - padding - 10, y0 - 5);
+        ctx.lineTo(width - padding - 10, y0 + 5);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    // Y-axis
+    if (xMin <= 0 && xMax >= 0) {
+        const x0 = toCanvasX(0);
+        ctx.beginPath();
+        ctx.moveTo(x0, padding);
+        ctx.lineTo(x0, height - padding);
+        ctx.stroke();
+
+        // Y-axis arrow
+        ctx.fillStyle = '#d1d5db';
+        ctx.beginPath();
+        ctx.moveTo(x0, padding);
+        ctx.lineTo(x0 - 5, padding + 10);
+        ctx.lineTo(x0 + 5, padding + 10);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    // Draw grid lines
+    ctx.strokeStyle = '#f3f4f6';
+    ctx.lineWidth = 1;
+
+    // Vertical grid lines
+    for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
+        if (x === 0) continue;
+        const canvasX = toCanvasX(x);
+        ctx.beginPath();
+        ctx.moveTo(canvasX, padding);
+        ctx.lineTo(canvasX, height - padding);
+        ctx.stroke();
+    }
+
+    // Horizontal grid lines
+    for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+        if (y === 0) continue;
+        const canvasY = toCanvasY(y);
+        ctx.beginPath();
+        ctx.moveTo(padding, canvasY);
+        ctx.lineTo(width - padding, canvasY);
+        ctx.stroke();
+    }
+
+    // Draw axis labels
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'center';
+
+    // X-axis labels
+    for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
+        if (x === 0) continue;
+        const canvasX = toCanvasX(x);
+        const y0 = toCanvasY(0);
+        const labelY = (yMin <= 0 && yMax >= 0) ? y0 + 15 : height - padding + 15;
+        ctx.fillText(x.toString(), canvasX, labelY);
+    }
+
+    // Y-axis labels
+    ctx.textAlign = 'right';
+    for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+        if (y === 0) continue;
+        const canvasY = toCanvasY(y);
+        const x0 = toCanvasX(0);
+        const labelX = (xMin <= 0 && xMax >= 0) ? x0 - 10 : padding - 10;
+        ctx.fillText(y.toString(), labelX, canvasY + 4);
+    }
+
+    // Draw the function
+    if (visual.function) {
+        ctx.strokeStyle = '#3b82f6';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+
+        let firstPoint = true;
+        const steps = 500;
+
+        for (let i = 0; i <= steps; i++) {
+            const x = xMin + (i / steps) * (xMax - xMin);
+            const y = evaluateFunction(visual.function, x);
+
+            if (!isNaN(y) && isFinite(y) && y >= yMin - 10 && y <= yMax + 10) {
+                const canvasX = toCanvasX(x);
+                const canvasY = toCanvasY(y);
+
+                if (firstPoint) {
+                    ctx.moveTo(canvasX, canvasY);
+                    firstPoint = false;
+                } else {
+                    ctx.lineTo(canvasX, canvasY);
+                }
+            } else {
+                firstPoint = true;
+            }
+        }
+
+        ctx.stroke();
+    }
+
+    // Draw vertical asymptotes
+    if (visual.asymptotes) {
+        ctx.strokeStyle = colors.asymptote || '#9ca3af';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 5]);
+
+        visual.asymptotes.forEach(asymptote => {
+            if (asymptote.type === 'vertical') {
+                const canvasX = toCanvasX(asymptote.x);
+                ctx.beginPath();
+                ctx.moveTo(canvasX, padding);
+                ctx.lineTo(canvasX, height - padding);
+                ctx.stroke();
+            }
+        });
+
+        ctx.setLineDash([]);
+    }
+
+    // Draw critical points
+    if (visual.criticalPoints && visual.criticalPoints.length > 0) {
+        visual.criticalPoints.forEach(point => {
+            const canvasX = toCanvasX(point.x);
+            const canvasY = toCanvasY(point.y);
+
+            // Draw the point
+            ctx.fillStyle = colors.criticalPoint || '#ef4444';
+            ctx.beginPath();
+            ctx.arc(canvasX, canvasY, 6, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Add a white border
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Label the point
+            ctx.fillStyle = colors.criticalPoint || '#ef4444';
+            ctx.font = 'bold 13px sans-serif';
+            ctx.textAlign = 'center';
+
+            let label = `(${point.x}, ${point.y})`;
+            if (point.type === 'max') {
+                label += ' max';
+            } else if (point.type === 'min') {
+                label += ' min';
+            }
+
+            ctx.fillText(label, canvasX, canvasY - 15);
+        });
+    }
+
+    // Draw inflection points
+    if (visual.inflectionPoints && visual.inflectionPoints.length > 0) {
+        visual.inflectionPoints.forEach(point => {
+            const canvasX = toCanvasX(point.x);
+            const canvasY = toCanvasY(point.y);
+
+            // Draw the point with a different style (square)
+            ctx.fillStyle = colors.inflectionPoint || '#10b981';
+            ctx.fillRect(canvasX - 6, canvasY - 6, 12, 12);
+
+            // Add a white border
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(canvasX - 6, canvasY - 6, 12, 12);
+
+            // Label the point
+            ctx.fillStyle = colors.inflectionPoint || '#10b981';
+            ctx.font = 'bold 13px sans-serif';
+            ctx.textAlign = 'center';
+
+            let label = `(${point.x}, ${point.y}) inflection`;
+            ctx.fillText(label, canvasX, canvasY - 15);
+        });
+    }
+
+    // Add function label
+    if (visual.function) {
+        ctx.fillStyle = '#1f2937';
+        ctx.font = 'italic 14px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(`f(x) = ${visual.function.replace(/\*/g, '')}`, padding, padding - 20);
+    }
 }
 
 function highlightDiagramElements(elements) {

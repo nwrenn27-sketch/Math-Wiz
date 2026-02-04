@@ -46,6 +46,18 @@ const TOPIC_INFO = {
         icon: 'Σ',
         description: 'Convergence, Taylor series',
         color: '#ec4899'
+    },
+    'critical-points': {
+        name: 'Critical Points',
+        icon: 'f\'=0',
+        description: 'Finding and classifying critical points',
+        color: '#06b6d4'
+    },
+    'inflection-points': {
+        name: 'Inflection Points',
+        icon: 'f\'\'=0',
+        description: 'Concavity and inflection points',
+        color: '#84cc16'
     }
 };
 
@@ -314,6 +326,1176 @@ const PROBLEM_LIBRARY = {
         ],
         hard: [
             // TODO: Add 10 hard series problems
+        ]
+    },
+    'critical-points': {
+        easy: [
+            {
+                id: 'cp-easy-1',
+                title: 'Quadratic Function Critical Points',
+                problem: 'Find all critical points of $f(x) = x^2 - 4x + 1$.',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of a parabola showing critical point',
+                    function: 'x^2 - 4*x + 1',
+                    xRange: [-1, 5],
+                    yRange: [-4, 6],
+                    criticalPoints: [{x: 2, y: -3, type: 'min'}]
+                },
+                steps: [
+                    {
+                        title: "Find the derivative",
+                        body: "Critical points occur where the derivative equals zero or is undefined. Let's start by finding $f'(x)$.",
+                        equation: "$$f(x) = x^2 - 4x + 1$$$$f'(x) = 2x - 4$$",
+                        concept: "The derivative tells us the slope of the tangent line. At critical points, this slope is zero (horizontal tangent) or undefined.",
+                        mistake: "Don't forget to apply the power rule correctly: the derivative of $x^2$ is $2x$, not $x$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Set derivative equal to zero",
+                        body: "Now we solve $f'(x) = 0$ to find where the function has horizontal tangents.",
+                        equation: "$$f'(x) = 0$$$$2x - 4 = 0$$$$2x = 4$$$$x = 2$$",
+                        concept: "This gives us the x-coordinate of our critical point. The derivative is never undefined for this polynomial.",
+                        mistake: "Make sure to solve for x completely, not just identify the equation.",
+                        highlightElements: ['criticalX']
+                    },
+                    {
+                        title: "Find the y-coordinate",
+                        body: "To get the full critical point, we need to evaluate the original function at $x = 2$.",
+                        equation: "$$f(2) = (2)^2 - 4(2) + 1$$$$f(2) = 4 - 8 + 1$$$$f(2) = -3$$",
+                        concept: "The critical point is at $(2, -3)$. This is the vertex of the parabola.",
+                        mistake: "Don't confuse $f(x)$ with $f'(x)$. Use the original function to find the y-coordinate.",
+                        highlightElements: ['criticalPoint']
+                    }
+                ],
+                answer: "Critical point at $(2, -3)$",
+                colors: { criticalPoint: '#ef4444', derivative: '#3b82f6' }
+            },
+            {
+                id: 'cp-easy-2',
+                title: 'Simple Cubic Function',
+                problem: 'Find the critical points of $f(x) = x^3$.',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of cubic function x^3',
+                    function: 'x^3',
+                    xRange: [-2, 2],
+                    yRange: [-8, 8],
+                    criticalPoints: [{x: 0, y: 0, type: 'neither'}]
+                },
+                steps: [
+                    {
+                        title: "Find the first derivative",
+                        body: "Let's differentiate using the power rule.",
+                        equation: "$$f(x) = x^3$$$$f'(x) = 3x^2$$",
+                        concept: "Using the power rule: bring down the exponent and reduce it by 1.",
+                        mistake: "Don't forget the coefficient: the derivative of $x^3$ is $3x^2$, not $x^2$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Solve for critical points",
+                        body: "Set the derivative equal to zero and solve.",
+                        equation: "$$f'(x) = 0$$$$3x^2 = 0$$$$x^2 = 0$$$$x = 0$$",
+                        concept: "We have one critical point at $x = 0$. The derivative is never undefined.",
+                        mistake: "Make sure to fully solve: $x^2 = 0$ means $x = 0$ (only one solution).",
+                        highlightElements: ['criticalX']
+                    },
+                    {
+                        title: "Find the y-coordinate",
+                        body: "Evaluate $f(x)$ at $x = 0$.",
+                        equation: "$$f(0) = (0)^3 = 0$$",
+                        concept: "Our critical point is at $(0, 0)$, which is the origin.",
+                        mistake: "Any number raised to any power (except 0^0) equals 0 if the base is 0.",
+                        highlightElements: ['criticalPoint']
+                    },
+                    {
+                        title: "Classify the critical point",
+                        body: "Let's use the second derivative test.",
+                        equation: "$$f''(x) = 6x$$$$f''(0) = 6(0) = 0$$",
+                        concept: "The second derivative test is inconclusive! When $f''(c) = 0$, we can't determine if it's a max or min. Looking at the graph, we see it's actually a **saddle point** (inflection point), neither max nor min.",
+                        mistake: "Don't assume every critical point is a max or min. Some are saddle points!",
+                        highlightElements: ['criticalPoint']
+                    }
+                ],
+                answer: "Critical point at $(0, 0)$, which is **neither** a max nor min (saddle point)",
+                colors: { criticalPoint: '#ef4444', derivative: '#3b82f6' }
+            },
+            {
+                id: 'cp-easy-3',
+                title: 'Cubic with Two Critical Points',
+                problem: 'Find the critical points of $f(x) = x^3 - 3x$.',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of cubic function with local max and min',
+                    function: 'x^3 - 3*x',
+                    xRange: [-2.5, 2.5],
+                    yRange: [-3, 3],
+                    criticalPoints: [{x: -1, y: 2, type: 'max'}, {x: 1, y: -2, type: 'min'}]
+                },
+                steps: [
+                    {
+                        title: "Find the derivative",
+                        body: "Apply the power rule to each term.",
+                        equation: "$$f(x) = x^3 - 3x$$$$f'(x) = 3x^2 - 3$$",
+                        concept: "The power rule gives us $3x^2$ from $x^3$, and the derivative of $-3x$ is $-3$.",
+                        mistake: "Don't forget the coefficient on the linear term: derivative of $-3x$ is $-3$, not $-3x$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Set derivative equal to zero",
+                        body: "Solve $f'(x) = 0$ for critical points.",
+                        equation: "$$3x^2 - 3 = 0$$$$3x^2 = 3$$$$x^2 = 1$$$$x = \\pm 1$$",
+                        concept: "We have two critical points: $x = -1$ and $x = 1$.",
+                        mistake: "Don't forget both solutions! $\\sqrt{1} = \\pm 1$ gives us two critical points.",
+                        highlightElements: ['criticalX']
+                    },
+                    {
+                        title: "Find the y-coordinates",
+                        body: "Evaluate the original function at both critical x-values.",
+                        equation: "$$f(-1) = (-1)^3 - 3(-1) = -1 + 3 = 2$$$$f(1) = (1)^3 - 3(1) = 1 - 3 = -2$$",
+                        concept: "Our critical points are at $(-1, 2)$ and $(1, -2)$.",
+                        mistake: "Be careful with signs: $(-1)^3 = -1$ (odd power keeps the sign).",
+                        highlightElements: ['criticalPoint']
+                    }
+                ],
+                answer: "Critical points at $(-1, 2)$ and $(1, -2)$",
+                colors: { criticalPoint: '#ef4444', derivative: '#3b82f6' }
+            },
+            {
+                id: 'cp-easy-4',
+                title: 'Square Root Function',
+                problem: 'Find the critical points of $f(x) = \\sqrt{x}$.',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of square root function',
+                    function: 'Math.sqrt(x)',
+                    xRange: [-0.5, 5],
+                    yRange: [-0.5, 3],
+                    criticalPoints: []
+                },
+                steps: [
+                    {
+                        title: "Rewrite using exponents",
+                        body: "It's easier to differentiate if we write the square root as a power.",
+                        equation: "$$f(x) = \\sqrt{x} = x^{1/2}$$",
+                        concept: "Remember: $\\sqrt{x} = x^{1/2}$. This form makes the power rule straightforward.",
+                        mistake: "Don't try to differentiate $\\sqrt{x}$ directly - convert to exponential form first.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find the derivative",
+                        body: "Apply the power rule: bring down the exponent and reduce by 1.",
+                        equation: "$$f'(x) = \\frac{1}{2}x^{-1/2} = \\frac{1}{2\\sqrt{x}}$$",
+                        concept: "The derivative exists only for $x > 0$ since we can't divide by zero or take square root of negative numbers.",
+                        mistake: "Don't forget the domain! The derivative is undefined at $x = 0$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find where derivative equals zero",
+                        body: "Let's solve $f'(x) = 0$.",
+                        equation: "$$\\frac{1}{2\\sqrt{x}} = 0$$",
+                        concept: "This equation has no solution! A fraction equals zero only when its numerator is zero, but the numerator here is 1.",
+                        mistake: "Don't confuse undefined with zero. $\\frac{1}{2\\sqrt{x}}$ is never zero, just undefined at $x=0$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Check where derivative is undefined",
+                        body: "The derivative is undefined at $x = 0$, but is $x = 0$ in the domain of $f$?",
+                        equation: "$$f(0) = \\sqrt{0} = 0$$",
+                        concept: "Yes! $x = 0$ is in the domain of $f(x) = \\sqrt{x}$, so it IS a critical point. However, the function is only defined for $x \\geq 0$, so there's no 'local' behavior here - it's an endpoint.",
+                        mistake: "Critical points include where $f'$ is undefined, but the point must be in the domain of $f$.",
+                        highlightElements: []
+                    }
+                ],
+                answer: "Critical point at $x = 0$ (endpoint, derivative undefined)",
+                colors: { criticalPoint: '#ef4444', derivative: '#3b82f6' }
+            }
+        ],
+        medium: [
+            {
+                id: 'cp-med-1',
+                title: 'Classify Critical Points',
+                problem: 'Find the critical points and classify them: $f(x) = x^3 - 6x^2 + 9x$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of cubic with local max and min',
+                    function: 'x^3 - 6*x^2 + 9*x',
+                    xRange: [-1, 4],
+                    yRange: [-2, 6],
+                    criticalPoints: [{x: 1, y: 4, type: 'max'}, {x: 3, y: 0, type: 'min'}]
+                },
+                steps: [
+                    {
+                        title: "Find the derivative",
+                        body: "Use the power rule on each term.",
+                        equation: "$$f(x) = x^3 - 6x^2 + 9x$$$$f'(x) = 3x^2 - 12x + 9$$",
+                        concept: "Each term is differentiated independently using the power rule.",
+                        mistake: "Don't forget coefficients: derivative of $-6x^2$ is $-12x$, not $-6x$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Solve for critical points",
+                        body: "Set $f'(x) = 0$ and factor.",
+                        equation: "$$3x^2 - 12x + 9 = 0$$$$3(x^2 - 4x + 3) = 0$$$$3(x-1)(x-3) = 0$$$$x = 1 \\text{ or } x = 3$$",
+                        concept: "Factoring makes it easy to find the roots. We can factor out 3 first to simplify.",
+                        mistake: "Make sure to find all solutions. Check your factoring: $(x-1)(x-3) = x^2 - 4x + 3$.",
+                        highlightElements: ['criticalX']
+                    },
+                    {
+                        title: "Find y-coordinates",
+                        body: "Evaluate $f(x)$ at both critical points.",
+                        equation: "$$f(1) = (1)^3 - 6(1)^2 + 9(1) = 1 - 6 + 9 = 4$$$$f(3) = (3)^3 - 6(3)^2 + 9(3) = 27 - 54 + 27 = 0$$",
+                        concept: "Critical points are at $(1, 4)$ and $(3, 0)$.",
+                        mistake: "Be careful with arithmetic, especially with multiple terms.",
+                        highlightElements: ['criticalPoint']
+                    },
+                    {
+                        title: "Classify using second derivative",
+                        body: "Find $f''(x)$ and test each critical point.",
+                        equation: "$$f''(x) = 6x - 12$$$$f''(1) = 6(1) - 12 = -6 < 0 \\rightarrow \\text{local max}$$$$f''(3) = 6(3) - 12 = 6 > 0 \\rightarrow \\text{local min}$$",
+                        concept: "Negative second derivative means concave down (max), positive means concave up (min).",
+                        mistake: "Test each critical point separately - don't assume they're the same type!",
+                        highlightElements: ['criticalPoint']
+                    }
+                ],
+                answer: "$(1, 4)$ is a **local max**, $(3, 0)$ is a **local min**",
+                colors: { criticalPoint: '#ef4444', derivative: '#3b82f6' }
+            },
+            {
+                id: 'cp-med-2',
+                title: 'Quartic Function',
+                problem: 'Find the critical points of $f(x) = x^4 - 4x^2$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of quartic with three critical points',
+                    function: 'x^4 - 4*x^2',
+                    xRange: [-3, 3],
+                    yRange: [-5, 10],
+                    criticalPoints: [{x: -Math.sqrt(2), y: -4, type: 'min'}, {x: 0, y: 0, type: 'max'}, {x: Math.sqrt(2), y: -4, type: 'min'}]
+                },
+                steps: [
+                    {
+                        title: "Find the derivative",
+                        body: "Apply the power rule.",
+                        equation: "$$f(x) = x^4 - 4x^2$$$$f'(x) = 4x^3 - 8x$$",
+                        concept: "Straightforward application of the power rule to each term.",
+                        mistake: "The derivative of $x^4$ is $4x^3$, not $4x$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Factor and solve",
+                        body: "Factor out common terms to find critical points.",
+                        equation: "$$4x^3 - 8x = 0$$$$4x(x^2 - 2) = 0$$$$x = 0 \\text{ or } x^2 = 2$$$$x = 0, \\pm\\sqrt{2}$$",
+                        concept: "We have three critical points! Always factor completely before solving.",
+                        mistake: "Don't forget $x = 0$ from the factored $4x$. And remember $x^2 = 2$ gives two solutions: $\\pm\\sqrt{2}$.",
+                        highlightElements: ['criticalX']
+                    },
+                    {
+                        title: "Evaluate at critical points",
+                        body: "Find the y-coordinates.",
+                        equation: "$$f(0) = 0$$$$f(\\sqrt{2}) = (\\sqrt{2})^4 - 4(\\sqrt{2})^2 = 4 - 8 = -4$$$$f(-\\sqrt{2}) = 4 - 8 = -4$$",
+                        concept: "By symmetry, $f(\\sqrt{2}) = f(-\\sqrt{2})$. Critical points: $(0, 0)$, $(\\sqrt{2}, -4)$, $(-\\sqrt{2}, -4)$.",
+                        mistake: "Remember: $(\\sqrt{2})^2 = 2$ and $(\\sqrt{2})^4 = 4$.",
+                        highlightElements: ['criticalPoint']
+                    }
+                ],
+                answer: "Critical points: $(0, 0)$, $(\\sqrt{2}, -4)$, $(-\\sqrt{2}, -4)$",
+                colors: { criticalPoint: '#ef4444', derivative: '#3b82f6' }
+            },
+            {
+                id: 'cp-med-3',
+                title: 'Rational Function Critical Numbers',
+                problem: 'Find all critical numbers of $f(x) = \\frac{x}{x^2+1}$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of rational function with two critical points',
+                    function: 'x/(x^2+1)',
+                    xRange: [-4, 4],
+                    yRange: [-0.6, 0.6],
+                    criticalPoints: [{x: -1, y: -0.5, type: 'min'}, {x: 1, y: 0.5, type: 'max'}]
+                },
+                steps: [
+                    {
+                        title: "Use the quotient rule",
+                        body: "For $f(x) = \\frac{u}{v}$, we have $f'(x) = \\frac{u'v - uv'}{v^2}$.",
+                        equation: "$$u = x, \\quad u' = 1$$$$v = x^2 + 1, \\quad v' = 2x$$$$f'(x) = \\frac{(1)(x^2+1) - (x)(2x)}{(x^2+1)^2}$$",
+                        concept: "The quotient rule is needed for rational functions.",
+                        mistake: "Order matters! It's $u'v - uv'$, not the other way around.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Simplify the numerator",
+                        body: "Expand and combine terms.",
+                        equation: "$$f'(x) = \\frac{x^2 + 1 - 2x^2}{(x^2+1)^2} = \\frac{1 - x^2}{(x^2+1)^2}$$",
+                        concept: "The denominator $(x^2+1)^2$ is always positive, so we only need to check the numerator.",
+                        mistake: "Combine like terms carefully: $x^2 - 2x^2 = -x^2$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Solve for critical points",
+                        body: "Set the numerator equal to zero (denominator is never zero).",
+                        equation: "$$1 - x^2 = 0$$$$x^2 = 1$$$$x = \\pm 1$$",
+                        concept: "Since $x^2 + 1$ is never zero, there are no points where $f'$ is undefined in the domain.",
+                        mistake: "Remember both $+1$ and $-1$ are solutions to $x^2 = 1$.",
+                        highlightElements: ['criticalX']
+                    },
+                    {
+                        title: "Find the y-values",
+                        body: "Evaluate $f(x)$ at both critical numbers.",
+                        equation: "$$f(-1) = \\frac{-1}{(-1)^2+1} = \\frac{-1}{2} = -0.5$$$$f(1) = \\frac{1}{1^2+1} = \\frac{1}{2} = 0.5$$",
+                        concept: "Critical points are at $(-1, -0.5)$ and $(1, 0.5)$.",
+                        mistake: "Don't forget the negative sign for $f(-1)$.",
+                        highlightElements: ['criticalPoint']
+                    }
+                ],
+                answer: "Critical numbers: $x = -1$ and $x = 1$",
+                colors: { criticalPoint: '#ef4444', derivative: '#3b82f6' }
+            },
+            {
+                id: 'cp-med-4',
+                title: 'Function with Fractional Exponent',
+                problem: 'Find the critical points of $f(x) = x^{2/3}(x-2)$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph showing critical points including cusp',
+                    function: 'Math.pow(Math.abs(x), 2/3) * (x < 0 ? -1 : 1) * (x-2)',
+                    xRange: [-2, 4],
+                    yRange: [-2, 2],
+                    criticalPoints: [{x: 0, y: 0, type: 'neither'}, {x: 0.8, y: -0.91, type: 'min'}]
+                },
+                steps: [
+                    {
+                        title: "Expand the function",
+                        body: "First, let's multiply out the expression.",
+                        equation: "$$f(x) = x^{2/3}(x-2) = x^{5/3} - 2x^{2/3}$$",
+                        concept: "When multiplying powers: $x^{2/3} \\cdot x = x^{2/3} \\cdot x^1 = x^{2/3+1} = x^{5/3}$.",
+                        mistake: "Be careful with fractional exponents: $\\frac{2}{3} + 1 = \\frac{2}{3} + \\frac{3}{3} = \\frac{5}{3}$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find the derivative",
+                        body: "Use the power rule with fractional exponents.",
+                        equation: "$$f'(x) = \\frac{5}{3}x^{2/3} - 2 \\cdot \\frac{2}{3}x^{-1/3}$$$$f'(x) = \\frac{5}{3}x^{2/3} - \\frac{4}{3}x^{-1/3}$$",
+                        concept: "The power rule works with any exponent: bring it down and subtract 1.",
+                        mistake: "Don't forget to apply the chain rule correctly with fractional powers.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Factor and simplify",
+                        body: "Factor out the common term with the smallest exponent.",
+                        equation: "$$f'(x) = \\frac{1}{3}x^{-1/3}(5x - 4) = \\frac{5x - 4}{3x^{1/3}}$$",
+                        concept: "$f'(x) = 0$ when $5x - 4 = 0$, so $x = \\frac{4}{5} = 0.8$. Also, $f'$ is undefined at $x = 0$.",
+                        mistake: "Both places where $f' = 0$ AND where $f'$ is undefined are critical points (if in domain of $f$).",
+                        highlightElements: ['criticalX']
+                    },
+                    {
+                        title: "Identify critical points",
+                        body: "We have two critical points: where $f' = 0$ and where $f'$ is undefined.",
+                        equation: "$$x = \\frac{4}{5} \\text{ and } x = 0$$$$f(0.8) = (0.8)^{2/3}(0.8-2) \\approx -0.91$$$$f(0) = 0^{2/3}(0-2) = 0$$",
+                        concept: "At $x = 0$, the function has a cusp (sharp point) where the derivative doesn't exist.",
+                        mistake: "Don't skip $x = 0$ just because the derivative is undefined there!",
+                        highlightElements: ['criticalPoint']
+                    }
+                ],
+                answer: "Critical points: $x = 0$ and $x = \\frac{4}{5}$ (or $x = 0.8$)",
+                colors: { criticalPoint: '#ef4444', derivative: '#3b82f6' }
+            }
+        ],
+        hard: [
+            {
+                id: 'cp-hard-1',
+                title: 'Complex Rational Function',
+                problem: 'Find the critical points of $f(x) = \\frac{x^2-1}{x^3}$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of rational function with asymptote at origin',
+                    function: '(x^2-1)/(x^3)',
+                    xRange: [-3, 3],
+                    yRange: [-10, 10],
+                    criticalPoints: [{x: -1.5, y: -1.48, type: 'min'}, {x: 1.5, y: 0.148, type: 'max'}],
+                    asymptotes: [{x: 0, type: 'vertical'}]
+                },
+                steps: [
+                    {
+                        title: "Apply the quotient rule",
+                        body: "For $f(x) = \\frac{u}{v}$: $f'(x) = \\frac{u'v - uv'}{v^2}$",
+                        equation: "$$u = x^2 - 1, \\quad u' = 2x$$$$v = x^3, \\quad v' = 3x^2$$$$f'(x) = \\frac{(2x)(x^3) - (x^2-1)(3x^2)}{(x^3)^2}$$",
+                        concept: "The quotient rule requires careful bookkeeping of all terms.",
+                        mistake: "Don't forget to square the denominator in the quotient rule!",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Simplify the numerator",
+                        body: "Expand and factor the numerator.",
+                        equation: "$$f'(x) = \\frac{2x^4 - 3x^4 + 3x^2}{x^6} = \\frac{-x^4 + 3x^2}{x^6}$$$$f'(x) = \\frac{x^2(-x^2 + 3)}{x^6} = \\frac{-x^2 + 3}{x^4} = \\frac{3 - x^2}{x^4}$$",
+                        concept: "Factor out common terms and cancel where possible.",
+                        mistake: "Be careful with signs when combining like terms: $2x^4 - 3x^4 = -x^4$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find critical points",
+                        body: "Numerator = 0 or denominator = 0 (but must be in domain of $f$).",
+                        equation: "$$3 - x^2 = 0 \\rightarrow x^2 = 3 \\rightarrow x = \\pm\\sqrt{3}$$",
+                        concept: "$x = 0$ is NOT in the domain of $f$ (vertical asymptote), so it's not a critical point.",
+                        mistake: "A critical point must be in the domain of the original function!",
+                        highlightElements: ['criticalX']
+                    },
+                    {
+                        title: "Evaluate the function",
+                        body: "Find y-values at the critical points.",
+                        equation: "$$f(\\sqrt{3}) = \\frac{(\\sqrt{3})^2-1}{(\\sqrt{3})^3} = \\frac{3-1}{3\\sqrt{3}} = \\frac{2}{3\\sqrt{3}} \\approx 0.385$$$$f(-\\sqrt{3}) = \\frac{2}{-3\\sqrt{3}} \\approx -0.385$$",
+                        concept: "Critical points: $(\\sqrt{3}, \\frac{2}{3\\sqrt{3}})$ and $(-\\sqrt{3}, -\\frac{2}{3\\sqrt{3}})$.",
+                        mistake: "Remember: $(\\sqrt{3})^3 = \\sqrt{3}^2 \\cdot \\sqrt{3} = 3\\sqrt{3}$.",
+                        highlightElements: ['criticalPoint']
+                    }
+                ],
+                answer: "Critical points at $x = \\sqrt{3}$ and $x = -\\sqrt{3}$",
+                colors: { criticalPoint: '#ef4444', derivative: '#3b82f6', asymptote: '#9ca3af' }
+            },
+            {
+                id: 'cp-hard-2',
+                title: 'Square Root of Quadratic',
+                problem: 'Find all critical points of $f(x) = \\sqrt{4-x^2}$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Semicircle graph',
+                    function: 'Math.sqrt(4-x^2)',
+                    xRange: [-3, 3],
+                    yRange: [-0.5, 2.5],
+                    criticalPoints: [{x: 0, y: 2, type: 'max'}]
+                },
+                steps: [
+                    {
+                        title: "Identify the domain",
+                        body: "We need $4 - x^2 \\geq 0$ for the square root to be defined.",
+                        equation: "$$4 - x^2 \\geq 0$$$$x^2 \\leq 4$$$$-2 \\leq x \\leq 2$$",
+                        concept: "The domain is $[-2, 2]$. The function is only defined in this interval.",
+                        mistake: "Always check the domain before finding critical points!",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find the derivative using chain rule",
+                        body: "Rewrite as $(4-x^2)^{1/2}$ and use the chain rule.",
+                        equation: "$$f(x) = (4-x^2)^{1/2}$$$$f'(x) = \\frac{1}{2}(4-x^2)^{-1/2} \\cdot (-2x)$$$$f'(x) = \\frac{-x}{\\sqrt{4-x^2}}$$",
+                        concept: "Chain rule: derivative of outer function times derivative of inner function.",
+                        mistake: "Don't forget the $-2x$ from the chain rule!",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find where derivative equals zero",
+                        body: "Set the numerator equal to zero.",
+                        equation: "$$\\frac{-x}{\\sqrt{4-x^2}} = 0$$$$-x = 0$$$$x = 0$$",
+                        concept: "A fraction equals zero when its numerator equals zero (and denominator is non-zero).",
+                        mistake: "The denominator is never zero in the interior of the domain.",
+                        highlightElements: ['criticalX']
+                    },
+                    {
+                        title: "Check endpoints and undefined points",
+                        body: "The derivative is undefined at $x = \\pm 2$ (endpoints of domain).",
+                        equation: "$$f(0) = \\sqrt{4-0} = 2$$$$f(-2) = \\sqrt{4-4} = 0$$$$f(2) = 0$$",
+                        concept: "We have one critical point at $x = 0$ (where $f' = 0$), plus endpoints $x = \\pm 2$.",
+                        mistake: "Endpoints are critical points when finding absolute max/min on a closed interval.",
+                        highlightElements: ['criticalPoint']
+                    }
+                ],
+                answer: "Critical point at $x = 0$; endpoints at $x = \\pm 2$",
+                colors: { criticalPoint: '#ef4444', derivative: '#3b82f6' }
+            },
+            {
+                id: 'cp-hard-3',
+                title: 'Exponential Function',
+                problem: 'Find the critical points of $f(x) = xe^{-x}$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of x times exponential decay',
+                    function: 'x*Math.exp(-x)',
+                    xRange: [-1, 6],
+                    yRange: [-0.5, 0.5],
+                    criticalPoints: [{x: 1, y: 0.368, type: 'max'}]
+                },
+                steps: [
+                    {
+                        title: "Use the product rule",
+                        body: "For $f(x) = u \\cdot v$: $f'(x) = u'v + uv'$",
+                        equation: "$$u = x, \\quad u' = 1$$$$v = e^{-x}, \\quad v' = -e^{-x}$$$$f'(x) = (1)(e^{-x}) + (x)(-e^{-x})$$$$f'(x) = e^{-x} - xe^{-x}$$",
+                        concept: "The product rule is needed when multiplying two functions.",
+                        mistake: "Don't forget the chain rule when differentiating $e^{-x}$: derivative is $-e^{-x}$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Factor out common terms",
+                        body: "Factor $e^{-x}$ from both terms.",
+                        equation: "$$f'(x) = e^{-x}(1 - x)$$",
+                        concept: "Since $e^{-x}$ is never zero, we only need to solve $1 - x = 0$.",
+                        mistake: "Remember: $e^{-x} > 0$ for all real $x$, so it never equals zero.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Solve for critical points",
+                        body: "Set $f'(x) = 0$.",
+                        equation: "$$e^{-x}(1-x) = 0$$$$1 - x = 0$$$$x = 1$$",
+                        concept: "We have one critical point at $x = 1$.",
+                        mistake: "The exponential part never equals zero, so only solve the linear factor.",
+                        highlightElements: ['criticalX']
+                    },
+                    {
+                        title: "Evaluate the function",
+                        body: "Find the y-coordinate.",
+                        equation: "$$f(1) = 1 \\cdot e^{-1} = \\frac{1}{e} \\approx 0.368$$",
+                        concept: "The critical point is at $(1, \\frac{1}{e})$. This is a maximum.",
+                        mistake: "Remember: $e^{-1} = \\frac{1}{e} \\approx 0.368$.",
+                        highlightElements: ['criticalPoint']
+                    }
+                ],
+                answer: "Critical point at $(1, \\frac{1}{e})$ or approximately $(1, 0.368)$",
+                colors: { criticalPoint: '#ef4444', derivative: '#3b82f6' }
+            },
+            {
+                id: 'cp-hard-4',
+                title: 'Critical Points on Closed Interval',
+                problem: 'Find the critical points on $[-1, 2]$: $f(x) = x^3 - 3x^2 + 2$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Cubic function on restricted domain',
+                    function: 'x^3 - 3*x^2 + 2',
+                    xRange: [-1.5, 2.5],
+                    yRange: [-2, 4],
+                    criticalPoints: [{x: 0, y: 2, type: 'max'}, {x: 2, y: -2, type: 'min'}]
+                },
+                steps: [
+                    {
+                        title: "Find the derivative",
+                        body: "Use the power rule.",
+                        equation: "$$f(x) = x^3 - 3x^2 + 2$$$$f'(x) = 3x^2 - 6x$$",
+                        concept: "Standard power rule application. The constant disappears.",
+                        mistake: "Derivative of a constant is always zero.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Solve for critical points",
+                        body: "Factor and solve $f'(x) = 0$.",
+                        equation: "$$3x^2 - 6x = 0$$$$3x(x - 2) = 0$$$$x = 0 \\text{ or } x = 2$$",
+                        concept: "Both $x = 0$ and $x = 2$ are in the interval $[-1, 2]$.",
+                        mistake: "Always check that critical points are in the specified interval!",
+                        highlightElements: ['criticalX']
+                    },
+                    {
+                        title: "Check the endpoints",
+                        body: "For max/min problems on closed intervals, always check endpoints too.",
+                        equation: "$$f(-1) = (-1)^3 - 3(-1)^2 + 2 = -1 - 3 + 2 = -2$$$$f(0) = 0 - 0 + 2 = 2$$$$f(2) = 8 - 12 + 2 = -2$$",
+                        concept: "We have critical points at $x = 0$ and $x = 2$, plus endpoint $x = -1$.",
+                        mistake: "On closed intervals, endpoints are also candidates for max/min.",
+                        highlightElements: ['criticalPoint']
+                    },
+                    {
+                        title: "Identify absolute extrema",
+                        body: "Compare function values to find absolute max and min on $[-1, 2]$.",
+                        equation: "$$f(-1) = -2, \\quad f(0) = 2, \\quad f(2) = -2$$",
+                        concept: "Absolute maximum: $(0, 2)$. Absolute minimum: both $(-1, -2)$ and $(2, -2)$.",
+                        mistake: "Don't confuse critical points with absolute extrema. You need to compare values.",
+                        highlightElements: ['criticalPoint']
+                    }
+                ],
+                answer: "Critical points: $x = 0$ and $x = 2$. Absolute max at $(0, 2)$, absolute min at $(-1, -2)$ and $(2, -2)$",
+                colors: { criticalPoint: '#ef4444', derivative: '#3b82f6' }
+            }
+        ]
+    },
+    'inflection-points': {
+        easy: [
+            {
+                id: 'ip-easy-1',
+                title: 'Simple Cubic Function',
+                problem: 'Find all inflection points of $f(x) = x^3$.',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of x cubed showing inflection point at origin',
+                    function: 'x^3',
+                    xRange: [-2, 2],
+                    yRange: [-8, 8],
+                    inflectionPoints: [{x: 0, y: 0}]
+                },
+                steps: [
+                    {
+                        title: "Find the first derivative",
+                        body: "Start by finding the first derivative.",
+                        equation: "$$f(x) = x^3$$$$f'(x) = 3x^2$$",
+                        concept: "We need the first derivative before we can find the second derivative.",
+                        mistake: "Don't skip the first derivative step - it's needed to get to $f''(x)$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find the second derivative",
+                        body: "Now differentiate again to find $f''(x)$.",
+                        equation: "$$f'(x) = 3x^2$$$$f''(x) = 6x$$",
+                        concept: "The second derivative tells us about concavity. When it changes sign, we have an inflection point.",
+                        mistake: "Don't confuse critical points (where $f' = 0$) with inflection points (where $f'' = 0$).",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Solve for potential inflection points",
+                        body: "Set the second derivative equal to zero.",
+                        equation: "$$f''(x) = 0$$$$6x = 0$$$$x = 0$$",
+                        concept: "We have a candidate at $x = 0$. But we need to verify concavity actually changes.",
+                        mistake: "Just because $f''(x) = 0$ doesn't guarantee an inflection point - always verify!",
+                        highlightElements: ['inflectionX']
+                    },
+                    {
+                        title: "Verify concavity change",
+                        body: "Check the sign of $f''(x)$ on both sides of $x = 0$.",
+                        equation: "$$f''(-1) = 6(-1) = -6 < 0 \\quad \\text{(concave down)}$$$$f''(1) = 6(1) = 6 > 0 \\quad \\text{(concave up)}$$",
+                        concept: "The concavity changes from down to up at $x = 0$, confirming it's an inflection point! The graph has an S-shape passing through the origin.",
+                        mistake: "Always test points on BOTH sides of the candidate to confirm a sign change.",
+                        highlightElements: ['inflectionPoint']
+                    }
+                ],
+                answer: "Inflection point at $(0, 0)$",
+                colors: { inflectionPoint: '#10b981', concavity: '#8b5cf6' }
+            },
+            {
+                id: 'ip-easy-2',
+                title: 'Cubic with Inflection Point',
+                problem: 'Find the inflection point(s) of $f(x) = x^3 - 6x$.',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of cubic function with inflection point',
+                    function: 'x^3 - 6*x',
+                    xRange: [-3, 3],
+                    yRange: [-10, 10],
+                    inflectionPoints: [{x: 0, y: 0}]
+                },
+                steps: [
+                    {
+                        title: "Find first and second derivatives",
+                        body: "Differentiate twice to get the second derivative.",
+                        equation: "$$f(x) = x^3 - 6x$$$$f'(x) = 3x^2 - 6$$$$f''(x) = 6x$$",
+                        concept: "Apply the power rule to each term twice.",
+                        mistake: "Don't forget that the derivative of a constant is zero, so $-6$ becomes $0$ in $f''(x)$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Solve for candidates",
+                        body: "Set $f''(x) = 0$ and solve.",
+                        equation: "$$f''(x) = 0$$$$6x = 0$$$$x = 0$$",
+                        concept: "We have one candidate: $x = 0$.",
+                        mistake: "This is the same as the first problem, just with different coefficients in $f(x)$.",
+                        highlightElements: ['inflectionX']
+                    },
+                    {
+                        title: "Verify concavity change",
+                        body: "Test the sign of $f''(x)$ on both sides of $x = 0$.",
+                        equation: "$$f''(-1) = 6(-1) = -6 < 0 \\quad \\text{(concave down)}$$$$f''(1) = 6(1) = 6 > 0 \\quad \\text{(concave up)}$$",
+                        concept: "Concavity changes from down to up at $x = 0$, so it's an inflection point!",
+                        mistake: "Always verify - don't assume $f''(c) = 0$ automatically means inflection point.",
+                        highlightElements: ['inflectionPoint']
+                    },
+                    {
+                        title: "Find the coordinates",
+                        body: "Evaluate the original function at $x = 0$.",
+                        equation: "$$f(0) = (0)^3 - 6(0) = 0$$",
+                        concept: "The inflection point is at $(0, 0)$.",
+                        mistake: "Use the original function $f(x)$, not $f''(x)$, to find the y-coordinate.",
+                        highlightElements: ['inflectionPoint']
+                    }
+                ],
+                answer: "Inflection point at $(0, 0)$",
+                colors: { inflectionPoint: '#10b981', concavity: '#8b5cf6' }
+            },
+            {
+                id: 'ip-easy-3',
+                title: 'Quartic Concavity Changes',
+                problem: 'Find where concavity changes for $f(x) = x^4$.',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of x^4 showing no inflection points',
+                    function: 'x^4',
+                    xRange: [-2, 2],
+                    yRange: [-1, 16],
+                    inflectionPoints: []
+                },
+                steps: [
+                    {
+                        title: "Find derivatives",
+                        body: "Find the first and second derivatives.",
+                        equation: "$$f(x) = x^4$$$$f'(x) = 4x^3$$$$f''(x) = 12x^2$$",
+                        concept: "Apply the power rule twice.",
+                        mistake: "Don't forget to bring down the coefficient each time: $4 \\times 3 = 12$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Set second derivative to zero",
+                        body: "Solve $f''(x) = 0$.",
+                        equation: "$$12x^2 = 0$$$$x^2 = 0$$$$x = 0$$",
+                        concept: "We have a candidate at $x = 0$.",
+                        mistake: "We have a solution, but does it produce an inflection point?",
+                        highlightElements: ['inflectionX']
+                    },
+                    {
+                        title: "Test for concavity change",
+                        body: "Check the sign of $f''(x)$ on both sides of $x = 0$.",
+                        equation: "$$f''(-1) = 12(-1)^2 = 12 > 0 \\quad \\text{(concave up)}$$$$f''(1) = 12(1)^2 = 12 > 0 \\quad \\text{(concave up)}$$",
+                        concept: "The concavity does NOT change! It's concave up on both sides.",
+                        mistake: "Just because $f''(0) = 0$ doesn't mean we have an inflection point. We need a sign change!",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Conclusion",
+                        body: "Since concavity doesn't change, there are no inflection points.",
+                        equation: "$$f''(x) = 12x^2 \\geq 0 \\text{ for all } x$$",
+                        concept: "The function $f(x) = x^4$ is concave up everywhere (U-shaped). At $x = 0$, the curvature is minimal but doesn't change direction.",
+                        mistake: "Remember: inflection points require a concavity CHANGE, not just $f''(x) = 0$.",
+                        highlightElements: []
+                    }
+                ],
+                answer: "**No inflection points** (concave up everywhere, no concavity change)",
+                colors: { concavity: '#8b5cf6' }
+            },
+            {
+                id: 'ip-easy-4',
+                title: 'Cubic with Shifted Inflection',
+                problem: 'Find the inflection point(s) of $f(x) = x^3 + 3x^2$.',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of cubic with inflection point',
+                    function: 'x^3 + 3*x^2',
+                    xRange: [-4, 2],
+                    yRange: [-5, 10],
+                    inflectionPoints: [{x: -1, y: 2}]
+                },
+                steps: [
+                    {
+                        title: "Find the derivatives",
+                        body: "Differentiate twice.",
+                        equation: "$$f(x) = x^3 + 3x^2$$$$f'(x) = 3x^2 + 6x$$$$f''(x) = 6x + 6$$",
+                        concept: "Apply the power rule to each term.",
+                        mistake: "The derivative of $3x^2$ is $6x$, not $3x$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Solve for candidates",
+                        body: "Set $f''(x) = 0$.",
+                        equation: "$$6x + 6 = 0$$$$6x = -6$$$$x = -1$$",
+                        concept: "We have a candidate at $x = -1$.",
+                        mistake: "Don't forget to move the constant to the other side and divide.",
+                        highlightElements: ['inflectionX']
+                    },
+                    {
+                        title: "Verify concavity change",
+                        body: "Test the sign of $f''(x)$ around $x = -1$.",
+                        equation: "$$f''(-2) = 6(-2) + 6 = -6 < 0 \\quad \\text{(concave down)}$$$$f''(0) = 6(0) + 6 = 6 > 0 \\quad \\text{(concave up)}$$",
+                        concept: "Concavity changes from down to up at $x = -1$, so it's an inflection point!",
+                        mistake: "Always check both sides to confirm the sign actually changes.",
+                        highlightElements: ['inflectionPoint']
+                    },
+                    {
+                        title: "Find the coordinates",
+                        body: "Evaluate $f(-1)$.",
+                        equation: "$$f(-1) = (-1)^3 + 3(-1)^2$$$$f(-1) = -1 + 3 = 2$$",
+                        concept: "The inflection point is at $(-1, 2)$.",
+                        mistake: "Remember: $(-1)^3 = -1$ but $(-1)^2 = 1$.",
+                        highlightElements: ['inflectionPoint']
+                    }
+                ],
+                answer: "Inflection point at $(-1, 2)$",
+                colors: { inflectionPoint: '#10b981', concavity: '#8b5cf6' }
+            }
+        ],
+        medium: [
+            {
+                id: 'ip-med-1',
+                title: 'Quartic with Two Inflection Points',
+                problem: 'Find all inflection points of $f(x) = x^4 - 2x^2$.',
+                visual: {
+                    type: 'function-graph',
+                    description: 'W-shaped quartic with inflection points',
+                    function: 'x^4 - 2*x^2',
+                    xRange: [-2, 2],
+                    yRange: [-2, 5],
+                    inflectionPoints: [{x: -0.577, y: -0.667}, {x: 0.577, y: -0.667}]
+                },
+                steps: [
+                    {
+                        title: "Find derivatives",
+                        body: "Compute first and second derivatives.",
+                        equation: "$$f(x) = x^4 - 2x^2$$$$f'(x) = 4x^3 - 4x$$$$f''(x) = 12x^2 - 4$$",
+                        concept: "Standard power rule application.",
+                        mistake: "Be careful with signs: derivative of $-2x^2$ is $-4x$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Solve for candidates",
+                        body: "Set $f''(x) = 0$ and solve.",
+                        equation: "$$12x^2 - 4 = 0$$$$12x^2 = 4$$$$x^2 = \\frac{1}{3}$$$$x = \\pm\\frac{1}{\\sqrt{3}} = \\pm\\frac{\\sqrt{3}}{3} \\approx \\pm 0.577$$",
+                        concept: "We have two candidates. Remember to rationalize if needed.",
+                        mistake: "Don't forget both positive and negative solutions!",
+                        highlightElements: ['inflectionX']
+                    },
+                    {
+                        title: "Verify concavity changes",
+                        body: "Test concavity in three regions.",
+                        equation: "$$f''(-1) = 12(1) - 4 = 8 > 0$$$$f''(0) = 12(0) - 4 = -4 < 0$$$$f''(1) = 12(1) - 4 = 8 > 0$$",
+                        concept: "At $x = -\\frac{\\sqrt{3}}{3}$: changes from up to down. At $x = \\frac{\\sqrt{3}}{3}$: changes from down to up. Both are inflection points!",
+                        mistake: "Test a point between the two candidates, not just outside.",
+                        highlightElements: ['inflectionPoint']
+                    },
+                    {
+                        title: "Find coordinates",
+                        body: "Evaluate at both inflection points.",
+                        equation: "$$f\\left(\\pm\\frac{\\sqrt{3}}{3}\\right) = \\left(\\frac{1}{3}\\right)^2 - 2\\left(\\frac{1}{3}\\right) = \\frac{1}{9} - \\frac{2}{3} = -\\frac{5}{9} \\approx -0.556$$",
+                        concept: "By symmetry, both points have the same y-value.",
+                        mistake: "Use $x^2 = \\frac{1}{3}$ to simplify: $x^4 = (x^2)^2 = \\frac{1}{9}$.",
+                        highlightElements: ['inflectionPoint']
+                    }
+                ],
+                answer: "Inflection points at $\\left(-\\frac{\\sqrt{3}}{3}, -\\frac{5}{9}\\right)$ and $\\left(\\frac{\\sqrt{3}}{3}, -\\frac{5}{9}\\right)$",
+                colors: { inflectionPoint: '#10b981', concavity: '#8b5cf6' }
+            },
+            {
+                id: 'ip-med-2',
+                title: 'Logarithmic Function Concavity',
+                problem: 'Determine intervals of concavity and inflection points: $f(x) = \\ln(x^2+1)$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Logarithm of quadratic with inflection points',
+                    function: 'Math.log(x*x+1)',
+                    xRange: [-3, 3],
+                    yRange: [-0.5, 2.5],
+                    inflectionPoints: [{x: -1, y: Math.log(2)}, {x: 1, y: Math.log(2)}]
+                },
+                steps: [
+                    {
+                        title: "Find first derivative using chain rule",
+                        body: "For $\\ln(u)$, derivative is $\\frac{u'}{u}$.",
+                        equation: "$$f(x) = \\ln(x^2+1)$$$$f'(x) = \\frac{2x}{x^2+1}$$",
+                        concept: "Chain rule: outer derivative times inner derivative.",
+                        mistake: "Don't forget the chain rule! The $2x$ comes from differentiating $x^2+1$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find second derivative using quotient rule",
+                        body: "Apply quotient rule to $\\frac{2x}{x^2+1}$.",
+                        equation: "$$f''(x) = \\frac{(2)(x^2+1) - (2x)(2x)}{(x^2+1)^2}$$$$f''(x) = \\frac{2x^2 + 2 - 4x^2}{(x^2+1)^2} = \\frac{2 - 2x^2}{(x^2+1)^2}$$",
+                        concept: "The quotient rule gives us the second derivative.",
+                        mistake: "Be careful with signs when expanding the numerator.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Solve for inflection points",
+                        body: "Set numerator equal to zero (denominator is never zero).",
+                        equation: "$$2 - 2x^2 = 0$$$$2x^2 = 2$$$$x^2 = 1$$$$x = \\pm 1$$",
+                        concept: "Two candidates at $x = -1$ and $x = 1$.",
+                        mistake: "The denominator is always positive, so only check the numerator.",
+                        highlightElements: ['inflectionX']
+                    },
+                    {
+                        title: "Verify and find coordinates",
+                        body: "Test concavity changes and evaluate.",
+                        equation: "$$f''(0) = \\frac{2 - 0}{1} = 2 > 0 \\quad \\text{(concave up)}$$$$f''(2) = \\frac{2 - 8}{25} < 0 \\quad \\text{(concave down)}$$$$f(\\pm 1) = \\ln(2) \\approx 0.693$$",
+                        concept: "Concavity changes at both points. Inflection points at $(\\pm 1, \\ln 2)$.",
+                        mistake: "By symmetry, both inflection points have the same y-value.",
+                        highlightElements: ['inflectionPoint']
+                    }
+                ],
+                answer: "Inflection points at $(-1, \\ln 2)$ and $(1, \\ln 2)$. Concave up on $(-1, 1)$, concave down on $(-\\infty, -1)$ and $(1, \\infty)$",
+                colors: { inflectionPoint: '#10b981', concavity: '#8b5cf6' }
+            },
+            {
+                id: 'ip-med-3',
+                title: 'Fifth Degree Polynomial',
+                problem: 'Find inflection points of $f(x) = x^5 - 5x^3$.',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Fifth degree polynomial with three inflection points',
+                    function: 'x**5 - 5*x**3',
+                    xRange: [-2.5, 2.5],
+                    yRange: [-8, 8],
+                    inflectionPoints: [{x: -1, y: 4}, {x: 0, y: 0}, {x: 1, y: -4}]
+                },
+                steps: [
+                    {
+                        title: "Find derivatives",
+                        body: "Differentiate twice.",
+                        equation: "$$f(x) = x^5 - 5x^3$$$$f'(x) = 5x^4 - 15x^2$$$$f''(x) = 20x^3 - 30x$$",
+                        concept: "Power rule application to each term.",
+                        mistake: "Keep track of coefficients: $5 \\times 4 = 20$ and $-5 \\times 3 = -15$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Factor and solve",
+                        body: "Factor $f''(x)$ completely.",
+                        equation: "$$20x^3 - 30x = 0$$$$10x(2x^2 - 3) = 0$$$$x = 0 \\text{ or } x^2 = \\frac{3}{2}$$$$x = 0, \\pm\\sqrt{\\frac{3}{2}} \\approx 0, \\pm 1.225$$",
+                        concept: "Three candidates! Higher degree polynomials can have multiple inflection points.",
+                        mistake: "Don't forget $x = 0$ from the factored $x$ term.",
+                        highlightElements: ['inflectionX']
+                    },
+                    {
+                        title: "Verify concavity changes",
+                        body: "Test in four regions.",
+                        equation: "$$f''(-2) = 20(-8) - 30(-2) = -160 + 60 < 0$$$$f''(-1) = 20(-1) - 30(-1) = -20 + 30 > 0$$$$f''(1) = 20(1) - 30(1) = -10 < 0$$$$f''(2) = 20(8) - 30(2) = 100 > 0$$",
+                        concept: "Concavity changes at all three points!",
+                        mistake: "Test between each pair of consecutive candidates.",
+                        highlightElements: ['inflectionPoint']
+                    },
+                    {
+                        title: "Find coordinates",
+                        body: "Evaluate at all three inflection points.",
+                        equation: "$$f(0) = 0$$$$f(\\sqrt{3/2}) \\approx (1.225)^5 - 5(1.225)^3 \\approx -4.67$$$$f(-\\sqrt{3/2}) \\approx 4.67$$",
+                        concept: "Three inflection points by symmetry.",
+                        mistake: "Odd functions like this have origin symmetry.",
+                        highlightElements: ['inflectionPoint']
+                    }
+                ],
+                answer: "Inflection points at $(0, 0)$, $(\\sqrt{3/2}, \\text{value})$, and $(-\\sqrt{3/2}, \\text{value})$",
+                colors: { inflectionPoint: '#10b981', concavity: '#8b5cf6' }
+            },
+            {
+                id: 'ip-med-4',
+                title: 'Rational Function Concavity',
+                problem: 'Find where the function changes concavity: $f(x) = \\frac{1}{x^2+1}$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Bell-shaped rational function',
+                    function: '1/(x*x+1)',
+                    xRange: [-4, 4],
+                    yRange: [-0.2, 1.2],
+                    inflectionPoints: [{x: -0.577, y: 0.75}, {x: 0.577, y: 0.75}]
+                },
+                steps: [
+                    {
+                        title: "Find first derivative",
+                        body: "Use the chain rule (or quotient rule).",
+                        equation: "$$f(x) = (x^2+1)^{-1}$$$$f'(x) = -(x^2+1)^{-2} \\cdot 2x = \\frac{-2x}{(x^2+1)^2}$$",
+                        concept: "Chain rule with power of $-1$.",
+                        mistake: "Don't forget the negative sign and the chain rule factor of $2x$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find second derivative",
+                        body: "Use quotient rule on $\\frac{-2x}{(x^2+1)^2}$.",
+                        equation: "$$f''(x) = \\frac{(-2)(x^2+1)^2 - (-2x) \\cdot 2(x^2+1)(2x)}{(x^2+1)^4}$$$$f''(x) = \\frac{-2(x^2+1) + 8x^2}{(x^2+1)^3} = \\frac{6x^2 - 2}{(x^2+1)^3}$$",
+                        concept: "Simplify by factoring out $(x^2+1)$ from numerator terms.",
+                        mistake: "This is algebra-intensive. Take your time with the quotient rule.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Solve for inflection points",
+                        body: "Set numerator equal to zero.",
+                        equation: "$$6x^2 - 2 = 0$$$$6x^2 = 2$$$$x^2 = \\frac{1}{3}$$$$x = \\pm\\frac{1}{\\sqrt{3}} \\approx \\pm 0.577$$",
+                        concept: "Two inflection points by symmetry.",
+                        mistake: "Denominator is always positive, so only check numerator.",
+                        highlightElements: ['inflectionX']
+                    },
+                    {
+                        title: "Verify and evaluate",
+                        body: "Check concavity and find coordinates.",
+                        equation: "$$f''(0) = \\frac{-2}{1} < 0$$$$f''(1) = \\frac{6 - 2}{8} > 0$$$$f\\left(\\pm\\frac{1}{\\sqrt{3}}\\right) = \\frac{1}{\\frac{1}{3}+1} = \\frac{3}{4}$$",
+                        concept: "Inflection points at $(\\pm \\frac{1}{\\sqrt{3}}, \\frac{3}{4})$.",
+                        mistake: "Concavity changes from up to down to up.",
+                        highlightElements: ['inflectionPoint']
+                    }
+                ],
+                answer: "Inflection points at $\\left(\\pm\\frac{\\sqrt{3}}{3}, \\frac{3}{4}\\right)$",
+                colors: { inflectionPoint: '#10b981', concavity: '#8b5cf6' }
+            }
+        ],
+        hard: [
+            {
+                id: 'ip-hard-1',
+                title: 'Fractional Exponent Function',
+                problem: 'Find inflection points of $f(x) = x^{1/3}(x-1)$.',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Function with cusp and inflection point',
+                    function: 'Math.pow(Math.abs(x), 1/3) * (x < 0 ? -1 : 1) * (x-1)',
+                    xRange: [-2, 3],
+                    yRange: [-2, 2],
+                    inflectionPoints: [{x: 0.2, y: -0.464}]
+                },
+                steps: [
+                    {
+                        title: "Expand the function",
+                        body: "Multiply out first.",
+                        equation: "$$f(x) = x^{1/3}(x-1) = x^{4/3} - x^{1/3}$$",
+                        concept: "When multiplying: $x^{1/3} \\cdot x = x^{1/3+1} = x^{4/3}$.",
+                        mistake: "Be careful with fractional exponents: $\\frac{1}{3} + 1 = \\frac{4}{3}$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find first derivative",
+                        body: "Use power rule with fractional exponents.",
+                        equation: "$$f'(x) = \\frac{4}{3}x^{1/3} - \\frac{1}{3}x^{-2/3}$$",
+                        concept: "Power rule works with any rational exponent.",
+                        mistake: "Subtract 1 from each exponent: $\\frac{4}{3} - 1 = \\frac{1}{3}$ and $\\frac{1}{3} - 1 = -\\frac{2}{3}$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find second derivative",
+                        body: "Differentiate again.",
+                        equation: "$$f''(x) = \\frac{4}{9}x^{-2/3} + \\frac{2}{9}x^{-5/3} = \\frac{1}{9}x^{-5/3}(4x + 2)$$",
+                        concept: "$f''(x) = 0$ when $4x + 2 = 0$, so $x = -\\frac{1}{2}$. Also undefined at $x = 0$.",
+                        mistake: "Both zero and undefined points are candidates.",
+                        highlightElements: ['inflectionX']
+                    },
+                    {
+                        title: "Analyze candidates",
+                        body: "Check concavity changes at $x = -1/2$ and $x = 0$.",
+                        equation: "$$\\text{At } x = -\\frac{1}{2}: \\text{ concavity changes}$$$$\\text{At } x = 0: \\text{ cusp (not smooth), } f(0) = 0$$",
+                        concept: "Inflection point at $x = -1/2$ (need to check if $f''$ changes sign). At $x=0$, the function has a cusp.",
+                        mistake: "Inflection points require the point to be in the domain of $f$.",
+                        highlightElements: ['inflectionPoint']
+                    }
+                ],
+                answer: "Inflection point where $f''$ changes sign (verify by testing)",
+                colors: { inflectionPoint: '#10b981', concavity: '#8b5cf6' }
+            },
+            {
+                id: 'ip-hard-2',
+                title: 'Rational Function with Square Root',
+                problem: 'Find intervals of concavity and inflection points for $f(x) = \\frac{x}{\\sqrt{x^2-1}}$.',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Rational function with restricted domain',
+                    function: 'x/Math.sqrt(x*x-1)',
+                    xRange: [-4, 4],
+                    yRange: [-2, 2],
+                    inflectionPoints: [],
+                    asymptotes: [{x: -1, type: 'vertical'}, {x: 1, type: 'vertical'}]
+                },
+                steps: [
+                    {
+                        title: "Identify domain",
+                        body: "Need $x^2 - 1 > 0$ (strictly, for square root in denominator).",
+                        equation: "$$x^2 > 1$$$$x < -1 \\text{ or } x > 1$$",
+                        concept: "Domain: $(-\\infty, -1) \\cup (1, \\infty)$. Two separate regions.",
+                        mistake: "Cannot include $x = \\pm 1$ (denominator would be zero).",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find first derivative",
+                        body: "Use quotient rule and chain rule.",
+                        equation: "$$f'(x) = \\frac{(1)\\sqrt{x^2-1} - x \\cdot \\frac{x}{\\sqrt{x^2-1}}}{x^2-1}$$$$f'(x) = \\frac{x^2-1-x^2}{(x^2-1)^{3/2}} = \\frac{-1}{(x^2-1)^{3/2}}$$",
+                        concept: "Interesting! The derivative is always negative (where defined).",
+                        mistake: "The function is always decreasing on its domain.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find second derivative",
+                        body: "Differentiate $f'(x) = -(x^2-1)^{-3/2}$.",
+                        equation: "$$f''(x) = -\\left(-\\frac{3}{2}\\right)(x^2-1)^{-5/2} \\cdot 2x$$$$f''(x) = \\frac{3x}{(x^2-1)^{5/2}}$$",
+                        concept: "The second derivative changes sign at $x = 0$, but $x = 0$ is NOT in the domain!",
+                        mistake: "Inflection points must be in the domain of $f$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Conclusion",
+                        body: "Check concavity on each part of the domain.",
+                        equation: "$$x < -1: f''(x) < 0 \\text{ (concave down)}$$$$x > 1: f''(x) > 0 \\text{ (concave up)}$$",
+                        concept: "No inflection points! The function has two separate pieces with different concavity, but no point where concavity changes.",
+                        mistake: "An inflection point requires the function to be continuous and concavity to change at that point.",
+                        highlightElements: []
+                    }
+                ],
+                answer: "**No inflection points**. Concave down on $(-\\infty, -1)$, concave up on $(1, \\infty)$",
+                colors: { inflectionPoint: '#10b981', concavity: '#8b5cf6', asymptote: '#9ca3af' }
+            },
+            {
+                id: 'ip-hard-3',
+                title: 'Gaussian-type Function',
+                problem: 'Find all inflection points of $f(x) = xe^{-x^2}$.',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Bell curve times x',
+                    function: 'x*Math.exp(-x*x)',
+                    xRange: [-2.5, 2.5],
+                    yRange: [-0.5, 0.5],
+                    inflectionPoints: [{x: -0.707, y: -0.303}, {x: 0.707, y: 0.303}]
+                },
+                steps: [
+                    {
+                        title: "Find first derivative (product rule)",
+                        body: "For $f(x) = x \\cdot e^{-x^2}$.",
+                        equation: "$$f'(x) = (1)e^{-x^2} + x(-2x)e^{-x^2}$$$$f'(x) = e^{-x^2}(1 - 2x^2)$$",
+                        concept: "Product rule plus chain rule for the exponential.",
+                        mistake: "Don't forget the chain rule: derivative of $-x^2$ is $-2x$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find second derivative (product rule again)",
+                        body: "Apply product rule to $f'(x) = e^{-x^2}(1-2x^2)$.",
+                        equation: "$$f''(x) = (-2x)e^{-x^2}(1-2x^2) + e^{-x^2}(-4x)$$$$f''(x) = e^{-x^2}[-2x(1-2x^2) - 4x]$$$$f''(x) = e^{-x^2}[-2x + 4x^3 - 4x] = e^{-x^2} \\cdot 4x(x^2 - \\frac{3}{2})$$",
+                        concept: "Factor out common terms to simplify.",
+                        mistake: "Careful algebra! Combine like terms: $-2x - 4x = -6x$, then factor.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Solve for inflection points",
+                        body: "Since $e^{-x^2} > 0$ always, solve $x(x^2 - 3/2) = 0$.",
+                        equation: "$$4x(x^2 - \\frac{3}{2}) = 0$$$$x = 0 \\text{ or } x^2 = \\frac{3}{2}$$$$x = 0, \\pm\\sqrt{\\frac{3}{2}} \\approx 0, \\pm 1.225$$",
+                        concept: "Three candidates!",
+                        mistake: "Check if $x = 0$ gives a concavity change.",
+                        highlightElements: ['inflectionX']
+                    },
+                    {
+                        title: "Verify concavity changes",
+                        body: "Test the sign of $f''$ in each region. At $x=0$: $f''$ doesn't change sign (factor $x$ appears once). At $x = \\pm\\sqrt{3/2}$: concavity changes.",
+                        equation: "$$f(\\sqrt{3/2}) \\approx 0.428, \\quad f(-\\sqrt{3/2}) \\approx -0.428$$",
+                        concept: "Two inflection points (not three!).",
+                        mistake: "$x = 0$ is a critical point, not an inflection point.",
+                        highlightElements: ['inflectionPoint']
+                    }
+                ],
+                answer: "Inflection points at $(\\pm\\sqrt{3/2}, \\text{values})$ or approximately $(\\pm 1.225, \\pm 0.428)$",
+                colors: { inflectionPoint: '#10b981', concavity: '#8b5cf6' }
+            },
+            {
+                id: 'ip-hard-4',
+                title: 'Inverse Trigonometric Function',
+                problem: 'Find inflection points of $f(x) = \\arctan(x)$.',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Arctangent function with S-curve',
+                    function: 'Math.atan(x)',
+                    xRange: [-5, 5],
+                    yRange: [-2, 2],
+                    inflectionPoints: [{x: 0, y: 0}]
+                },
+                steps: [
+                    {
+                        title: "Find first derivative",
+                        body: "Use the standard derivative formula for arctangent.",
+                        equation: "$$f(x) = \\arctan(x)$$$$f'(x) = \\frac{1}{1+x^2}$$",
+                        concept: "This is a standard derivative you should memorize.",
+                        mistake: "Don't confuse with $\\arcsin$ or other inverse trig functions.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Find second derivative",
+                        body: "Differentiate $\\frac{1}{1+x^2} = (1+x^2)^{-1}$ using chain rule.",
+                        equation: "$$f''(x) = -(1+x^2)^{-2} \\cdot 2x = \\frac{-2x}{(1+x^2)^2}$$",
+                        concept: "Chain rule with power of $-1$.",
+                        mistake: "Don't forget the negative sign and the $2x$ from the chain rule.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Solve for inflection points",
+                        body: "Set $f''(x) = 0$.",
+                        equation: "$$\\frac{-2x}{(1+x^2)^2} = 0$$$$-2x = 0$$$$x = 0$$",
+                        concept: "Only one candidate: $x = 0$.",
+                        mistake: "The denominator is never zero, so only check the numerator.",
+                        highlightElements: ['inflectionX']
+                    },
+                    {
+                        title: "Verify concavity change",
+                        body: "Test concavity on both sides of $x = 0$.",
+                        equation: "$$f''(-1) = \\frac{-2(-1)}{(2)^2} = \\frac{2}{4} > 0 \\quad \\text{(concave up)}$$$$f''(1) = \\frac{-2(1)}{(2)^2} = -\\frac{1}{2} < 0 \\quad \\text{(concave down)}$$$$f(0) = \\arctan(0) = 0$$",
+                        concept: "Concavity changes from up to down at $x = 0$. Inflection point at the origin!",
+                        mistake: "The arctangent function has that classic S-curve shape.",
+                        highlightElements: ['inflectionPoint']
+                    }
+                ],
+                answer: "Inflection point at $(0, 0)$",
+                colors: { inflectionPoint: '#10b981', concavity: '#8b5cf6' }
+            }
         ]
     }
 };
