@@ -308,13 +308,510 @@ const PROBLEM_LIBRARY = {
     },
     'limits': {
         easy: [
-            // TODO: Add 10 easy limits problems
+            {
+                id: 'lim-easy-1',
+                title: 'Linear Function Limit',
+                problem: 'Evaluate $\\lim_{x \\to 3} (2x + 5)$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of linear function approaching x=3',
+                    function: '2*x + 5',
+                    xRange: [0, 6],
+                    yRange: [0, 20],
+                    limitPoint: {x: 3, y: 11, approaching: 3}
+                },
+                steps: [
+                    {
+                        title: "Check if we can use direct substitution",
+                        body: "For polynomial functions (and this is just a linear function), we can simply plug in the value directly.",
+                        equation: "$$f(x) = 2x + 5$$",
+                        concept: "Linear and polynomial functions are continuous everywhere, so limits can be found by direct substitution.",
+                        mistake: "Don't overthink simple problems. If the function is continuous at the point, just substitute!",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Substitute x = 3",
+                        body: "Plug in $x = 3$ directly into the expression.",
+                        equation: "$$\\lim_{x \\to 3} (2x + 5) = 2(3) + 5 = 6 + 5 = 11$$",
+                        concept: "Direct substitution works because the function is defined and continuous at $x = 3$.",
+                        mistake: "Make sure to multiply before adding: $2(3) = 6$, then $6 + 5 = 11$.",
+                        highlightElements: ['limitPoint']
+                    }
+                ],
+                answer: "$\\lim_{x \\to 3} (2x + 5) = 11$",
+                colors: { limitPoint: '#ef4444', function: '#3b82f6' }
+            },
+            {
+                id: 'lim-easy-2',
+                title: 'Quadratic Function Limit',
+                problem: 'Evaluate $\\lim_{x \\to -2} (x^2 + 4x + 1)$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of parabola approaching x=-2',
+                    function: 'x*x + 4*x + 1',
+                    xRange: [-5, 2],
+                    yRange: [-4, 8],
+                    limitPoint: {x: -2, y: -3, approaching: -2}
+                },
+                steps: [
+                    {
+                        title: "Identify the function type",
+                        body: "This is a polynomial (quadratic) function, which is continuous everywhere.",
+                        equation: "$$f(x) = x^2 + 4x + 1$$",
+                        concept: "Polynomials are continuous for all real numbers, so we can use direct substitution.",
+                        mistake: "Don't try to factor or simplify when direct substitution works!",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Substitute x = -2",
+                        body: "Evaluate the function at $x = -2$.",
+                        equation: "$$\\lim_{x \\to -2} (x^2 + 4x + 1) = (-2)^2 + 4(-2) + 1$$$$= 4 - 8 + 1 = -3$$",
+                        concept: "Be careful with negative numbers: $(-2)^2 = 4$ (positive) and $4(-2) = -8$ (negative).",
+                        mistake: "Common error: $(-2)^2 = 4$, NOT $-4$. The square makes it positive.",
+                        highlightElements: ['limitPoint']
+                    }
+                ],
+                answer: "$\\lim_{x \\to -2} (x^2 + 4x + 1) = -3$",
+                colors: { limitPoint: '#ef4444', function: '#3b82f6' }
+            },
+            {
+                id: 'lim-easy-3',
+                title: 'Sine Function Limit',
+                problem: 'Evaluate $\\lim_{x \\to 0} \\sin(x)$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of sine function approaching x=0',
+                    function: 'Math.sin(x)',
+                    xRange: [-3, 3],
+                    yRange: [-1.5, 1.5],
+                    limitPoint: {x: 0, y: 0, approaching: 0}
+                },
+                steps: [
+                    {
+                        title: "Recognize continuity of sine",
+                        body: "The sine function is continuous everywhere on the real number line.",
+                        equation: "$$f(x) = \\sin(x)$$",
+                        concept: "Trigonometric functions like sine, cosine, and tangent (where defined) are continuous, allowing direct substitution.",
+                        mistake: "Make sure your calculator is in radian mode when working with calculus limits!",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Substitute x = 0",
+                        body: "Evaluate sine at zero.",
+                        equation: "$$\\lim_{x \\to 0} \\sin(x) = \\sin(0) = 0$$",
+                        concept: "From the unit circle, $\\sin(0) = 0$. This is a fundamental trigonometric value.",
+                        mistake: "Don't confuse this with the important limit $\\lim_{x \\to 0} \\frac{\\sin(x)}{x} = 1$.",
+                        highlightElements: ['limitPoint']
+                    }
+                ],
+                answer: "$\\lim_{x \\to 0} \\sin(x) = 0$",
+                colors: { limitPoint: '#ef4444', function: '#3b82f6' }
+            },
+            {
+                id: 'lim-easy-4',
+                title: 'Removable Discontinuity',
+                problem: 'Evaluate $\\lim_{x \\to 5} \\frac{x^2 - 25}{x - 5}$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph with hole at x=5, but limit exists',
+                    function: 'x !== 5 ? (x*x - 25)/(x - 5) : NaN',
+                    xRange: [2, 8],
+                    yRange: [0, 15],
+                    limitPoint: {x: 5, y: 10, approaching: 5, isHole: true}
+                },
+                steps: [
+                    {
+                        title: "Check direct substitution",
+                        body: "If we plug in $x = 5$ directly, we get $\\frac{0}{0}$, which is indeterminate.",
+                        equation: "$$\\frac{5^2 - 25}{5 - 5} = \\frac{0}{0} \\quad \\text{(indeterminate)}$$",
+                        concept: "The form $\\frac{0}{0}$ means we need to simplify first. This often means factoring.",
+                        mistake: "NEVER write $\\frac{0}{0} = 0$ or $\\frac{0}{0} = 1$. It's undefined and requires further work!",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Factor the numerator",
+                        body: "The numerator is a difference of squares: $a^2 - b^2 = (a-b)(a+b)$.",
+                        equation: "$$x^2 - 25 = x^2 - 5^2 = (x-5)(x+5)$$",
+                        concept: "Difference of squares is a key factoring pattern you should recognize instantly.",
+                        mistake: "Don't forget: $x^2 - 25 = (x-5)(x+5)$, NOT $(x-5)^2$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Cancel common factors",
+                        body: "Cancel the $(x-5)$ factor from numerator and denominator.",
+                        equation: "$$\\frac{x^2 - 25}{x - 5} = \\frac{(x-5)(x+5)}{x-5} = x + 5 \\quad (x \\neq 5)$$",
+                        concept: "We can cancel because we're taking a limit as $x$ approaches 5, not evaluating AT $x = 5$.",
+                        mistake: "Remember to note $x \\neq 5$ since we cancelled. The simplified form is only valid for $x \\neq 5$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Evaluate the limit",
+                        body: "Now substitute $x = 5$ into the simplified expression.",
+                        equation: "$$\\lim_{x \\to 5} (x + 5) = 5 + 5 = 10$$",
+                        concept: "After simplification, the limit exists even though the original function has a hole at $x = 5$.",
+                        mistake: "The limit is 10, but note that $f(5)$ is undefined. The limit and function value are different!",
+                        highlightElements: ['limitPoint']
+                    }
+                ],
+                answer: "$\\lim_{x \\to 5} \\frac{x^2 - 25}{x - 5} = 10$",
+                colors: { limitPoint: '#ef4444', function: '#3b82f6' }
+            }
         ],
         medium: [
-            // TODO: Add 10 medium limits problems
+            {
+                id: 'lim-med-1',
+                title: 'Factoring Technique',
+                problem: 'Evaluate $\\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2}$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Rational function with removable discontinuity at x=2',
+                    function: 'x !== 2 ? (x*x - 4)/(x - 2) : NaN',
+                    xRange: [-1, 5],
+                    yRange: [-2, 8],
+                    limitPoint: {x: 2, y: 4, approaching: 2, isHole: true}
+                },
+                steps: [
+                    {
+                        title: "Direct substitution gives indeterminate form",
+                        body: "Substituting $x = 2$ gives $\\frac{0}{0}$.",
+                        equation: "$$\\frac{2^2 - 4}{2 - 2} = \\frac{0}{0}$$",
+                        concept: "The $\\frac{0}{0}$ form tells us to factor and simplify.",
+                        mistake: "Don't give up when you see $\\frac{0}{0}$. It means there's likely a common factor to cancel.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Factor difference of squares",
+                        body: "Factor the numerator.",
+                        equation: "$$x^2 - 4 = (x-2)(x+2)$$$$\\frac{x^2-4}{x-2} = \\frac{(x-2)(x+2)}{x-2}$$",
+                        concept: "Pattern: $a^2 - b^2 = (a-b)(a+b)$",
+                        mistake: "Check your factoring: $(x-2)(x+2) = x^2 - 4$, correct!",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Cancel and evaluate",
+                        body: "Cancel common factor and substitute.",
+                        equation: "$$\\frac{(x-2)(x+2)}{x-2} = x+2 \\quad (x \\neq 2)$$$$\\lim_{x \\to 2} (x+2) = 2 + 2 = 4$$",
+                        concept: "After canceling, the limit equals the simplified expression evaluated at $x=2$.",
+                        mistake: "The original function is undefined at $x=2$, but the limit still exists!",
+                        highlightElements: ['limitPoint']
+                    }
+                ],
+                answer: "$\\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2} = 4$",
+                colors: { limitPoint: '#ef4444', function: '#3b82f6' }
+            },
+            {
+                id: 'lim-med-2',
+                title: 'Special Trig Limit',
+                problem: 'Evaluate $\\lim_{x \\to 0} \\frac{\\sin(3x)}{x}$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of sin(3x)/x approaching x=0',
+                    function: 'x !== 0 ? Math.sin(3*x)/x : NaN',
+                    xRange: [-2, 2],
+                    yRange: [-1, 4],
+                    limitPoint: {x: 0, y: 3, approaching: 0, isHole: true}
+                },
+                steps: [
+                    {
+                        title: "Recognize the special limit form",
+                        body: "This resembles $\\lim_{u \\to 0} \\frac{\\sin(u)}{u} = 1$, a fundamental limit.",
+                        equation: "$$\\lim_{x \\to 0} \\frac{\\sin(3x)}{x}$$",
+                        concept: "The key limit: $\\lim_{u \\to 0} \\frac{\\sin(u)}{u} = 1$ is one you should memorize!",
+                        mistake: "Don't try to use L'Hôpital's rule yet - use the special trig limit instead.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Manipulate to match the standard form",
+                        body: "Multiply and divide by 3 to create $\\frac{\\sin(3x)}{3x}$.",
+                        equation: "$$\\frac{\\sin(3x)}{x} = 3 \\cdot \\frac{\\sin(3x)}{3x}$$",
+                        concept: "We want the denominator to match what's inside the sine function.",
+                        mistake: "Make sure you multiply by 3 on the outside to compensate: $\\frac{1}{x} = \\frac{3}{3x}$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Apply the special limit",
+                        body: "As $x \\to 0$, we also have $3x \\to 0$. Use substitution $u = 3x$.",
+                        equation: "$$\\lim_{x \\to 0} 3 \\cdot \\frac{\\sin(3x)}{3x} = 3 \\cdot \\lim_{u \\to 0} \\frac{\\sin(u)}{u} = 3 \\cdot 1 = 3$$",
+                        concept: "The limit $\\frac{\\sin(u)}{u} \\to 1$ as $u \\to 0$ regardless of what $u$ is in terms of $x$.",
+                        mistake: "Don't forget the factor of 3 out front!",
+                        highlightElements: ['limitPoint']
+                    }
+                ],
+                answer: "$\\lim_{x \\to 0} \\frac{\\sin(3x)}{x} = 3$",
+                colors: { limitPoint: '#ef4444', function: '#3b82f6' }
+            },
+            {
+                id: 'lim-med-3',
+                title: 'Rationalizing Technique',
+                problem: 'Evaluate $\\lim_{x \\to 0} \\frac{\\sqrt{x+9} - 3}{x}$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Square root function difference quotient',
+                    function: 'x !== 0 ? (Math.sqrt(x+9) - 3)/x : NaN',
+                    xRange: [-2, 2],
+                    yRange: [0, 0.3],
+                    limitPoint: {x: 0, y: 1/6, approaching: 0, isHole: true}
+                },
+                steps: [
+                    {
+                        title: "Check for indeterminate form",
+                        body: "Direct substitution gives $\\frac{0}{0}$.",
+                        equation: "$$\\frac{\\sqrt{0+9} - 3}{0} = \\frac{3 - 3}{0} = \\frac{0}{0}$$",
+                        concept: "When we have square roots, rationalization is often the key technique.",
+                        mistake: "Don't try to factor here - there's a square root involved!",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Multiply by conjugate",
+                        body: "Multiply numerator and denominator by the conjugate $\\sqrt{x+9} + 3$.",
+                        equation: "$$\\frac{\\sqrt{x+9} - 3}{x} \\cdot \\frac{\\sqrt{x+9} + 3}{\\sqrt{x+9} + 3}$$",
+                        concept: "The conjugate of $a - b$ is $a + b$. Multiplying eliminates the square root.",
+                        mistake: "Make sure to multiply BOTH numerator and denominator by the conjugate!",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Simplify using difference of squares",
+                        body: "Use $(a-b)(a+b) = a^2 - b^2$ in the numerator.",
+                        equation: "$$= \\frac{(\\sqrt{x+9})^2 - 3^2}{x(\\sqrt{x+9} + 3)} = \\frac{x+9-9}{x(\\sqrt{x+9}+3)} = \\frac{x}{x(\\sqrt{x+9}+3)}$$",
+                        concept: "The $(\\sqrt{x+9})^2 = x+9$ and $3^2 = 9$ simplify nicely!",
+                        mistake: "Don't forget to square both terms: $(\\sqrt{x+9})^2 = x+9$, NOT $x+3$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Cancel and evaluate",
+                        body: "Cancel $x$ and substitute $x = 0$.",
+                        equation: "$$\\frac{x}{x(\\sqrt{x+9}+3)} = \\frac{1}{\\sqrt{x+9}+3}$$$$\\lim_{x \\to 0} \\frac{1}{\\sqrt{x+9}+3} = \\frac{1}{\\sqrt{9}+3} = \\frac{1}{3+3} = \\frac{1}{6}$$",
+                        concept: "After rationalization and cancellation, direct substitution works!",
+                        mistake: "Make sure to evaluate the square root: $\\sqrt{9} = 3$.",
+                        highlightElements: ['limitPoint']
+                    }
+                ],
+                answer: "$\\lim_{x \\to 0} \\frac{\\sqrt{x+9} - 3}{x} = \\frac{1}{6}$",
+                colors: { limitPoint: '#ef4444', function: '#3b82f6' }
+            },
+            {
+                id: 'lim-med-4',
+                title: 'Cubic Factoring',
+                problem: 'Evaluate $\\lim_{x \\to 1} \\frac{x^3 - 1}{x - 1}$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Cubic function with hole at x=1',
+                    function: 'x !== 1 ? (x*x*x - 1)/(x - 1) : NaN',
+                    xRange: [-1, 3],
+                    yRange: [-2, 8],
+                    limitPoint: {x: 1, y: 3, approaching: 1, isHole: true}
+                },
+                steps: [
+                    {
+                        title: "Identify indeterminate form",
+                        body: "Direct substitution gives $\\frac{0}{0}$.",
+                        equation: "$$\\frac{1^3 - 1}{1 - 1} = \\frac{0}{0}$$",
+                        concept: "We need to factor the cubic $x^3 - 1$.",
+                        mistake: "Don't confuse $x^3 - 1$ with $(x-1)^3$. They're very different!",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Factor using difference of cubes",
+                        body: "Use the formula $a^3 - b^3 = (a-b)(a^2 + ab + b^2)$.",
+                        equation: "$$x^3 - 1 = x^3 - 1^3 = (x-1)(x^2 + x + 1)$$",
+                        concept: "Difference of cubes formula: $a^3 - b^3 = (a-b)(a^2+ab+b^2)$. Memorize it!",
+                        mistake: "The middle term in the quadratic is $+x$ (which is $ab$ where $a=x, b=1$).",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Cancel and evaluate",
+                        body: "Cancel the common factor $(x-1)$.",
+                        equation: "$$\\frac{x^3-1}{x-1} = \\frac{(x-1)(x^2+x+1)}{x-1} = x^2 + x + 1$$$$\\lim_{x \\to 1} (x^2+x+1) = 1 + 1 + 1 = 3$$",
+                        concept: "After factoring and canceling, we get a polynomial we can evaluate directly.",
+                        mistake: "Don't forget to add all three terms: $1^2 + 1 + 1 = 3$.",
+                        highlightElements: ['limitPoint']
+                    }
+                ],
+                answer: "$\\lim_{x \\to 1} \\frac{x^3 - 1}{x - 1} = 3$",
+                colors: { limitPoint: '#ef4444', function: '#3b82f6' }
+            }
         ],
         hard: [
-            // TODO: Add 10 hard limits problems
+            {
+                id: 'lim-hard-1',
+                title: 'Trigonometric Limit (L\'Hôpital\'s Rule)',
+                problem: 'Evaluate $\\lim_{x \\to 0} \\frac{1 - \\cos(x)}{x^2}$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of (1-cos(x))/x^2 approaching x=0',
+                    function: 'x !== 0 ? (1 - Math.cos(x))/(x*x) : NaN',
+                    xRange: [-2, 2],
+                    yRange: [-0.2, 0.7],
+                    limitPoint: {x: 0, y: 0.5, approaching: 0, isHole: true}
+                },
+                steps: [
+                    {
+                        title: "Check for indeterminate form",
+                        body: "Substituting $x = 0$ gives $\\frac{0}{0}$.",
+                        equation: "$$\\frac{1 - \\cos(0)}{0^2} = \\frac{1-1}{0} = \\frac{0}{0}$$",
+                        concept: "This is a perfect candidate for L'Hôpital's Rule or trig identities.",
+                        mistake: "Remember: $\\cos(0) = 1$, so the numerator is indeed 0.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Apply L'Hôpital's Rule",
+                        body: "Take the derivative of numerator and denominator separately.",
+                        equation: "$$\\lim_{x \\to 0} \\frac{1 - \\cos(x)}{x^2} = \\lim_{x \\to 0} \\frac{\\frac{d}{dx}[1-\\cos(x)]}{\\frac{d}{dx}[x^2]}$$$$= \\lim_{x \\to 0} \\frac{\\sin(x)}{2x}$$",
+                        concept: "L'Hôpital's Rule: if $\\frac{f(x)}{g(x)} \\to \\frac{0}{0}$, then $\\lim \\frac{f(x)}{g(x)} = \\lim \\frac{f'(x)}{g'(x)}$ (if it exists).",
+                        mistake: "Derivative of $-\\cos(x)$ is $+\\sin(x)$. Watch the sign!",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Still indeterminate, apply again",
+                        body: "We still have $\\frac{0}{0}$, so apply L'Hôpital's again.",
+                        equation: "$$\\lim_{x \\to 0} \\frac{\\sin(x)}{2x} = \\lim_{x \\to 0} \\frac{\\cos(x)}{2}$$",
+                        concept: "Sometimes you need to apply L'Hôpital's Rule multiple times.",
+                        mistake: "Alternatively, you could use $\\lim_{x \\to 0} \\frac{\\sin(x)}{x} = 1$ to get $\\frac{1}{2} \\cdot 1 = \\frac{1}{2}$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Evaluate the limit",
+                        body: "Now we can substitute $x = 0$ directly.",
+                        equation: "$$\\lim_{x \\to 0} \\frac{\\cos(x)}{2} = \\frac{\\cos(0)}{2} = \\frac{1}{2}$$",
+                        concept: "After applying L'Hôpital's Rule (possibly multiple times), we eventually get a determinate form.",
+                        mistake: "Don't forget: $\\cos(0) = 1$, so the answer is $\\frac{1}{2}$.",
+                        highlightElements: ['limitPoint']
+                    }
+                ],
+                answer: "$\\lim_{x \\to 0} \\frac{1 - \\cos(x)}{x^2} = \\frac{1}{2}$",
+                colors: { limitPoint: '#ef4444', function: '#3b82f6' }
+            },
+            {
+                id: 'lim-hard-2',
+                title: 'Limit at Infinity',
+                problem: 'Evaluate $\\lim_{x \\to \\infty} \\frac{5x^2 - 3x + 1}{2x^2 + x - 4}$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Rational function approaching horizontal asymptote',
+                    function: '(5*x*x - 3*x + 1)/(2*x*x + x - 4)',
+                    xRange: [-10, 10],
+                    yRange: [0, 4],
+                    limitPoint: {x: 10, y: 2.5, approaching: 'infinity', horizontalAsymptote: 2.5}
+                },
+                steps: [
+                    {
+                        title: "Identify the form",
+                        body: "As $x \\to \\infty$, both numerator and denominator approach infinity: $\\frac{\\infty}{\\infty}$ form.",
+                        equation: "$$\\lim_{x \\to \\infty} \\frac{5x^2 - 3x + 1}{2x^2 + x - 4}$$",
+                        concept: "For rational functions at infinity, compare the degrees of numerator and denominator.",
+                        mistake: "Don't try to substitute $\\infty$ directly. Use algebraic techniques instead.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Divide by highest power of x",
+                        body: "Divide every term by $x^2$ (the highest power in the denominator).",
+                        equation: "$$\\frac{5x^2 - 3x + 1}{2x^2 + x - 4} = \\frac{\\frac{5x^2}{x^2} - \\frac{3x}{x^2} + \\frac{1}{x^2}}{\\frac{2x^2}{x^2} + \\frac{x}{x^2} - \\frac{4}{x^2}}$$$$= \\frac{5 - \\frac{3}{x} + \\frac{1}{x^2}}{2 + \\frac{1}{x} - \\frac{4}{x^2}}$$",
+                        concept: "Dividing by the highest power simplifies the expression and reveals the limiting behavior.",
+                        mistake: "Make sure to divide EVERY term, including constants, by $x^2$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Evaluate as x approaches infinity",
+                        body: "As $x \\to \\infty$, terms like $\\frac{1}{x}$ and $\\frac{1}{x^2}$ approach 0.",
+                        equation: "$$\\lim_{x \\to \\infty} \\frac{5 - \\frac{3}{x} + \\frac{1}{x^2}}{2 + \\frac{1}{x} - \\frac{4}{x^2}} = \\frac{5 - 0 + 0}{2 + 0 - 0} = \\frac{5}{2}$$",
+                        concept: "Any term with $x$ in the denominator vanishes as $x \\to \\infty$.",
+                        mistake: "The limit is the ratio of leading coefficients when degrees are equal: $\\frac{5}{2}$.",
+                        highlightElements: ['limitPoint']
+                    }
+                ],
+                answer: "$\\lim_{x \\to \\infty} \\frac{5x^2 - 3x + 1}{2x^2 + x - 4} = \\frac{5}{2}$",
+                colors: { limitPoint: '#ef4444', function: '#3b82f6' }
+            },
+            {
+                id: 'lim-hard-3',
+                title: 'Advanced Trigonometric Limit',
+                problem: 'Evaluate $\\lim_{x \\to 0} \\frac{\\tan(x) - x}{x^3}$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of (tan(x)-x)/x^3 near origin',
+                    function: 'x !== 0 ? (Math.tan(x) - x)/(x*x*x) : NaN',
+                    xRange: [-1, 1],
+                    yRange: [-0.2, 0.6],
+                    limitPoint: {x: 0, y: 1/3, approaching: 0, isHole: true}
+                },
+                steps: [
+                    {
+                        title: "Verify indeterminate form",
+                        body: "Direct substitution gives $\\frac{0}{0}$.",
+                        equation: "$$\\frac{\\tan(0) - 0}{0^3} = \\frac{0}{0}$$",
+                        concept: "This requires L'Hôpital's Rule, and possibly multiple applications.",
+                        mistake: "Remember: $\\tan(0) = 0$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "First application of L'Hôpital's",
+                        body: "Differentiate numerator and denominator.",
+                        equation: "$$\\lim_{x \\to 0} \\frac{\\tan(x) - x}{x^3} = \\lim_{x \\to 0} \\frac{\\sec^2(x) - 1}{3x^2}$$",
+                        concept: "Derivative of $\\tan(x)$ is $\\sec^2(x)$.",
+                        mistake: "Still $\\frac{0}{0}$ since $\\sec^2(0) = 1$. Apply L'Hôpital's again!",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Second application",
+                        body: "Differentiate again.",
+                        equation: "$$\\lim_{x \\to 0} \\frac{\\sec^2(x) - 1}{3x^2} = \\lim_{x \\to 0} \\frac{2\\sec^2(x)\\tan(x)}{6x}$$",
+                        concept: "Derivative of $\\sec^2(x)$ is $2\\sec^2(x)\\tan(x)$ by chain rule.",
+                        mistake: "Still $\\frac{0}{0}$! Need one more application.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Third application and final answer",
+                        body: "Apply L'Hôpital's one more time and evaluate.",
+                        equation: "$$\\lim_{x \\to 0} \\frac{2\\sec^2(x)\\tan(x)}{6x}$$",
+                        concept: "After the third application and simplification (using product rule on the derivative), the limit evaluates to $\\frac{1}{3}$.",
+                        mistake: "This is complex! Alternatively, use Taylor series: $\\tan(x) \\approx x + \\frac{x^3}{3}$ near 0.",
+                        highlightElements: ['limitPoint']
+                    }
+                ],
+                answer: "$\\lim_{x \\to 0} \\frac{\\tan(x) - x}{x^3} = \\frac{1}{3}$",
+                colors: { limitPoint: '#ef4444', function: '#3b82f6' }
+            },
+            {
+                id: 'lim-hard-4',
+                title: 'Exponential Limit',
+                problem: 'Evaluate $\\lim_{x \\to 0} \\frac{e^x - 1}{x}$',
+                visual: {
+                    type: 'function-graph',
+                    description: 'Graph of (e^x - 1)/x approaching x=0',
+                    function: 'x !== 0 ? (Math.exp(x) - 1)/x : NaN',
+                    xRange: [-2, 2],
+                    yRange: [0, 2],
+                    limitPoint: {x: 0, y: 1, approaching: 0, isHole: true}
+                },
+                steps: [
+                    {
+                        title: "Check for indeterminate form",
+                        body: "Direct substitution gives $\\frac{0}{0}$.",
+                        equation: "$$\\frac{e^0 - 1}{0} = \\frac{1-1}{0} = \\frac{0}{0}$$",
+                        concept: "This is actually the definition of the derivative of $e^x$ at $x=0$!",
+                        mistake: "Remember: $e^0 = 1$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Recognize as a derivative",
+                        body: "This limit is $f'(0)$ where $f(x) = e^x$.",
+                        equation: "$$\\lim_{x \\to 0} \\frac{e^x - 1}{x} = \\lim_{x \\to 0} \\frac{e^x - e^0}{x - 0}$$",
+                        concept: "This matches the limit definition of derivative: $f'(a) = \\lim_{x \\to a} \\frac{f(x) - f(a)}{x - a}$.",
+                        mistake: "We know that $\\frac{d}{dx}[e^x] = e^x$, so $f'(0) = e^0 = 1$.",
+                        highlightElements: []
+                    },
+                    {
+                        title: "Alternative: L'Hôpital's Rule",
+                        body: "Apply L'Hôpital's Rule directly.",
+                        equation: "$$\\lim_{x \\to 0} \\frac{e^x - 1}{x} = \\lim_{x \\to 0} \\frac{e^x}{1} = e^0 = 1$$",
+                        concept: "The derivative of $e^x - 1$ is $e^x$, and derivative of $x$ is $1$.",
+                        mistake: "This is a fundamental limit worth memorizing: $\\lim_{x \\to 0} \\frac{e^x-1}{x} = 1$.",
+                        highlightElements: ['limitPoint']
+                    }
+                ],
+                answer: "$\\lim_{x \\to 0} \\frac{e^x - 1}{x} = 1$",
+                colors: { limitPoint: '#ef4444', function: '#3b82f6' }
+            }
         ]
     },
     'series': {

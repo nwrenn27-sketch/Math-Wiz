@@ -965,6 +965,67 @@ function drawFunctionGraph(ctx, visual, colors) {
         });
     }
 
+    // Draw limit point
+    if (visual.limitPoint) {
+        const point = visual.limitPoint;
+        const canvasX = toCanvasX(point.x);
+        const canvasY = toCanvasY(point.y);
+
+        if (point.isHole) {
+            // Draw a hollow circle for removable discontinuity
+            ctx.strokeStyle = colors.limitPoint || '#ef4444';
+            ctx.fillStyle = '#ffffff';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(canvasX, canvasY, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+        } else {
+            // Draw a solid circle for continuous limit
+            ctx.fillStyle = colors.limitPoint || '#ef4444';
+            ctx.beginPath();
+            ctx.arc(canvasX, canvasY, 6, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Add a white border
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        // Label the limit point
+        ctx.fillStyle = colors.limitPoint || '#ef4444';
+        ctx.font = 'bold 13px sans-serif';
+        ctx.textAlign = 'center';
+
+        let label = `(${point.x}, ${point.y})`;
+        if (point.approaching === 'infinity') {
+            label = `limit = ${point.y}`;
+        } else if (point.isHole) {
+            label += ' (hole)';
+        }
+        ctx.fillText(label, canvasX, canvasY - 15);
+
+        // Draw horizontal asymptote line if approaching infinity
+        if (point.approaching === 'infinity' && point.horizontalAsymptote !== undefined) {
+            ctx.strokeStyle = colors.limitPoint || '#ef4444';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([10, 5]);
+            const asymY = toCanvasY(point.horizontalAsymptote);
+            ctx.beginPath();
+            ctx.moveTo(padding, asymY);
+            ctx.lineTo(width - padding, asymY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Label the asymptote
+            ctx.fillStyle = colors.limitPoint || '#ef4444';
+            ctx.font = '12px sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText(`y = ${point.horizontalAsymptote}`, width - padding - 5, asymY - 5);
+        }
+    }
+
     // Add function label
     if (visual.function) {
         ctx.fillStyle = '#1f2937';
