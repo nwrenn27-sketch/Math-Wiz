@@ -267,10 +267,299 @@ const PROBLEM_LIBRARY = {
             }
         ],
         medium: [
-            // TODO: Add 10 medium related-rates problems
+            {
+                id: 'rr-med-1',
+                title: 'Expanding Circle',
+                problem: "A circle's radius is increasing at a rate of 3 cm/s. Find the rate at which the area is increasing when the radius is 10 cm.",
+                visual: {
+                    type: 'balloon',
+                    description: 'A circle whose radius r grows over time'
+                },
+                steps: [
+                    {
+                        title: 'Write the area formula',
+                        body: 'The area of a circle is A = πr². Both A and r are functions of time t.',
+                        equation: '$A = \\pi r^2$',
+                        concept: 'Whenever a geometric quantity changes over time, write its formula first — then differentiate.'
+                    },
+                    {
+                        title: 'Differentiate with respect to time',
+                        body: 'Use the chain rule: dA/dt = 2πr · (dr/dt).',
+                        equation: '$\\dfrac{dA}{dt} = 2\\pi r \\cdot \\dfrac{dr}{dt}$',
+                        mistake: 'Don\'t forget the chain rule — dr/dt multiplies the result, it doesn\'t just disappear.'
+                    },
+                    {
+                        title: 'Plug in known values',
+                        body: 'We know dr/dt = 3 cm/s and r = 10 cm. Substitute.',
+                        equation: '$\\dfrac{dA}{dt} = 2\\pi (10)(3) = 60\\pi \\approx 188.5 \\text{ cm}^2/\\text{s}$'
+                    }
+                ],
+                answer: '$\\dfrac{dA}{dt} = 60\\pi \\approx 188.5$ cm²/s',
+                colors: { d: '#3b82f6' }
+            },
+            {
+                id: 'rr-med-2',
+                title: 'Rising Water in a Cone',
+                problem: 'Water is being poured into a cone-shaped cup at 5 cm³/s. The cup has height 12 cm and radius 4 cm. How fast is the water level rising when the water is 6 cm deep?',
+                visual: {
+                    type: 'function-graph',
+                    function: 'Math.PI * (x/3)**2 * x',
+                    xRange: [0, 12],
+                    yRange: [0, 70],
+                    description: 'Volume of water V as a function of water depth h'
+                },
+                steps: [
+                    {
+                        title: 'Set up similar triangles',
+                        body: 'The cone has height 12 and radius 4, so r/h = 4/12 = 1/3, meaning r = h/3 at any water level h.',
+                        equation: '$\\dfrac{r}{h} = \\dfrac{4}{12} \\Rightarrow r = \\dfrac{h}{3}$',
+                        concept: 'Similar triangles let us eliminate one variable — express r in terms of h so V depends on h alone.'
+                    },
+                    {
+                        title: 'Write volume in terms of h only',
+                        body: 'Volume of a cone is V = (1/3)πr²h. Substitute r = h/3.',
+                        equation: '$V = \\dfrac{1}{3}\\pi\\left(\\dfrac{h}{3}\\right)^2 h = \\dfrac{\\pi h^3}{27}$'
+                    },
+                    {
+                        title: 'Differentiate with respect to time',
+                        body: 'Apply the chain rule to both sides.',
+                        equation: '$\\dfrac{dV}{dt} = \\dfrac{\\pi h^2}{9} \\cdot \\dfrac{dh}{dt}$'
+                    },
+                    {
+                        title: 'Solve for dh/dt',
+                        body: 'Plug in dV/dt = 5 cm³/s and h = 6 cm.',
+                        equation: '$5 = \\dfrac{\\pi (36)}{9} \\cdot \\dfrac{dh}{dt} = 4\\pi \\cdot \\dfrac{dh}{dt} \\Rightarrow \\dfrac{dh}{dt} = \\dfrac{5}{4\\pi} \\approx 0.398 \\text{ cm/s}$'
+                    }
+                ],
+                answer: '$\\dfrac{dh}{dt} = \\dfrac{5}{4\\pi} \\approx 0.398$ cm/s',
+                colors: {}
+            },
+            {
+                id: 'rr-med-3',
+                title: 'Ladder Sliding Down a Wall',
+                problem: 'A 13 ft ladder leans against a wall. The bottom slides away from the wall at 2 ft/s. How fast is the top sliding down when the bottom is 5 ft from the wall?',
+                visual: {
+                    type: 'two-cars',
+                    description: 'Right triangle formed by ladder, wall, and ground'
+                },
+                steps: [
+                    {
+                        title: 'Set up the Pythagorean relationship',
+                        body: 'Let x = distance of bottom from wall, y = height of top on wall. The ladder length is always 13 ft.',
+                        equation: '$x^2 + y^2 = 13^2 = 169$',
+                        concept: 'The ladder length is constant — that\'s your constraint equation.'
+                    },
+                    {
+                        title: 'Differentiate implicitly',
+                        body: 'Both x and y change with time. Differentiate both sides.',
+                        equation: '$2x\\dfrac{dx}{dt} + 2y\\dfrac{dy}{dt} = 0$'
+                    },
+                    {
+                        title: 'Find y when x = 5',
+                        body: 'Use the Pythagorean theorem: y = √(169 − 25) = √144 = 12 ft.',
+                        equation: '$y = \\sqrt{169 - 25} = 12 \\text{ ft}$'
+                    },
+                    {
+                        title: 'Solve for dy/dt',
+                        body: 'Substitute x = 5, y = 12, dx/dt = 2.',
+                        equation: '$2(5)(2) + 2(12)\\dfrac{dy}{dt} = 0 \\Rightarrow \\dfrac{dy}{dt} = -\\dfrac{10}{12} = -\\dfrac{5}{6} \\text{ ft/s}$',
+                        concept: 'The negative sign means the top is sliding DOWN — that\'s expected and correct.'
+                    }
+                ],
+                answer: '$\\dfrac{dy}{dt} = -\\dfrac{5}{6} \\approx -0.833$ ft/s (sliding down)',
+                colors: { x: '#3b82f6', y: '#8b5cf6', z: '#ef4444' }
+            },
+            {
+                id: 'rr-med-4',
+                title: 'Balloon Inflation',
+                problem: 'A spherical balloon is being inflated so that its volume increases at 20 cm³/s. How fast is the radius increasing when the radius is 5 cm?',
+                visual: {
+                    type: 'balloon',
+                    description: 'Spherical balloon with increasing radius r'
+                },
+                steps: [
+                    {
+                        title: 'Write the volume formula for a sphere',
+                        body: 'V = (4/3)πr³. Both V and r are functions of time.',
+                        equation: '$V = \\dfrac{4}{3}\\pi r^3$'
+                    },
+                    {
+                        title: 'Differentiate with respect to time',
+                        body: 'Apply the chain rule.',
+                        equation: '$\\dfrac{dV}{dt} = 4\\pi r^2 \\cdot \\dfrac{dr}{dt}$',
+                        concept: 'The derivative of r³ is 3r², and the chain rule adds the dr/dt factor.'
+                    },
+                    {
+                        title: 'Solve for dr/dt',
+                        body: 'Plug in dV/dt = 20 and r = 5.',
+                        equation: '$20 = 4\\pi(25)\\dfrac{dr}{dt} \\Rightarrow \\dfrac{dr}{dt} = \\dfrac{20}{100\\pi} = \\dfrac{1}{5\\pi} \\approx 0.0637 \\text{ cm/s}$'
+                    }
+                ],
+                answer: '$\\dfrac{dr}{dt} = \\dfrac{1}{5\\pi} \\approx 0.0637$ cm/s',
+                colors: { d: '#8b5cf6' }
+            }
         ],
         hard: [
-            // TODO: Add 10 hard related-rates problems
+            {
+                id: 'rr-hard-1',
+                title: 'Shadow Problem',
+                problem: 'A 6 ft tall person walks away from a streetlamp that is 15 ft tall at a rate of 4 ft/s. How fast is the length of the person\'s shadow increasing when they are 10 ft from the lamp?',
+                visual: {
+                    type: 'function-graph',
+                    function: '(6/9)*x',
+                    xRange: [0, 20],
+                    yRange: [0, 16],
+                    description: 'Shadow length s as a function of distance x from the lamp'
+                },
+                steps: [
+                    {
+                        title: 'Set up similar triangles',
+                        body: 'Let x = distance from lamp to person, s = shadow length. The lamp (15 ft) and the person (6 ft) form two similar triangles with the ground.',
+                        equation: '$\\dfrac{15}{x + s} = \\dfrac{6}{s}$',
+                        concept: 'The tip of the shadow, the top of the person, and the top of the lamp are collinear — that\'s what creates similar triangles.'
+                    },
+                    {
+                        title: 'Solve for s in terms of x',
+                        body: 'Cross-multiply and simplify.',
+                        equation: '$15s = 6(x + s) \\Rightarrow 9s = 6x \\Rightarrow s = \\dfrac{2x}{3}$'
+                    },
+                    {
+                        title: 'Differentiate with respect to time',
+                        body: 'Since s = (2/3)x, differentiate both sides.',
+                        equation: '$\\dfrac{ds}{dt} = \\dfrac{2}{3}\\dfrac{dx}{dt}$'
+                    },
+                    {
+                        title: 'Plug in dx/dt = 4',
+                        body: 'The person\'s speed dx/dt = 4 ft/s — and notice this answer is independent of their position.',
+                        equation: '$\\dfrac{ds}{dt} = \\dfrac{2}{3}(4) = \\dfrac{8}{3} \\approx 2.67 \\text{ ft/s}$',
+                        concept: 'The shadow grows at the same rate regardless of how far the person is from the lamp — a surprising result!'
+                    }
+                ],
+                answer: '$\\dfrac{ds}{dt} = \\dfrac{8}{3} \\approx 2.67$ ft/s',
+                colors: {}
+            },
+            {
+                id: 'rr-hard-2',
+                title: 'Two Cars Approaching an Intersection',
+                problem: 'Car A travels east at 50 mph and Car B travels north at 60 mph, both approaching the same intersection. How fast is the distance between them changing when Car A is 0.3 miles and Car B is 0.4 miles from the intersection?',
+                visual: {
+                    type: 'two-cars',
+                    description: 'Two cars approaching an intersection — right triangle with shrinking legs'
+                },
+                steps: [
+                    {
+                        title: 'Define variables and the constraint',
+                        body: 'Let a = Car A\'s distance from intersection, b = Car B\'s distance. Distance between them: z² = a² + b².',
+                        equation: '$z^2 = a^2 + b^2$',
+                        concept: 'Since both cars are approaching, da/dt = −50 and db/dt = −60 (negative = decreasing distance).'
+                    },
+                    {
+                        title: 'Differentiate implicitly',
+                        body: 'Differentiate z² = a² + b² with respect to t.',
+                        equation: '$2z\\dfrac{dz}{dt} = 2a\\dfrac{da}{dt} + 2b\\dfrac{db}{dt}$'
+                    },
+                    {
+                        title: 'Find z at the given moment',
+                        body: 'With a = 0.3 and b = 0.4: z = √(0.09 + 0.16) = √0.25 = 0.5 miles.',
+                        equation: '$z = \\sqrt{(0.3)^2 + (0.4)^2} = 0.5 \\text{ miles}$'
+                    },
+                    {
+                        title: 'Solve for dz/dt',
+                        body: 'Substitute all values.',
+                        equation: '$2(0.5)\\dfrac{dz}{dt} = 2(0.3)(-50) + 2(0.4)(-60) = -30 - 48 = -78$',
+                        mistake: 'Don\'t forget the negative signs — the cars are approaching, so their distances are decreasing.'
+                    },
+                    {
+                        title: 'Final answer',
+                        body: 'Divide both sides by 1.',
+                        equation: '$\\dfrac{dz}{dt} = \\dfrac{-78}{1} = -78 \\text{ mph}$',
+                        concept: 'Negative means the distance is decreasing — the cars are getting closer together at 78 mph.'
+                    }
+                ],
+                answer: '$\\dfrac{dz}{dt} = -78$ mph (distance decreasing at 78 mph)',
+                colors: { x: '#3b82f6', y: '#8b5cf6', z: '#ef4444' }
+            },
+            {
+                id: 'rr-hard-3',
+                title: 'Rotating Spotlight',
+                problem: 'A spotlight is located 300 m from a straight wall. The light rotates at 0.05 rad/s. How fast is the light spot moving along the wall when the beam makes an angle of π/6 with the perpendicular?',
+                visual: {
+                    type: 'function-graph',
+                    function: '300 * Math.tan(x)',
+                    xRange: [0, 1.2],
+                    yRange: [0, 600],
+                    description: 'Position of light spot x = 300·tan(θ) as a function of angle θ'
+                },
+                steps: [
+                    {
+                        title: 'Write the trig relationship',
+                        body: 'Let x = position of the light spot on the wall, θ = angle from the perpendicular. Then x = 300·tan(θ).',
+                        equation: '$x = 300\\tan(\\theta)$',
+                        concept: 'SOH-CAH-TOA: tan(θ) = opposite/adjacent = x/300.'
+                    },
+                    {
+                        title: 'Differentiate with respect to time',
+                        body: 'Use the chain rule — d/dθ(tan θ) = sec²θ.',
+                        equation: '$\\dfrac{dx}{dt} = 300\\sec^2(\\theta) \\cdot \\dfrac{d\\theta}{dt}$'
+                    },
+                    {
+                        title: 'Evaluate at θ = π/6',
+                        body: 'sec(π/6) = 1/cos(π/6) = 1/(√3/2) = 2/√3. So sec²(π/6) = 4/3.',
+                        equation: '$\\sec^2\\left(\\dfrac{\\pi}{6}\\right) = \\dfrac{4}{3}$'
+                    },
+                    {
+                        title: 'Calculate the speed',
+                        body: 'Substitute dθ/dt = 0.05 and sec²(π/6) = 4/3.',
+                        equation: '$\\dfrac{dx}{dt} = 300 \\cdot \\dfrac{4}{3} \\cdot 0.05 = 20 \\text{ m/s}$'
+                    }
+                ],
+                answer: '$\\dfrac{dx}{dt} = 20$ m/s',
+                colors: {}
+            },
+            {
+                id: 'rr-hard-4',
+                title: 'Oil Spill Expanding',
+                problem: 'An oil spill forms a circular patch whose radius increases at 2 m/s, but the thickness decreases so that the total volume stays constant at 5000 m³. Find the rate of change of the thickness when the radius is 20 m.',
+                visual: {
+                    type: 'function-graph',
+                    function: '5000 / (Math.PI * x**2)',
+                    xRange: [5, 40],
+                    yRange: [0, 20],
+                    description: 'Thickness h = V/(πr²) as a function of radius r'
+                },
+                steps: [
+                    {
+                        title: 'Write the volume formula',
+                        body: 'Model the spill as a cylinder: V = πr²h. Volume is constant at 5000 m³.',
+                        equation: '$V = \\pi r^2 h = 5000$ (constant)',
+                        concept: 'Since V is constant, dV/dt = 0. This is the key constraint.'
+                    },
+                    {
+                        title: 'Differentiate with respect to time',
+                        body: 'Differentiate V = πr²h using the product rule on r²h.',
+                        equation: '$\\dfrac{dV}{dt} = \\pi\\left(2r\\dfrac{dr}{dt}\\cdot h + r^2\\dfrac{dh}{dt}\\right) = 0$'
+                    },
+                    {
+                        title: 'Find h when r = 20',
+                        body: 'From V = πr²h: h = 5000/(π·400) = 25/(2π).',
+                        equation: '$h = \\dfrac{5000}{\\pi(20)^2} = \\dfrac{25}{2\\pi}$'
+                    },
+                    {
+                        title: 'Solve for dh/dt',
+                        body: 'Substitute r = 20, dr/dt = 2, h = 25/(2π) into the differentiated equation.',
+                        equation: '$0 = \\pi\\left(2(20)(2)\\cdot\\dfrac{25}{2\\pi} + (400)\\dfrac{dh}{dt}\\right)$',
+                        mistake: 'Keep the π — it cancels cleanly in the final step.'
+                    },
+                    {
+                        title: 'Final answer',
+                        body: 'Solve for dh/dt.',
+                        equation: '$0 = 1000 + 400\\pi\\dfrac{dh}{dt} \\Rightarrow \\dfrac{dh}{dt} = -\\dfrac{1000}{400\\pi} = -\\dfrac{5}{2\\pi} \\approx -0.796 \\text{ m/s}$',
+                        concept: 'Negative confirms the thickness is decreasing as the spill spreads out — makes physical sense!'
+                    }
+                ],
+                answer: '$\\dfrac{dh}{dt} = -\\dfrac{5}{2\\pi} \\approx -0.796$ m/s',
+                colors: {}
+            }
         ]
     },
     'optimization': {
@@ -1992,6 +2281,582 @@ const PROBLEM_LIBRARY = {
                 ],
                 answer: "Inflection point at $(0, 0)$",
                 colors: { inflectionPoint: '#10b981', concavity: '#8b5cf6' }
+            }
+        ]
+    },
+
+    // --------------------------------------------------------
+    // OPTIMIZATION
+    // --------------------------------------------------------
+    'optimization': {
+        easy: [
+            {
+                id: 'opt-easy-1',
+                title: 'Largest Rectangle in a Fixed Perimeter',
+                problem: 'A farmer has 200 meters of fencing and wants to enclose a rectangular area. What dimensions maximize the enclosed area?',
+                visual: {
+                    type: 'function-graph',
+                    function: '-(x - 50)^2 + 2500',
+                    xRange: [0, 100],
+                    yRange: [0, 2700],
+                    description: 'Area as a function of width w',
+                    criticalPoints: [{ x: 50, y: 2500, type: 'max' }]
+                },
+                steps: [
+                    {
+                        title: 'Set Up the Constraint',
+                        body: 'Let w be the width and l be the length. The perimeter constraint gives us 2w + 2l = 200, so l = 100 - w.',
+                        equation: '$2w + 2l = 200 \\Rightarrow l = 100 - w$',
+                        concept: 'Optimization problems always have a quantity to maximize/minimize and a constraint that limits the variables.'
+                    },
+                    {
+                        title: 'Write the Objective Function',
+                        body: 'The area to maximize is A = w × l. Substitute the constraint to get A in terms of one variable.',
+                        equation: '$A = w(100 - w) = 100w - w^2$',
+                    },
+                    {
+                        title: 'Find the Critical Point',
+                        body: 'Differentiate A with respect to w and set equal to zero.',
+                        equation: "$A'(w) = 100 - 2w = 0 \\Rightarrow w = 50$",
+                        concept: 'At a maximum, the derivative equals zero.'
+                    },
+                    {
+                        title: 'Verify and Compute Dimensions',
+                        body: 'Since A\'\'(w) = -2 < 0, w = 50 is a maximum. The length is l = 100 - 50 = 50.',
+                        equation: '$w = 50 \\text{ m}, \\quad l = 50 \\text{ m}, \\quad A_{max} = 2500 \\text{ m}^2$',
+                        concept: 'A square always maximizes area for a fixed perimeter.'
+                    }
+                ],
+                answer: '50 m × 50 m (a square), giving a maximum area of 2500 m²',
+                colors: { criticalPoint: '#ef4444' }
+            },
+            {
+                id: 'opt-easy-2',
+                title: 'Minimum Cost Box (Open Top)',
+                problem: 'An open-top box with a square base must have a volume of 32 cubic feet. The base costs $4/ft² and the sides cost $2/ft². What dimensions minimize the total cost?',
+                visual: {
+                    type: 'function-graph',
+                    function: '4*x^2 + 256/x',
+                    xRange: [1, 7],
+                    yRange: [0, 200],
+                    description: 'Cost C as a function of base side length x',
+                    criticalPoints: [{ x: 4, y: 96, type: 'min' }]
+                },
+                steps: [
+                    {
+                        title: 'Define Variables and Constraint',
+                        body: 'Let x = side of the square base (ft), h = height (ft). Volume constraint: x²h = 32, so h = 32/x².',
+                        equation: '$x^2 h = 32 \\Rightarrow h = \\dfrac{32}{x^2}$'
+                    },
+                    {
+                        title: 'Write the Cost Function',
+                        body: 'Base cost = 4 × x². Side cost = 2 × 4 × (x × h) = 8xh. Total cost C = 4x² + 8xh.',
+                        equation: '$C = 4x^2 + 8x \\cdot \\dfrac{32}{x^2} = 4x^2 + \\dfrac{256}{x}$'
+                    },
+                    {
+                        title: 'Minimize by Differentiating',
+                        body: 'Set C\'(x) = 0 to find the critical point.',
+                        equation: "$C'(x) = 8x - \\dfrac{256}{x^2} = 0 \\Rightarrow x^3 = 32 \\Rightarrow x = 4 \\text{ ft}$",
+                        mistake: 'Don\'t forget to apply the quotient/power rule to the 256/x term.'
+                    },
+                    {
+                        title: 'Find Height and Minimum Cost',
+                        body: 'With x = 4: h = 32/16 = 2 ft. Minimum cost = 4(16) + 256/4 = 64 + 64 = $128.',
+                        equation: '$x = 4 \\text{ ft}, \\quad h = 2 \\text{ ft}, \\quad C_{min} = \\$128$'
+                    }
+                ],
+                answer: 'Base 4 ft × 4 ft, height 2 ft, minimum cost = $128',
+                colors: { criticalPoint: '#3b82f6' }
+            }
+        ],
+        medium: [
+            {
+                id: 'opt-medium-1',
+                title: 'Shortest Distance from Point to Line',
+                problem: 'Find the point on the line y = 2x + 1 closest to the point (3, 0). What is the minimum distance?',
+                visual: {
+                    type: 'function-graph',
+                    function: '2*x + 1',
+                    xRange: [-1, 4],
+                    yRange: [-2, 6],
+                    description: 'Line y = 2x + 1 with the closest point marked',
+                    criticalPoints: [{ x: 1, y: 3, type: 'min' }]
+                },
+                steps: [
+                    {
+                        title: 'Write the Distance Formula',
+                        body: 'The distance from point (x, 2x+1) on the line to (3, 0) is D = √[(x-3)² + (2x+1)²]. Minimize D² to simplify.',
+                        equation: '$D^2 = (x-3)^2 + (2x+1)^2$'
+                    },
+                    {
+                        title: 'Expand and Differentiate',
+                        body: 'Expand D² = x² - 6x + 9 + 4x² + 4x + 1 = 5x² - 2x + 10. Take the derivative.',
+                        equation: "$\\frac{d(D^2)}{dx} = 10x - 2 = 0 \\Rightarrow x = \\frac{1}{5}$"
+                    },
+                    {
+                        title: 'Find the Closest Point',
+                        body: 'At x = 1/5: y = 2(1/5) + 1 = 7/5. The closest point is (1/5, 7/5).',
+                        equation: '$\\left(\\dfrac{1}{5},\\ \\dfrac{7}{5}\\right)$'
+                    },
+                    {
+                        title: 'Compute Minimum Distance',
+                        body: 'D = √[(1/5 - 3)² + (7/5)²] = √[(−14/5)² + (7/5)²] = √[196/25 + 49/25] = √(245/25) = 7/√5.',
+                        equation: '$D_{min} = \\dfrac{7}{\\sqrt{5}} = \\dfrac{7\\sqrt{5}}{5} \\approx 3.13$'
+                    }
+                ],
+                answer: '7√5 / 5 ≈ 3.13 units',
+                colors: { criticalPoint: '#ef4444' }
+            }
+        ],
+        hard: [
+            {
+                id: 'opt-hard-1',
+                title: 'Optimal Cylinder in a Sphere',
+                problem: 'A cylinder is inscribed in a sphere of radius R = 5. Find the dimensions of the cylinder with maximum volume.',
+                visual: {
+                    type: 'function-graph',
+                    function: '2*3.14159*(25*x - x^3)',
+                    xRange: [0, 5],
+                    yRange: [0, 600],
+                    description: 'Volume V as a function of cylinder radius r',
+                    criticalPoints: [{ x: 3.33, y: 544, type: 'max' }]
+                },
+                steps: [
+                    {
+                        title: 'Set Up the Geometry',
+                        body: 'Let r = cylinder radius, h = cylinder height. The cylinder fits inside a sphere of radius R = 5, so r² + (h/2)² = 25.',
+                        equation: '$r^2 + \\dfrac{h^2}{4} = 25$'
+                    },
+                    {
+                        title: 'Express Volume in One Variable',
+                        body: 'V = πr²h. From the constraint, h = 2√(25 - r²). Substitute.',
+                        equation: '$V(r) = \\pi r^2 \\cdot 2\\sqrt{25 - r^2} = 2\\pi r^2 \\sqrt{25 - r^2}$'
+                    },
+                    {
+                        title: 'Differentiate and Set to Zero',
+                        body: 'Using the product rule: V\'(r) = 2π[2r√(25-r²) + r²·(-r/√(25-r²))] = 0. Multiply through by √(25-r²).',
+                        equation: "$4r(25 - r^2) - 2r^3 = 0 \\Rightarrow 100r - 6r^3 = 0 \\Rightarrow r^2 = \\dfrac{50}{3}$",
+                        concept: 'Factor out r (r ≠ 0) to simplify the equation.'
+                    },
+                    {
+                        title: 'Compute Dimensions and Maximum Volume',
+                        body: 'r = √(50/3) = 5√(2/3). Then h = 2√(25 - 50/3) = 2√(25/3) = 10/√3.',
+                        equation: '$r = 5\\sqrt{\\dfrac{2}{3}},\\quad h = \\dfrac{10}{\\sqrt{3}},\\quad V_{max} = \\dfrac{2000\\pi}{3\\sqrt{3}} \\approx 1209$ units³',
+                        concept: 'The optimal cylinder has height h = r√2 inside any sphere.'
+                    }
+                ],
+                answer: 'r = 5√(2/3) ≈ 4.08, h = 10/√3 ≈ 5.77, V_max = 2000π/(3√3) ≈ 1209 units³',
+                colors: { criticalPoint: '#ef4444' }
+            }
+        ]
+    },
+
+    // --------------------------------------------------------
+    // INTEGRATION
+    // --------------------------------------------------------
+    'integration': {
+        easy: [
+            {
+                id: 'int-easy-1',
+                title: 'Basic Polynomial Antiderivative',
+                problem: 'Evaluate the indefinite integral: ∫(3x² + 2x − 5) dx',
+                visual: {
+                    type: 'function-graph',
+                    function: '3*x^2 + 2*x - 5',
+                    xRange: [-3, 3],
+                    yRange: [-10, 25],
+                    description: 'The integrand f(x) = 3x² + 2x − 5'
+                },
+                steps: [
+                    {
+                        title: 'Apply the Power Rule for Integration',
+                        body: 'For each term xⁿ, the antiderivative is xⁿ⁺¹/(n+1). Apply term by term.',
+                        equation: '$\\int x^n\\, dx = \\dfrac{x^{n+1}}{n+1} + C$',
+                        concept: 'Integration is the reverse of differentiation. Always add the constant C.'
+                    },
+                    {
+                        title: 'Integrate Each Term',
+                        body: 'Integrate 3x²: result is x³. Integrate 2x: result is x². Integrate −5: result is −5x.',
+                        equation: '$\\int 3x^2\\,dx = x^3, \\quad \\int 2x\\,dx = x^2, \\quad \\int -5\\,dx = -5x$'
+                    },
+                    {
+                        title: 'Write the Final Answer',
+                        body: 'Combine all terms and add the constant of integration C.',
+                        equation: '$\\int(3x^2 + 2x - 5)\\,dx = x^3 + x^2 - 5x + C$',
+                        mistake: 'Never forget + C for an indefinite integral — it represents a whole family of antiderivatives.'
+                    }
+                ],
+                answer: 'x³ + x² − 5x + C',
+                colors: {}
+            },
+            {
+                id: 'int-easy-2',
+                title: 'Definite Integral — Area Under a Curve',
+                problem: 'Evaluate the definite integral: ∫₀³ (x² + 1) dx',
+                visual: {
+                    type: 'function-graph',
+                    function: 'x^2 + 1',
+                    xRange: [-1, 4],
+                    yRange: [0, 12],
+                    description: 'Area under f(x) = x² + 1 from x = 0 to x = 3'
+                },
+                steps: [
+                    {
+                        title: 'Find the Antiderivative',
+                        body: 'The antiderivative of x² + 1 is x³/3 + x.',
+                        equation: '$F(x) = \\dfrac{x^3}{3} + x$'
+                    },
+                    {
+                        title: 'Apply the Fundamental Theorem of Calculus',
+                        body: 'Evaluate F at the upper limit minus F at the lower limit.',
+                        equation: '$\\int_0^3(x^2+1)\\,dx = F(3) - F(0) = \\left[\\dfrac{27}{3} + 3\\right] - [0] = 9 + 3 = 12$',
+                        concept: 'The Fundamental Theorem connects differentiation and integration — a beautiful result!'
+                    }
+                ],
+                answer: '12',
+                colors: {}
+            }
+        ],
+        medium: [
+            {
+                id: 'int-medium-1',
+                title: 'U-Substitution',
+                problem: 'Evaluate ∫ 2x·cos(x²) dx using substitution.',
+                visual: {
+                    type: 'function-graph',
+                    function: '2*x*Math.cos(x**2)',
+                    xRange: [-3, 3],
+                    yRange: [-3, 3],
+                    description: 'Integrand f(x) = 2x·cos(x²)'
+                },
+                steps: [
+                    {
+                        title: 'Identify the Substitution',
+                        body: 'Notice that 2x is the derivative of x². Let u = x², so du = 2x dx.',
+                        equation: '$u = x^2,\\quad du = 2x\\,dx$',
+                        concept: 'Look for a function whose derivative appears as a factor in the integrand.'
+                    },
+                    {
+                        title: 'Rewrite in Terms of u',
+                        body: 'Replace x² with u and 2x dx with du.',
+                        equation: '$\\int 2x\\cos(x^2)\\,dx = \\int \\cos(u)\\,du$'
+                    },
+                    {
+                        title: 'Integrate and Back-Substitute',
+                        body: '∫cos(u)du = sin(u) + C. Replace u with x².',
+                        equation: '$= \\sin(u) + C = \\sin(x^2) + C$'
+                    }
+                ],
+                answer: 'sin(x²) + C',
+                colors: {}
+            }
+        ],
+        hard: [
+            {
+                id: 'int-hard-1',
+                title: 'Integration by Parts',
+                problem: 'Evaluate ∫ x·eˣ dx',
+                visual: {
+                    type: 'function-graph',
+                    function: 'x*Math.exp(x)',
+                    xRange: [-3, 2],
+                    yRange: [-2, 8],
+                    description: 'Integrand f(x) = x·eˣ'
+                },
+                steps: [
+                    {
+                        title: 'Apply the Integration by Parts Formula',
+                        body: 'Use ∫u dv = uv − ∫v du. Choose u = x (so du = dx) and dv = eˣ dx (so v = eˣ).',
+                        equation: '$\\int u\\,dv = uv - \\int v\\,du$',
+                        concept: 'LIATE rule: choose u as the function that appears first in Logarithm, Inverse trig, Algebraic, Trig, Exponential.'
+                    },
+                    {
+                        title: 'Set Up with u = x and dv = eˣ dx',
+                        body: 'With u = x and v = eˣ:',
+                        equation: '$\\int x e^x\\,dx = x e^x - \\int e^x\\,dx$'
+                    },
+                    {
+                        title: 'Evaluate the Remaining Integral',
+                        body: '∫eˣ dx = eˣ. Combine and add C.',
+                        equation: '$= x e^x - e^x + C = e^x(x - 1) + C$'
+                    }
+                ],
+                answer: 'eˣ(x − 1) + C',
+                colors: {}
+            }
+        ]
+    },
+
+    // --------------------------------------------------------
+    // DERIVATIVES
+    // --------------------------------------------------------
+    'derivatives': {
+        easy: [
+            {
+                id: 'der-easy-1',
+                title: 'Product Rule',
+                problem: 'Find the derivative of f(x) = x²·sin(x)',
+                visual: {
+                    type: 'function-graph',
+                    function: 'x^2 * Math.sin(x)',
+                    xRange: [-4, 4],
+                    yRange: [-15, 15],
+                    description: 'f(x) = x²·sin(x)'
+                },
+                steps: [
+                    {
+                        title: 'Identify the Product Rule',
+                        body: 'f(x) = u·v where u = x² and v = sin(x). Use (uv)\' = u\'v + uv\'.',
+                        equation: "$(uv)' = u'v + uv'$",
+                        concept: 'Whenever two functions are multiplied together, use the product rule.'
+                    },
+                    {
+                        title: 'Differentiate Each Factor',
+                        body: 'u = x² → u\' = 2x. v = sin(x) → v\' = cos(x).',
+                        equation: "$u' = 2x,\\quad v' = \\cos(x)$"
+                    },
+                    {
+                        title: 'Apply the Product Rule',
+                        body: 'Combine: f\'(x) = 2x·sin(x) + x²·cos(x).',
+                        equation: "$f'(x) = 2x\\sin(x) + x^2\\cos(x)$"
+                    }
+                ],
+                answer: "f'(x) = 2x·sin(x) + x²·cos(x)",
+                colors: {}
+            },
+            {
+                id: 'der-easy-2',
+                title: 'Chain Rule Basics',
+                problem: 'Find the derivative of f(x) = (3x + 1)⁵',
+                visual: {
+                    type: 'function-graph',
+                    function: '(3*x + 1)^5',
+                    xRange: [-1.5, 0.5],
+                    yRange: [-10, 10],
+                    description: 'f(x) = (3x + 1)⁵'
+                },
+                steps: [
+                    {
+                        title: 'Identify the Outer and Inner Functions',
+                        body: 'Outer: u⁵ where u = 3x + 1 is the inner function.',
+                        equation: '$f(x) = [g(x)]^5,\\quad g(x) = 3x+1$',
+                        concept: 'The chain rule says: differentiate the outside, keep the inside, then multiply by the derivative of the inside.'
+                    },
+                    {
+                        title: 'Apply the Chain Rule',
+                        body: 'f\'(x) = 5(3x+1)⁴ · (3x+1)\'.',
+                        equation: "$f'(x) = 5(3x+1)^4 \\cdot 3 = 15(3x+1)^4$"
+                    }
+                ],
+                answer: "f'(x) = 15(3x + 1)⁴",
+                colors: {}
+            }
+        ],
+        medium: [
+            {
+                id: 'der-medium-1',
+                title: 'Quotient Rule',
+                problem: 'Find the derivative of f(x) = (x² + 1) / (x − 2)',
+                visual: {
+                    type: 'function-graph',
+                    function: '(x^2 + 1)/(x - 2)',
+                    xRange: [-2, 6],
+                    yRange: [-20, 20],
+                    description: 'f(x) = (x²+1)/(x−2)',
+                    asymptotes: [{ type: 'vertical', x: 2 }]
+                },
+                steps: [
+                    {
+                        title: 'Identify the Quotient Rule',
+                        body: 'f(x) = u/v where u = x²+1 and v = x−2. Rule: (u/v)\' = (u\'v − uv\')/v².',
+                        equation: "$(u/v)' = \\dfrac{u'v - uv'}{v^2}$",
+                        concept: '"Low d-High minus High d-Low, over Low squared" is a helpful mnemonic.'
+                    },
+                    {
+                        title: 'Compute Derivatives of Numerator and Denominator',
+                        body: 'u\' = 2x, v\' = 1.',
+                        equation: "$u' = 2x,\\quad v' = 1$"
+                    },
+                    {
+                        title: 'Apply the Formula',
+                        body: 'Substitute into the quotient rule formula.',
+                        equation: "$f'(x) = \\dfrac{2x(x-2) - (x^2+1)(1)}{(x-2)^2} = \\dfrac{2x^2 - 4x - x^2 - 1}{(x-2)^2} = \\dfrac{x^2 - 4x - 1}{(x-2)^2}$"
+                    }
+                ],
+                answer: "f'(x) = (x² − 4x − 1) / (x − 2)²",
+                colors: {}
+            }
+        ],
+        hard: [
+            {
+                id: 'der-hard-1',
+                title: 'Implicit Differentiation',
+                problem: 'Find dy/dx for the curve x² + y² = 25 (a circle of radius 5). What is the slope at the point (3, 4)?',
+                visual: {
+                    type: 'function-graph',
+                    function: 'Math.sqrt(25 - x^2)',
+                    xRange: [-6, 6],
+                    yRange: [-6, 6],
+                    description: 'Upper semicircle x² + y² = 25',
+                    criticalPoints: [{ x: 3, y: 4, type: 'max' }]
+                },
+                steps: [
+                    {
+                        title: 'Differentiate Both Sides Implicitly',
+                        body: 'Differentiate x² + y² = 25 with respect to x. Remember y is a function of x, so d/dx(y²) = 2y·(dy/dx).',
+                        equation: '$2x + 2y\\,\\dfrac{dy}{dx} = 0$',
+                        concept: 'Implicit differentiation treats y as a function of x and uses the chain rule on y-terms.'
+                    },
+                    {
+                        title: 'Solve for dy/dx',
+                        body: 'Isolate dy/dx.',
+                        equation: '$\\dfrac{dy}{dx} = -\\dfrac{x}{y}$'
+                    },
+                    {
+                        title: 'Evaluate at the Given Point',
+                        body: 'At (3, 4): dy/dx = −3/4.',
+                        equation: '$\\dfrac{dy}{dx}\\Big|_{(3,4)} = -\\dfrac{3}{4}$'
+                    }
+                ],
+                answer: 'dy/dx = −x/y; at (3,4) the slope is −3/4',
+                colors: { criticalPoint: '#ef4444' }
+            }
+        ]
+    },
+
+    // --------------------------------------------------------
+    // SERIES
+    // --------------------------------------------------------
+    'series': {
+        easy: [
+            {
+                id: 'ser-easy-1',
+                title: 'Geometric Series — Does It Converge?',
+                problem: 'Determine if the series Σ (1/3)ⁿ from n=0 to ∞ converges, and if so, find its sum.',
+                visual: {
+                    type: 'function-graph',
+                    function: 'Math.pow(1/3, x)',
+                    xRange: [0, 8],
+                    yRange: [0, 1.2],
+                    description: 'Terms aₙ = (1/3)ⁿ approach 0 as n → ∞'
+                },
+                steps: [
+                    {
+                        title: 'Identify the Common Ratio',
+                        body: 'This is a geometric series Σ arⁿ with a = 1 (first term when n=0) and r = 1/3.',
+                        equation: '$\\sum_{n=0}^{\\infty} \\left(\\tfrac{1}{3}\\right)^n = \\sum_{n=0}^{\\infty} 1 \\cdot \\left(\\tfrac{1}{3}\\right)^n$'
+                    },
+                    {
+                        title: 'Apply the Convergence Test',
+                        body: 'A geometric series converges if and only if |r| < 1. Here |r| = 1/3 < 1, so the series converges.',
+                        equation: '$|r| = \\tfrac{1}{3} < 1 \\Rightarrow \\text{converges}$',
+                        concept: 'Geometric series is one of the few series where we can always find the exact sum.'
+                    },
+                    {
+                        title: 'Compute the Sum',
+                        body: 'Use the formula S = a / (1 − r).',
+                        equation: '$S = \\dfrac{1}{1 - \\tfrac{1}{3}} = \\dfrac{1}{\\tfrac{2}{3}} = \\dfrac{3}{2}$'
+                    }
+                ],
+                answer: 'The series converges to 3/2',
+                colors: {}
+            },
+            {
+                id: 'ser-easy-2',
+                title: 'Telescoping Series',
+                problem: 'Find the sum of Σ [1/n − 1/(n+1)] from n=1 to ∞.',
+                visual: {
+                    type: 'function-graph',
+                    function: '1/x - 1/(x+1)',
+                    xRange: [0.5, 10],
+                    yRange: [0, 0.6],
+                    description: 'Terms aₙ = 1/n − 1/(n+1) decreasing to 0'
+                },
+                steps: [
+                    {
+                        title: 'Write Out Partial Sums',
+                        body: 'Write the first few terms of the partial sum Sₙ = (1 - 1/2) + (1/2 - 1/3) + (1/3 - 1/4) + ...',
+                        equation: '$S_n = 1 - \\dfrac{1}{n+1}$',
+                        concept: 'In a telescoping series, most terms cancel, leaving only the first and last.'
+                    },
+                    {
+                        title: 'Take the Limit',
+                        body: 'As n → ∞, 1/(n+1) → 0.',
+                        equation: '$S = \\lim_{n\\to\\infty} S_n = \\lim_{n\\to\\infty}\\left(1 - \\dfrac{1}{n+1}\\right) = 1$'
+                    }
+                ],
+                answer: 'The sum is 1',
+                colors: {}
+            }
+        ],
+        medium: [
+            {
+                id: 'ser-medium-1',
+                title: 'Ratio Test for Convergence',
+                problem: 'Use the Ratio Test to determine if Σ n!/2ⁿ (from n=1 to ∞) converges or diverges.',
+                visual: {
+                    type: 'function-graph',
+                    function: 'x/2',
+                    xRange: [0, 10],
+                    yRange: [0, 10],
+                    description: 'The ratio aₙ₊₁/aₙ = (n+1)/2 grows without bound'
+                },
+                steps: [
+                    {
+                        title: 'Set Up the Ratio Test',
+                        body: 'The Ratio Test computes L = lim |aₙ₊₁/aₙ|. If L > 1, the series diverges.',
+                        equation: '$L = \\lim_{n\\to\\infty} \\left|\\dfrac{a_{n+1}}{a_n}\\right|$',
+                        concept: 'The Ratio Test is especially useful when terms involve factorials or exponentials.'
+                    },
+                    {
+                        title: 'Compute the Ratio',
+                        body: 'aₙ = n!/2ⁿ, so aₙ₊₁ = (n+1)!/2ⁿ⁺¹.',
+                        equation: '$\\dfrac{a_{n+1}}{a_n} = \\dfrac{(n+1)! / 2^{n+1}}{n! / 2^n} = \\dfrac{(n+1)}{2}$'
+                    },
+                    {
+                        title: 'Evaluate the Limit',
+                        body: 'As n → ∞, (n+1)/2 → ∞. Since L = ∞ > 1, the series diverges.',
+                        equation: '$L = \\lim_{n\\to\\infty} \\dfrac{n+1}{2} = \\infty > 1 \\Rightarrow \\text{Diverges}$',
+                        mistake: 'L = 1 is inconclusive — the Ratio Test fails in that case.'
+                    }
+                ],
+                answer: 'The series diverges (L = ∞ by the Ratio Test)',
+                colors: {}
+            }
+        ],
+        hard: [
+            {
+                id: 'ser-hard-1',
+                title: 'Taylor Series of eˣ at x = 0',
+                problem: 'Find the Taylor series for f(x) = eˣ centered at x = 0, and write it in summation notation.',
+                visual: {
+                    type: 'function-graph',
+                    function: 'Math.exp(x)',
+                    xRange: [-2, 2],
+                    yRange: [0, 8],
+                    description: 'f(x) = eˣ and its polynomial approximations'
+                },
+                steps: [
+                    {
+                        title: 'Recall the Taylor Series Formula',
+                        body: 'A Taylor series centered at 0 (Maclaurin series) is: f(x) = Σ f⁽ⁿ⁾(0)/n! · xⁿ.',
+                        equation: '$f(x) = \\sum_{n=0}^{\\infty} \\dfrac{f^{(n)}(0)}{n!}\\, x^n$',
+                        concept: 'For eˣ, every derivative is eˣ itself, making it the simplest Taylor series.'
+                    },
+                    {
+                        title: 'Find the Derivatives at x = 0',
+                        body: 'f(x) = eˣ, so f⁽ⁿ⁾(x) = eˣ for all n. Therefore f⁽ⁿ⁾(0) = e⁰ = 1.',
+                        equation: '$f^{(n)}(0) = 1 \\text{ for all } n \\geq 0$'
+                    },
+                    {
+                        title: 'Write the Series',
+                        body: 'Plug in to get the Maclaurin series for eˣ.',
+                        equation: '$e^x = \\sum_{n=0}^{\\infty} \\dfrac{x^n}{n!} = 1 + x + \\dfrac{x^2}{2!} + \\dfrac{x^3}{3!} + \\cdots$',
+                        concept: 'This series converges for all x ∈ ℝ — infinite radius of convergence!'
+                    }
+                ],
+                answer: 'eˣ = Σ xⁿ/n! = 1 + x + x²/2! + x³/3! + ...',
+                colors: {}
             }
         ]
     }

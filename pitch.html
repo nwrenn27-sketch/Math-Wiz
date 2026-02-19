@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Wiz — Pitch</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --blue: #2563eb;
+            --blue-dark: #1e40af;
+            --purple: #7c3aed;
+            --cyan: #06b6d4;
+            --green: #10b981;
+            --orange: #f59e0b;
+            --red: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* ── SLIDES ── */
+        .deck { width: 100vw; height: 100vh; position: relative; }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4vw 7vw;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .slide.active { opacity: 1; pointer-events: all; }
+
+        /* ── BACKGROUNDS ── */
+        .bg-hero {
+            background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+        }
+        .bg-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 50%, rgba(255,255,255,0.07) 0%, transparent 50%),
+                radial-gradient(circle at 85% 80%, rgba(124,58,237,0.35) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .bg-dark  { background: #0f172a; }
+        .bg-dark2 { background: #111827; }
+        .bg-code  { background: #0d1117; }
+        .bg-demo  { background: #050a14; }
+        .bg-close { background: linear-gradient(135deg, #1e40af 0%, #7c3aed 60%, #06b6d4 100%); }
+
+        /* ── TYPE ── */
+        .label {
+            font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            opacity: 0.5;
+            margin-bottom: 0.9rem;
+        }
+
+        h1.hero {
+            font-size: clamp(3.5rem, 8vw, 6rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1.25rem;
+        }
+
+        .sub {
+            font-size: clamp(0.9rem, 1.6vw, 1.2rem);
+            opacity: 0.8;
+            max-width: 680px;
+            line-height: 1.55;
+        }
+
+        .grad {
+            background: linear-gradient(to right, #93c5fd, #c4b5fd, #67e8f9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .divider {
+            width: 2.5rem; height: 3px;
+            background: linear-gradient(to right, var(--blue), var(--purple));
+            border-radius: 999px;
+            margin: 0.9rem auto;
+        }
+        .divider.left { margin: 0.9rem 0; }
+
+        /* ── STATS ── */
+        .stats {
+            display: flex;
+            gap: clamp(1.5rem, 4vw, 4rem);
+            margin-top: 1.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .stat-num {
+            font-size: clamp(2rem, 4.5vw, 3.2rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            display: block;
+        }
+        .stat-lbl {
+            font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            opacity: 0.55;
+            font-weight: 600;
+            display: block;
+            margin-top: 0.2rem;
+        }
+
+        /* ── CARDS ── */
+        .cards {
+            display: flex;
+            gap: clamp(0.75rem, 2vw, 1.5rem);
+            margin-top: 1.75rem;
+            max-width: 960px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 1.1rem;
+            padding: clamp(1rem, 2vw, 1.75rem);
+            flex: 1;
+            min-width: 180px;
+            max-width: 260px;
+            text-align: left;
+            backdrop-filter: blur(8px);
+        }
+        .card-icon { font-size: 1.6rem; margin-bottom: 0.6rem; display: block; }
+        .card-title {
+            font-size: clamp(0.8rem, 1.3vw, 1rem);
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+        .card-body {
+            font-size: clamp(0.7rem, 1.05vw, 0.82rem);
+            opacity: 0.65;
+            line-height: 1.5;
+        }
+
+        /* ── BULLETS ── */
+        .bullets {
+            list-style: none;
+            text-align: left;
+            max-width: 680px;
+            width: 100%;
+            margin-top: 1.25rem;
+        }
+        .bullets li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7rem;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            font-size: clamp(0.8rem, 1.35vw, 1rem);
+            line-height: 1.4;
+        }
+        .bullets li:last-child { border-bottom: none; }
+        .bi { font-size: 1rem; flex-shrink: 0; margin-top: 0.1em; }
+
+        /* ── TWO-COL ── */
+        .two-col {
+            display: flex;
+            gap: clamp(2rem, 4vw, 4rem);
+            align-items: center;
+            max-width: 1000px;
+            width: 100%;
+            text-align: left;
+        }
+        .col { flex: 1; }
+
+        /* ── CODE BLOCKS ── */
+        .code-window {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 0.9rem;
+            overflow: hidden;
+            width: 100%;
+            max-width: 860px;
+            text-align: left;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        }
+        .code-titlebar {
+            background: #21262d;
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid #30363d;
+        }
+        .dot { width: 0.65rem; height: 0.65rem; border-radius: 50%; }
+        .dot-r { background: #ff5f57; }
+        .dot-y { background: #febc2e; }
+        .dot-g { background: #28c840; }
+        .code-file {
+            font-size: 0.7rem;
+            color: #8b949e;
+            font-family: monospace;
+            margin-left: 0.5rem;
+        }
+        pre {
+            padding: 1.25rem 1.5rem;
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+            font-size: clamp(0.65rem, 1.1vw, 0.8rem);
+            line-height: 1.7;
+            overflow-x: auto;
+            color: #e6edf3;
+        }
+
+        /* syntax highlight classes */
+        .kw  { color: #ff7b72; }   /* keywords: function, const, if, return */
+        .fn  { color: #d2a8ff; }   /* function names */
+        .str { color: #a5d6ff; }   /* strings */
+        .cm  { color: #8b949e; font-style: italic; } /* comments */
+        .num { color: #79c0ff; }   /* numbers */
+        .op  { color: #ff7b72; }   /* operators */
+        .var { color: #ffa657; }   /* variables */
+        .hl  {                     /* highlighted line */
+            display: block;
+            background: rgba(255,255,255,0.06);
+            border-left: 3px solid #7c3aed;
+            margin: 0 -1.5rem;
+            padding: 0 1.5rem 0 calc(1.5rem - 3px);
+        }
+
+        .code-caption {
+            background: rgba(124,58,237,0.15);
+            border: 1px solid rgba(124,58,237,0.3);
+            border-radius: 0.6rem;
+            padding: 0.75rem 1.25rem;
+            font-size: clamp(0.75rem, 1.1vw, 0.875rem);
+            max-width: 860px;
+            width: 100%;
+            text-align: left;
+            margin-top: 1rem;
+            line-height: 1.5;
+            color: #c4b5fd;
+        }
+
+        /* ── CHALLENGES ── */
+        .challenge-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+            max-width: 760px;
+            width: 100%;
+            margin-top: 1.5rem;
+            text-align: left;
+        }
+        .challenge {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 0.9rem;
+            padding: 1rem 1.25rem;
+        }
+        .challenge-num {
+            font-size: 1.4rem;
+            font-weight: 900;
+            line-height: 1;
+            min-width: 2rem;
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .challenge-title {
+            font-size: clamp(0.85rem, 1.3vw, 1rem);
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        .challenge-body {
+            font-size: clamp(0.72rem, 1.05vw, 0.82rem);
+            opacity: 0.65;
+            line-height: 1.5;
+        }
+
+        /* ── DEMO SLIDE ── */
+        .demo-launch-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .demo-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            text-decoration: none;
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            font-weight: 800;
+            padding: 1.25rem 3rem;
+            border-radius: 999px;
+            box-shadow: 0 0 40px rgba(124, 58, 237, 0.5), 0 20px 40px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            letter-spacing: -0.01em;
+        }
+
+        .demo-btn:hover {
+            transform: scale(1.04);
+            box-shadow: 0 0 60px rgba(124, 58, 237, 0.7), 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        .demo-btn-icon { font-size: 1.5em; }
+
+        .demo-preview {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 700px;
+        }
+
+        .demo-preview-chip {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 0.75rem;
+            padding: 0.6rem 1rem;
+            font-size: clamp(0.7rem, 1vw, 0.85rem);
+            opacity: 0.75;
+        }
+
+        /* ── NAV ── */
+        .nav {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 999px;
+            padding: 0.6rem 1.25rem;
+            z-index: 200;
+        }
+        .nav button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0.6;
+            transition: opacity 0.15s, background 0.15s;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.4rem;
+        }
+        .nav button:hover:not(:disabled) { opacity: 1; background: rgba(255,255,255,0.1); }
+        .nav button:disabled { opacity: 0.2; cursor: not-allowed; }
+        .slide-counter {
+            font-size: 0.75rem;
+            font-weight: 600;
+            opacity: 0.5;
+            min-width: 44px;
+            text-align: center;
+            letter-spacing: 0.04em;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--blue), var(--purple), var(--cyan));
+            transition: width 0.3s ease;
+            z-index: 200;
+        }
+
+        .key-hint {
+            position: fixed;
+            top: 1rem; right: 1.25rem;
+            font-size: 0.65rem;
+            opacity: 0.25;
+            color: white;
+            letter-spacing: 0.05em;
+            pointer-events: none;
+        }
+
+        /* pain stat */
+        .pain {
+            font-size: clamp(3.5rem, 8vw, 6.5rem);
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            line-height: 1;
+            background: linear-gradient(135deg, #f87171, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* chips */
+        .chip {
+            display: inline-block;
+            padding: 0.25rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin: 0.2rem;
+        }
+        .chip-b { background: rgba(37,99,235,0.2); border: 1px solid rgba(96,165,250,0.35); color: #93c5fd; }
+        .chip-g { background: rgba(16,185,129,0.2); border: 1px solid rgba(52,211,153,0.35); color: #6ee7b7; }
+        .chip-p { background: rgba(124,58,237,0.2); border: 1px solid rgba(167,139,250,0.35); color: #c4b5fd; }
+
+        /* comparison table */
+        .cmp-table {
+            width: 100%;
+            max-width: 860px;
+            border-collapse: collapse;
+            font-size: clamp(0.65rem, 1.1vw, 0.82rem);
+            margin-top: 1.5rem;
+        }
+        .cmp-table th {
+            padding: 0.65rem 0.9rem;
+            text-align: left;
+            font-weight: 700;
+            background: rgba(37,99,235,0.25);
+            border-bottom: 2px solid rgba(255,255,255,0.12);
+        }
+        .cmp-table td {
+            padding: 0.55rem 0.9rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .cmp-table .hl-row td { background: rgba(37,99,235,0.12); font-weight: 700; }
+        .ck { color: #34d399; } .cx { color: #f87171; } .cp { color: #fbbf24; }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+<div class="key-hint">← → to navigate</div>
+
+<div class="deck">
+
+    <!-- ══ 1. TITLE ══ -->
+    <div class="slide bg-hero active">
+        <div class="label">Math Wiz &mdash; 2025</div>
+        <h1 class="hero">Math<br><span class="grad">Wiz</span></h1>
+        <p class="sub">The calculus tutor that teaches you <em>how</em> to think — not just what to do.</p>
+        <div class="stats">
+            <div><span class="stat-num">8</span><span class="stat-lbl">Topics</span></div>
+            <div><span class="stat-num">100+</span><span class="stat-lbl">Problems</span></div>
+            <div><span class="stat-num">3</span><span class="stat-lbl">Difficulty levels</span></div>
+            <div><span class="stat-num">$0</span><span class="stat-lbl">To start</span></div>
+        </div>
+    </div>
+
+    <!-- ══ 2. PROBLEM ══ -->
+    <div class="slide bg-dark">
+        <div class="label">The Problem</div>
+        <h2>Calculus is the #1 reason<br>students leave STEM</h2>
+        <div class="divider"></div>
+        <div class="stats" style="gap:3rem;">
+            <div style="text-align:center;">
+                <div class="pain">30%</div>
+                <div class="stat-lbl" style="color:white;margin-top:0.5rem;">of STEM students drop out<br><span style="opacity:0.4;font-size:0.65rem;">ACT Research</span></div>
+            </div>
+            <div style="text-align:center;">
+                <div class="pain">$120</div>
+                <div class="stat-lbl" style="color:white;margin-top:0.5rem;">avg. hourly tutor cost<br><span style="opacity:0.4;font-size:0.65rem;">inaccessible for most</span></div>
+            </div>
+            <div style="text-align:center;">
+                <div class="pain">750K</div>
+                <div class="stat-lbl" style="color:white;margin-top:0.5rem;">students take Calc I yearly<br><span style="opacity:0.4;font-size:0.65rem;">in the US alone</span></div>
+            </div>
+        </div>
+        <p class="sub" style="margin-top:1.75rem;font-size:0.95rem;">Textbooks show <strong>answers</strong>. Lectures show <strong>techniques</strong>.<br>Nobody teaches students how to <strong>actually think through a problem.</strong></p>
+    </div>
+
+    <!-- ══ 3. SOLUTION ══ -->
+    <div class="slide bg-dark2">
+        <div class="label">The Solution</div>
+        <h2>A personal tutor, available 24/7 — for free</h2>
+        <div class="cards">
+            <div class="card">
+                <span class="card-icon">🧩</span>
+                <div class="card-title">Step-by-step reveals</div>
+                <div class="card-body">Solutions unfold one step at a time, forcing active reasoning — not passive reading.</div>
+            </div>
+            <div class="card">
+                <span class="card-icon">📐</span>
+                <div class="card-title">Interactive diagrams</div>
+                <div class="card-body">Every problem has a canvas-rendered visual that updates as you work through it.</div>
+            </div>
+            <div class="card">
+                <span class="card-icon">✅</span>
+                <div class="card-title">Instant answer checking</div>
+                <div class="card-body">Try the problem yourself first. Get immediate, contextual feedback on your answer.</div>
+            </div>
+            <div class="card">
+                <span class="card-icon">🤖</span>
+                <div class="card-title">AI-powered extension</div>
+                <div class="card-body">Solve any calculus problem with Claude, GPT-4, or Gemini — not just pre-loaded ones.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 4. LIVE DEMO ══ -->
+    <div class="slide bg-demo">
+        <div class="label">Live Demo</div>
+        <h2>See it in action</h2>
+        <div class="demo-launch-wrap">
+            <a href="index.html" target="_blank" class="demo-btn">
+                <span class="demo-btn-icon">🚀</span>
+                Launch Math Wiz
+            </a>
+            <div class="demo-preview">
+                <div class="demo-preview-chip">🧩 Pick a topic</div>
+                <div class="demo-preview-chip">📊 Choose a difficulty</div>
+                <div class="demo-preview-chip">✏️ Try the problem</div>
+                <div class="demo-preview-chip">👣 Reveal steps one by one</div>
+            </div>
+        </div>
+        <p class="sub" style="margin-top:1.5rem;font-size:0.85rem;opacity:0.4;">Opens in a new tab — full screen, fully interactive</p>
+    </div>
+
+    <!-- ══ 5. CHALLENGES ══ -->
+    <div class="slide bg-dark">
+        <div class="label">Building It — Challenges</div>
+        <h2>What was hard to build</h2>
+        <div class="challenge-list">
+            <div class="challenge">
+                <div class="challenge-num">01</div>
+                <div>
+                    <div class="challenge-title">Rendering math in the browser</div>
+                    <div class="challenge-body">Calculus requires LaTeX — symbols like ∫, ∂, ∑. Integrating MathJax and making it render dynamically inside JavaScript-injected DOM elements (not just static HTML) took significant trial and error.</div>
+                </div>
+            </div>
+            <div class="challenge">
+                <div class="challenge-num">02</div>
+                <div>
+                    <div class="challenge-title">Fuzzy answer checking</div>
+                    <div class="challenge-body">Students write answers in dozens of formats: "65 m/hr", "65", "$65$", "≈65". Building a normalizer that accepts all valid forms without false positives required layered regex and numeric comparison logic.</div>
+                </div>
+            </div>
+            <div class="challenge">
+                <div class="challenge-num">03</div>
+                <div>
+                    <div class="challenge-title">Drawing diagrams with Canvas API</div>
+                    <div class="challenge-body">Each problem type needs a unique visual — right triangles, function graphs, 3D cubes, balloons. Every diagram is drawn in code from scratch using the HTML5 Canvas API with no external libraries.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ 5. CODE: STEP REVEAL ══ -->
+    <div class="slide bg-code">
+        <div class="label">Under the Hood — Step-by-Step Reveal</div>
+        <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:1rem;">How the step reveal logic works</h2>
+        <div class="code-window">
+            <div class="code-titlebar">
+                <div class="dot dot-r"></div>
+                <div class="dot dot-y"></div>
+                <div class="dot dot-g"></div>
+                <span class="code-file">practice-app.js</span>
+            </div>
+            <pre><span class="cm">// Called every time the user clicks "Show Next Step"</span>
+<span class="kw">function</span> <span class="fn">showNextStep</span>() {
+  <span class="kw">const</span> <span class="var">problem</span> = <span class="var">appState</span>.currentProblem;
+  <span class="kw">if</span> (!<span class="var">problem</span>) <span class="kw">return</span>;
+
+  <span class="kw">const</span> <span class="var">nextIndex</span> = <span class="var">appState</span>.currentStepIndex + <span class="num">1</span>;
+
+<span class="hl">  <span class="kw">if</span> (<span class="var">nextIndex</span> >= <span class="var">problem</span>.steps.length) {</span>
+<span class="hl">    <span class="fn">revealAnswer</span>();  <span class="cm">// all steps done — show the final answer</span></span>
+<span class="hl">    <span class="kw">return</span>;</span>
+<span class="hl">  }</span>
+
+  <span class="var">appState</span>.currentStepIndex = <span class="var">nextIndex</span>;
+  <span class="var">appState</span>.stepsRevealed.push(<span class="var">nextIndex</span>);
+
+  <span class="fn">renderStep</span>(<span class="var">problem</span>.steps[<span class="var">nextIndex</span>], <span class="var">nextIndex</span>);
+  <span class="fn">updateProgress</span>();
+  <span class="fn">updateButtonStates</span>();
+
+<span class="hl">  <span class="cm">// Re-highlight diagram elements specific to this step</span></span>
+<span class="hl">  <span class="kw">if</span> (<span class="var">problem</span>.steps[<span class="var">nextIndex</span>].highlightElements) {</span>
+<span class="hl">    <span class="fn">highlightDiagramElements</span>(<span class="var">problem</span>.steps[<span class="var">nextIndex</span>].highlightElements);</span>
+<span class="hl">  }</span>
+}</pre>
+        </div>
+        <div class="code-caption">
+            💡 <strong>Key insight:</strong> Each step is an object in an array. The function tracks an index into that array — when the index exceeds the array length, the answer is automatically revealed. Steps can also carry <code>highlightElements</code> to update the diagram in sync with the explanation.
+        </div>
+    </div>
+
+    <!-- ══ 6. CODE: ANSWER CHECK ══ -->
+    <div class="slide bg-code">
+        <div class="label">Under the Hood — Answer Checking</div>
+        <h2 style="font-size:clamp(1.3rem,2.5vw,2rem);margin-bottom:1rem;">Fuzzy answer matching</h2>
+        <div class="code-window">
+            <div class="code-titlebar">
+                <div class="dot dot-r"></div>
+                <div class="dot dot-y"></div>
+                <div class="dot dot-g"></div>
+                <span class="code-file">practice-app.js</span>
+            </div>
+            <pre><span class="kw">function</span> <span class="fn">checkAnswer</span>(<span class="var">studentAnswer</span>, <span class="var">correctAnswer</span>) {
+
+<span class="hl">  <span class="kw">const</span> <span class="fn">normalize</span> = (<span class="var">str</span>) => <span class="var">str</span></span>
+<span class="hl">    .toLowerCase()</span>
+<span class="hl">    .replace(<span class="str">/\s+/g</span>, <span class="str">''</span>)                        <span class="cm">// "65 m/hr" → "65m/hr"</span></span>
+<span class="hl">    .replace(<span class="str">/[\\${}]/g</span>, <span class="str">''</span>)                     <span class="cm">// strip LaTeX chars</span></span>
+<span class="hl">    .replace(<span class="str">/\\frac\{([^}]+)\}\{([^}]+)\}/g</span>, <span class="str">'($1/$2)'</span>) <span class="cm">// \frac{1}{2} → (1/2)</span></span>
+<span class="hl">    .replace(<span class="str">/≈|~|approximately/g</span>, <span class="str">''</span>);          <span class="cm">// ignore ≈ symbol</span></span>
+
+  <span class="kw">const</span> <span class="var">a</span> = <span class="fn">normalize</span>(<span class="var">studentAnswer</span>);
+  <span class="kw">const</span> <span class="var">b</span> = <span class="fn">normalize</span>(<span class="var">correctAnswer</span>);
+
+  <span class="kw">if</span> (<span class="var">a</span> === <span class="var">b</span>) <span class="kw">return</span> <span class="kw">true</span>;   <span class="cm">// exact match after normalization</span>
+
+  <span class="cm">// Extract the numeric part and compare with tolerance</span>
+  <span class="kw">const</span> <span class="var">numA</span> = <span class="fn">parseFloat</span>(<span class="var">a</span>.match(<span class="str">/[\d.]+/</span>));
+  <span class="kw">const</span> <span class="var">numB</span> = <span class="fn">parseFloat</span>(<span class="var">b</span>.match(<span class="str">/[\d.]+/</span>));
+
+<span class="hl">  <span class="kw">if</span> (<span class="var">numA</span> && <span class="var">numB</span>) <span class="kw">return</span> Math.abs(<span class="var">numA</span> - <span class="var">numB</span>) < <span class="num">0.01</span>;</span>
+
+  <span class="kw">return</span> <span class="var">a</span>.includes(<span class="var">b</span>) || <span class="var">b</span>.includes(<span class="var">a</span>);  <span class="cm">// substring match fallback</span>
+}</pre>
+        </div>
+        <div class="code-caption">
+            💡 <strong>Key insight:</strong> Three layers of matching — (1) exact match after stripping formatting, (2) numeric tolerance of ±0.01 for floating point answers, (3) substring containment as a final fallback. This lets "65", "65 m/hr", "$65$", and "≈65" all be accepted for the same correct answer.
+        </div>
+    </div>
+
+    <!-- ══ 8. COMPETITION ══ -->
+    <div class="slide bg-dark">
+        <div class="label">Competitive Landscape</div>
+        <h2>Why Math Wiz is different</h2>
+        <table class="cmp-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Math Wiz</th>
+                    <th>Wolfram Alpha</th>
+                    <th>Photomath</th>
+                    <th>Khan Academy</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="hl-row">
+                    <td>Teaches <em>reasoning</em>, not just answers</td>
+                    <td><span class="ck">✓</span></td>
+                    <td><span class="cx">✗</span></td>
+                    <td><span class="cx">✗</span></td>
+                    <td><span class="cp">~</span></td>
+                </tr>
+                <tr>
+                    <td>Interactive diagram per problem</td>
+                    <td><span class="ck">✓</span></td>
+                    <td><span class="cx">✗</span></td>
+                    <td><span class="cx">✗</span></td>
+                    <td><span class="cx">✗</span></td>
+                </tr>
+                <tr>
+                    <td>Step-by-step with conceptual notes</td>
+                    <td><span class="ck">✓</span></td>
+                    <td><span class="cp">~</span></td>
+                    <td><span class="ck">✓</span></td>
+                    <td><span class="ck">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Answer checking with feedback</td>
+                    <td><span class="ck">✓</span></td>
+                    <td><span class="cx">✗</span></td>
+                    <td><span class="cx">✗</span></td>
+                    <td><span class="ck">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Solve any problem (AI)</td>
+                    <td><span class="ck">✓</span></td>
+                    <td><span class="ck">✓</span></td>
+                    <td><span class="ck">✓</span></td>
+                    <td><span class="cx">✗</span></td>
+                </tr>
+                <tr>
+                    <td>Free, no login</td>
+                    <td><span class="ck">✓</span></td>
+                    <td><span class="cp">~</span></td>
+                    <td><span class="cx">✗</span></td>
+                    <td><span class="ck">✓</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ══ 9. CLOSING ══ -->
+    <div class="slide bg-close">
+        <div class="label">Math Wiz — 2025</div>
+        <h1 class="hero" style="font-size:clamp(2.5rem,5.5vw,4.5rem);">Every student deserves<br>a great tutor.</h1>
+        <div class="divider" style="margin:1.25rem auto;"></div>
+        <p class="sub">Math Wiz is making that possible — one step at a time.</p>
+        <div class="stats" style="margin-top:2.5rem;">
+            <div><span class="stat-num">8</span><span class="stat-lbl">Topics</span></div>
+            <div><span class="stat-num">100+</span><span class="stat-lbl">Problems</span></div>
+            <div><span class="stat-num">3</span><span class="stat-lbl">Difficulty levels</span></div>
+            <div><span class="stat-num">$0</span><span class="stat-lbl">To start</span></div>
+        </div>
+        <div style="margin-top:2rem;">
+            <span class="chip chip-b">Ships today</span>
+            <span class="chip chip-g">No login needed</span>
+            <span class="chip chip-p">Open any browser</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- Nav -->
+<div class="nav">
+    <button id="prev-btn" disabled onclick="nav(-1)">&#8592;</button>
+    <span class="slide-counter" id="counter">1 / 9</span>
+    <button id="next-btn" onclick="nav(1)">&#8594;</button>
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('counter');
+    const bar = document.getElementById('progress');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    let cur = 0;
+
+    function nav(dir) {
+        slides[cur].classList.remove('active');
+        cur = Math.max(0, Math.min(slides.length - 1, cur + dir));
+        slides[cur].classList.add('active');
+        update();
+    }
+
+    function goTo(n) {
+        slides[cur].classList.remove('active');
+        cur = n;
+        slides[cur].classList.add('active');
+        update();
+    }
+
+    function update() {
+        counter.textContent = `${cur + 1} / ${slides.length}`;
+        bar.style.width = `${((cur + 1) / slides.length) * 100}%`;
+        prevBtn.disabled = cur === 0;
+        nextBtn.disabled = cur === slides.length - 1;
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (['ArrowRight','ArrowDown',' '].includes(e.key)) { e.preventDefault(); if (cur < slides.length-1) nav(1); }
+        if (['ArrowLeft','ArrowUp'].includes(e.key))        { e.preventDefault(); if (cur > 0) nav(-1); }
+    });
+
+    update();
+</script>
+</body>
+</html>

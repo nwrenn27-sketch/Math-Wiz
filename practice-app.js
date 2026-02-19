@@ -48,10 +48,16 @@ function renderTopicGrid() {
         topicCard.setAttribute('role', 'listitem');
         topicCard.setAttribute('aria-label', `${topic.name}: ${topic.description}`);
 
+        // Count total problems across all difficulties for this topic
+        const topicProblems = PROBLEM_LIBRARY[topicId] || {};
+        const total = Object.values(topicProblems).reduce((sum, arr) => sum + (arr ? arr.length : 0), 0);
+        const badgeText = total > 0 ? `${total} problems` : 'Coming soon';
+
         topicCard.innerHTML = `
             <div class="topic-icon">${topic.icon}</div>
             <div class="topic-name">${topic.name}</div>
             <div class="topic-desc">${topic.description}</div>
+            <div class="topic-badge">${badgeText}</div>
         `;
 
         topicCard.addEventListener('click', () => selectTopic(topicId));

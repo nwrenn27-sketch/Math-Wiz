@@ -130,6 +130,34 @@ body {
     letter-spacing: -0.01em;
 }
 
+.header-stats {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.header-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+}
+
 .main {
     flex: 1;
     padding: 2rem 1.5rem;
@@ -389,6 +417,19 @@ body {
     color: var(--color-gray-500);
     padding: 2rem;
     font-style: italic;
+}
+
+/* Topic badge - problem count */
+.topic-badge {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.1));
+    color: var(--color-primary);
+    border: 1px solid rgba(37, 99, 235, 0.2);
 }
 
 /* ========================================================
